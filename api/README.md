@@ -26,7 +26,7 @@ Then, you must add these lines to your .env file :
 ###> lexik/jwt-authentication-bundle ###
 JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
 JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
-JWT_PASSPHRASE=bujur
+JWT_PASSPHRASE= <YOUR-PASSPHRASE>
 ###< lexik/jwt-authentication-bundle ###
 ```
 
