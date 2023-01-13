@@ -16,6 +16,17 @@ $ docker compose exec php openssl genrsa -out config/jwt/private.pem -aes256 409
 $ docker compose exec php openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
 ```
 
+In case the above commands don't work:
+```
+docker-compose exec php sh -c '
+    set -e
+    apk add openssl
+    php bin/console lexik:jwt:generate-keypair --overwrite
+    setfacl -R -m u:www-data:rX -m u:"$(whoami)":rwX config/jwt
+    setfacl -dR -m u:www-data:rX -m u:"$(whoami)":rwX config/jwt
+'
+```
+
 ## .env
 
 Then, add your passphrase in the .env file :
