@@ -4,6 +4,15 @@ api_platform:
     # Mercure integration, remove if unwanted
     mercure: ~
     # Good cache defaults for REST APIs
+    mapping:
+        paths: ['%kernel.project_dir%/src/Entity']
+    
+    swagger:
+        api_keys:
+            JWT:
+                name: Authorization
+                type: header
+
     defaults:
         stateless: true
         cache_headers:

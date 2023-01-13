@@ -2,6 +2,7 @@ version: "3.4"
 
 services:
   php:
+    container_name: cw_api
     build:
       context: ./api
       target: app_php
@@ -25,6 +26,7 @@ services:
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
 
   caddy:
+    container_name: cw_server
     build:
       context: api/
       target: app_caddy
@@ -51,6 +53,7 @@ services:
         protocol: udp
 
   database:
+    container_name: cw_db
     image: postgres:${POSTGRES_VERSION:-14}-alpine
     environment:
       - POSTGRES_DB=${POSTGRES_DB:-app}
