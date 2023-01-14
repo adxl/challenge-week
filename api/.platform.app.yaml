@@ -23,15 +23,14 @@ mounts:
   "/var/cache": "shared:files/cache"
   "/var/log": "shared:files/log"
   "/var/sessions": "shared:files/sessions"
+  "config/jwt":
+    source: local
+    source_path: uploads
   'web/uploads':
     source: local
     source_path: uploads
 
 disk: 2048
-
-relationships:
-    postgresdatabase: 'dbpostgres:postgresql'
-
 
 hooks:
     build: |
