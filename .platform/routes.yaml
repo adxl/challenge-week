@@ -1,0 +1,3 @@
+"https://www.{default}/":
+    type: upstream
+    upstream: "challenge-week:http"

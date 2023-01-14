@@ -1,0 +1,46 @@
+# The name of this app. Must be unique within a project.
+name: challenge-week
+
+variables:
+    env:
+        APP_ENV: 'prod'
+
+type: 'php:8.2'
+
+build:
+    flavor: none
+
+dependencies:
+    php:
+        composer/composer: "^2"
+
+runtime:
+    extensions:
+        - apcu
+        - pdo_pgsql
+
+mounts:
+  "/var/cache": "shared:files/cache"
+  "/var/log": "shared:files/log"
+  "/var/sessions": "shared:files/sessions"
+  'web/uploads':
+    source: local
+    source_path: uploads
+
+disk: 2048
+
+relationships:
+    postgresdatabase: 'dbpostgres:postgresql'
+
+
+hooks:
+    build: |
+        touch .env
+        rm composer.lock && composer --no-ansi --no-interaction install --no-progress --prefer-dist --optimize-autoloader --no-scripts
+        composer dump-env prod
+
+web:
+  locations: 
+    '/': 
+      root: "public"
+      passthru: "/index.php"
