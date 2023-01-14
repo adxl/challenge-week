@@ -96,11 +96,12 @@ RUN rm -f .env.local.php
 # Build Caddy with the Mercure and Vulcain modules
 FROM caddy:2-builder-alpine AS app_caddy_builder
 
-RUN xcaddy build \
-	--with github.com/dunglas/mercure \
-	--with github.com/dunglas/mercure/caddy \
-	--with github.com/dunglas/vulcain \
-	--with github.com/dunglas/vulcain/caddy
+# RUN go mod init xcaddy
+
+RUN xcaddy build --with  github.com/dunglas/mercure
+RUN xcaddy build --with  github.com/dunglas/mercure/caddy
+RUN xcaddy build --with  github.com/dunglas/vulcain
+RUN xcaddy build --with  github.com/dunglas/vulcain/caddy
 
 # Caddy image
 FROM caddy:2-alpine AS app_caddy
