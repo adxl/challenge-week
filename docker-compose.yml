@@ -25,6 +25,16 @@ services:
       MERCURE_PUBLIC_URL: https://${SERVER_NAME:-localhost}/.well-known/mercure
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
 
+  client:
+    container_name: cw_client
+    build: ./client
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./client:/usr/src/app
+    command: sh -c "npm install && npm run dev"
+    env_file: ./client/.env
+
   caddy:
     container_name: cw_server
     build:
