@@ -10,23 +10,61 @@ on:
 
 jobs:
   api:
-    name: API
+   name: API
+   runs-on: ubuntu-latest
+
+   steps:
+     - name: Checkout
+       uses: actions/checkout@v2
+    
+     - name: Start services
+       run: |
+         cp ./api/.env.ci ./api/.env
+         docker compose up php --build -d
+
+     - name: Check reachability
+       run: |
+         while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker compose ps -q php)")"; do
+           case $status in
+             starting) sleep 1;;
+             healthy) exit 0;;
+             unhealthy)
+               docker compose ps
+               docker compose logs
+               exit 1
+             ;;
+           esac
+         done
+         exit 1
+
+         curl -v -o /dev/null http://localhost
+
+     - name: Create test database
+       run: |
+         docker compose exec -T php bin/console -e test doctrine:database:create
+         docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
+
+     - name: Doctrine Schema Validator
+       run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
+
+  client:
+    name: Client
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      
+ 
       - name: Start services
+        run: docker compose up client --build -d
+      
+      - name: Check reachability
         run: |
-          cp ./api/.env.ci ./api/.env
-          # export DATABASE_URL=${{ secrets.DATABASE_URL }}
-          docker compose up --build -d
-          while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker compose ps -q php)")"; do
+          while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Status}}{{end}}" "$(docker compose ps -q client)")"; do
             case $status in
               starting) sleep 1;;
-              healthy) exit 0;;
-              unhealthy)
+              running) exit 0;;
+              *)
                 docker compose ps
                 docker compose logs
                 exit 1
@@ -35,14 +73,4 @@ jobs:
           done
           exit 1
 
-      - name: Check reachability
-        run: curl -v -o /dev/null http://localhost
-
-      - name: Create test database
-        run: |
-          docker compose exec -T php bin/console -e test doctrine:database:create
-          docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
-
-      - name: Doctrine Schema Validator
-        run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
-
+          curl -v -o /dev/null http://localhost:3000
