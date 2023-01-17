@@ -32,7 +32,6 @@ class VerifyTokenController extends AbstractController
       if ($user) {
         $user->setToken(null);
         $user->setStatus('ACTIVE');
-        $em->persist($user);
         $em->flush();
       }
     }
