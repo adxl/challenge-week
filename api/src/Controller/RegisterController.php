@@ -18,6 +18,10 @@ class RegisterController extends AbstractController
 
     public function __invoke(User $user, ManagerRegistry $doctrine): User
     {
+        if ($_ENV["APP_STAGE"] === "local") {
+          return $user;
+        }
+
         $em = $doctrine->getManager();
         $token = TokenGeneration::generateToken();
         $user->setToken($token);
