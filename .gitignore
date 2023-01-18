@@ -1,5 +1,8 @@
 /.env
 /helm/api-platform/charts/*
 !/helm/api-platform/charts/.gitignore
+**/.DS_Store
+**/.idea
 
 api/composer.lock
+package-lock.json
