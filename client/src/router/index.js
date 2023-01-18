@@ -4,6 +4,7 @@ import Login from "@/views/Login.vue";
 import HelloWorld from "@/components/HelloWorld.vue";
 import NotFound from "@/views/NotFound.vue";
 import Product from "@/views/Product.vue";
+import ProductType from "@/views/ProductType.vue";
 
 import { REGISTER_CLIENT, REGISTER_DELIVERER } from "./constants";
 
@@ -12,6 +13,11 @@ const routes = [
     name: "home",
     path: "/",
     component: HelloWorld,
+  },
+  {
+    name: "productTypes",
+    path: "/productTypes",
+    component: ProductType,
   },
   {
     name: "registerClient",
@@ -30,25 +36,22 @@ const routes = [
     path: "/login",
     component: Login,
   },
- 
-    {
-      name: "products",
-      path: "/products",
-      component: Product,
-    },
-    {
-      name: "catchAll",
-      path: "/:pathMatch(.*)*",
-      component: NotFound,
-    },
+
+  {
+    name: "products",
+    path: "/products",
+    component: Product,
+  },
+  {
+    name: "catchAll",
+    path: "/:pathMatch(.*)*",
+    component: NotFound,
+  },
 ];
-
-
-
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
-});  
+});
 
 export default router;
