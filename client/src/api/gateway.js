@@ -12,6 +12,7 @@ function get_headers() {
     headers["Authorization"] = token;
   }
 
+  console.log(headers);
   return headers;
 }
 
