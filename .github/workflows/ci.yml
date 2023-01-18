@@ -20,6 +20,7 @@ jobs:
       - name: Start services
         run: |
           cp ./api/.env.ci ./api/.env
+          touch ./client/.env
           docker compose up php --build -d
 
       - name: Check reachability
