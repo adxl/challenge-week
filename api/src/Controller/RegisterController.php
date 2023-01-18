@@ -26,7 +26,7 @@ class RegisterController extends AbstractController
         $url = $_ENV["APP_URL"] . '/users/verify/' . $token;
 
         $mailer = new BlueMailer();
-        $mailer->sendEmail($user, [
+        $mailer->sendEmail($user, 6, [
             'URL' => $url,
             "firstname" => $user->getFirstname(),
         ]);
