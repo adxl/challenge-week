@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[AsController]
 class VerifyTokenController extends AbstractController
@@ -23,7 +24,7 @@ class VerifyTokenController extends AbstractController
             '_api_operation_name' => '_api_/users/verify/{token}',
         ],
     )]
-    public function __invoke(string $token, ManagerRegistry $doctrine): Response
+    public function __invoke(string $token, ManagerRegistry $doctrine): JsonResponse
     {
       $em = $doctrine->getManager();
 
@@ -34,7 +35,7 @@ class VerifyTokenController extends AbstractController
         $user->setStatus('ACTIVE');
         $em->flush();
       }
-
+      
       return $this->json([
         "code" => 200,
         "message" => "User verified"
