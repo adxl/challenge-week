@@ -39,6 +39,16 @@ class OrderProductRepository extends ServiceEntityRepository
         }
     }
 
+    public function findByOrderByStatus(array $status): array
+    {
+        return $this->createQueryBuilder('op')
+            ->join('op.productOrder', 'po')
+            ->andWhere('po.status = (:status)')
+            ->setParameter('status', $status)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return OrderProduct[] Returns an array of OrderProduct objects
 //     */

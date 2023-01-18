@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\OrderProductRepository;
+use ApiPlatform\Metadata\ApiResource;
+use App\Repository\ProductReviewRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: OrderProductRepository::class)]
-class OrderProduct
+#[ORM\Entity(repositoryClass: ProductReviewRepository::class)]
+#[ApiResource]
+class ProductReview
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -14,9 +16,9 @@ class OrderProduct
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $quantity = null;
+    private ?bool $rating = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'reviews')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
@@ -29,14 +31,14 @@ class OrderProduct
         return $this->id;
     }
 
-    public function getQuantity(): ?int
+    public function isRating(): ?bool
     {
-        return $this->quantity;
+        return $this->rating;
     }
 
-    public function setQuantity(int $quantity): self
+    public function setRating(bool $rating): self
     {
-        $this->quantity = $quantity;
+        $this->rating = $rating;
 
         return $this;
     }
