@@ -3,8 +3,11 @@ import Header from "./components/Header.vue";
 </script>
 
 <template>
-    <div id="app" className="h-full bg-regal-orange dark:bg-[#202023]">
+    <div className="h-full">
         <Header />
+        <main className="flex items-center justify-center h-screen">
+            <router-view />
+        </main>
     </div>
 </template>
 
