@@ -3,6 +3,8 @@ import Register from "@/views/Register.vue";
 import Login from "@/views/Login.vue";
 import HelloWorld from "@/components/HelloWorld.vue";
 import NotFound from "@/views/NotFound.vue";
+import ProductType from "@/views/ProductType/ProductType.vue";
+import ProductTypeList from "@/views/ProductType/ProductTypeList.vue";
 
 import { REGISTER_CLIENT, REGISTER_DELIVERER } from "./constants";
 
@@ -28,6 +30,21 @@ const routes = [
     name: "login",
     path: "/login",
     component: Login,
+  },
+  {
+    name: "product-types",
+    path: "/product-types",
+    component: ProductTypeList,
+  },
+  {
+    name: "product-type-create",
+    path: "/product-type/create",
+    component: ProductType,
+  },
+  {
+    name: "product-type",
+    path: "/product-type/:id",
+    component: ProductType,
   },
   {
     name: "catchAll",
