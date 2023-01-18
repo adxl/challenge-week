@@ -25,7 +25,7 @@ class Kyc
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $reason = null;
 
     #[ORM\OneToOne(mappedBy: 'kyc', cascade: ['persist', 'remove'])]
@@ -77,7 +77,7 @@ class Kyc
         return $this->reason;
     }
 
-    public function setReason(string $reason): self
+    public function setReason(?string $reason): self
     {
         $this->reason = $reason;
 

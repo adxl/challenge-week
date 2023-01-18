@@ -55,12 +55,12 @@ class DelivererReview
         return $this;
     }
 
-    public function getProductOrder(): ?Order
+    public function getOrder(): ?Order
     {
         return $this->ProductOrder;
     }
 
-    public function setProductOrder(?Order $ProductOrder): self
+    public function setOrder(?Order $ProductOrder): self
     {
         $this->ProductOrder = $ProductOrder;
 

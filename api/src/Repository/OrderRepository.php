@@ -39,6 +39,17 @@ class OrderRepository extends ServiceEntityRepository
         }
     }
 
+    public function findByStatus(array $status): array
+    {
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.status IN (:status)')
+            ->setParameter('status', $status)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+
 //    /**
 //     * @return Order[] Returns an array of Order objects
 //     */
