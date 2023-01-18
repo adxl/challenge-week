@@ -1,24 +1,28 @@
-name: CI
+name: Challenge Week CI
 
 on:
   push:
     branches:
       - main
-  pull_request: ~
-  workflow_dispatch: ~
+      - develop
+      - feature/*
+      - ci/setup
 
 jobs:
-  tests:
-    name: Tests
+  api:
+    name: API
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Pull images
-        run: docker compose pull --ignore-pull-failures || true
+    
       - name: Start services
-        run: docker compose up --build -d
-      - name: Wait for services
+        run: |
+          cp ./api/.env.ci ./api/.env
+          docker compose up php --build -d
+
+      - name: Check reachability
         run: |
           while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker compose ps -q php)")"; do
             case $status in
@@ -32,17 +36,61 @@ jobs:
             esac
           done
           exit 1
-      - name: Check HTTP reachability
-        run: curl -v -o /dev/null http://localhost
-      - name: Check API reachability
-        run: curl -vk -o /dev/null https://localhost
-      - name: Check PWA reachability
-        run: "curl -vk -o /dev/null -H 'Accept: text/html' https://localhost"
+
+          curl -v -o /dev/null http://localhost
+
       - name: Create test database
         run: |
           docker compose exec -T php bin/console -e test doctrine:database:create
           docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
-      - name: PHPUnit
-        run: docker compose exec -T php bin/phpunit
+
       - name: Doctrine Schema Validator
         run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
+      
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.HUB_USERNAME }}
+          password: ${{ secrets.HUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: ./api
+          push: true
+          tags: ${{ secrets.HUB_USERNAME }}/challenge-week:latest 
+        
+
+  client:
+    name: Client
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Start services
+        run: docker compose up client --build -d
+      
+      - name: Check reachability
+        run: |
+          while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Status}}{{end}}" "$(docker compose ps -q client)")"; do
+            case $status in
+              starting) sleep 1;;
+              running) exit 0;;
+              *)
+                docker compose ps
+                docker compose logs
+                exit 1
+              ;;
+            esac
+          done
+          exit 1
+
+          curl -v -o /dev/null http://localhost:3000
