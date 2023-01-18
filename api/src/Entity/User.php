@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use App\Controller\RegisterController;
 use App\Controller\VerifyTokenController;
+use App\Controller\ResetPasswordController;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -25,8 +26,15 @@ use App\Controller\VerifyTokenController;
     new GetCollection(security: 'is_granted("PUBLIC_ACCESS")'),
     new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'register', controller: RegisterController::class),
     new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'verify_token', controller: VerifyTokenController::class),
+    new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'reset_password_email', controller: ResetPasswordController::class),
     new Put(),
     new Patch(),
+    new Patch(
+        security: 'is_granted("PUBLIC_ACCESS")',
+        uriTemplate: '/users/reset-password/{token}',
+        name: 'reset_password',
+        controller: ResetPasswordController::class,
+    ),
     new Delete(),
 ])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
