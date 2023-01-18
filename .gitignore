@@ -5,3 +5,4 @@
 **/.idea
 
 api/composer.lock
+package-lock.json
