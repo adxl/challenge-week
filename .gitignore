@@ -6,3 +6,13 @@
 
 api/composer.lock
 package-lock.json
+.idea/.gitignore
+.idea/challenge-week.iml
+.idea/dataSources.xml
+.idea/modules.xml
+.idea/php.xml
+.idea/vcs.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/jsLinters/eslint.xml
+.DS_Store
+/vendor
