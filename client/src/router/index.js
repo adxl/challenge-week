@@ -3,6 +3,7 @@ import Register from "@/views/Register.vue";
 import Login from "@/views/Login.vue";
 import HelloWorld from "@/components/HelloWorld.vue";
 import NotFound from "@/views/NotFound.vue";
+import VerifyToken from "@/views/VerifyToken.vue";
 import ProductType from "@/views/ProductType/ProductType.vue";
 import ProductTypeList from "@/views/ProductType/ProductTypeList.vue";
 
@@ -30,6 +31,11 @@ const routes = [
     name: "login",
     path: "/login",
     component: Login,
+  },
+  {
+    path: "/users/verify/:token",
+    name: "Verify Token",
+    component: VerifyToken,
   },
   {
     name: "product-types",
