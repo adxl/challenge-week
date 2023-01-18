@@ -34,7 +34,7 @@ class VerifyTokenController extends AbstractController
         $user->setStatus('ACTIVE');
         $em->flush();
       }
-
+      
       return $this->json([
         "code" => 200,
         "message" => "User verified"

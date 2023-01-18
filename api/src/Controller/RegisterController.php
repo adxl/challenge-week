@@ -23,8 +23,13 @@ class RegisterController extends AbstractController
         $user->setToken($token);
         $em->flush();
 
-        $url = 'https://localhost:3000/users/verify/' . $token;
-        $mailer->sendVerificationEmail($user->getEmail(), $user->getFirstname(), $url);
+        $url = $_ENV["APP_URL"] . '/users/verify/' . $token;
+
+        $mailer = new BlueMailer();
+        $mailer->sendEmail($user, [
+            'URL' => $url,
+            "firstname" => $user->getFirstname(),
+        ]);
 
         return $user;
     }
