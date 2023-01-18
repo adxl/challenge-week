@@ -35,7 +35,7 @@ disk: 2048
 hooks:
     build: |
         touch .env
-        rm composer.lock && composer --no-ansi --no-interaction install --no-progress --prefer-dist --optimize-autoloader --no-scripts
+        composer --no-ansi --no-interaction install --no-progress --prefer-dist --optimize-autoloader --no-scripts
         composer dump-env prod
 
 web:
