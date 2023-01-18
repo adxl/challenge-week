@@ -1,9 +1,9 @@
 <script setup>
-// import { getAllProductType } from "@/api/productType";
+import { getAllProductType } from "@/api/productType";
 
-// const productTypes = await getAllProductType();
+const productTypes = getAllProductType();
 
-// console.log(productTypes);
+console.log(productTypes);
 </script>
 
 <template>
