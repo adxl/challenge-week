@@ -9,10 +9,26 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
+use App\Controller\RegisterController;
+use App\Controller\VerifyTokenController;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[ApiResource(mercure: true)]
+#[ApiResource(mercure: true, operations: [
+    new Get(security: 'is_granted("PUBLIC_ACCESS")'),
+    new GetCollection(security: 'is_granted("PUBLIC_ACCESS")'),
+    new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'register', controller: RegisterController::class),
+    new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'verify_token', controller: VerifyTokenController::class),
+    new Put(),
+    new Patch(),
+    new Delete(),
+])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -47,7 +63,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
-    #[ORM\OneToOne(inversedBy: 'deliverer', cascade: ['persist', 'remove'])]
+    #[ORM\Column(length: 255)]
+    private ?string $token = null;
+
+    #[ORM\OneToOne(inversedBy: 'deliverer', cascade: ['persist', 'remove'], )]
     private ?Kyc $kyc = null;
 
     #[ORM\OneToMany(mappedBy: 'deliverer', targetEntity: Order::class)]
@@ -188,6 +207,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAddress(string $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }

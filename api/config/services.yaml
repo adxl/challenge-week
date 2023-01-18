@@ -23,6 +23,10 @@ services:
     App\OpenApi\JwtDecorator:
         decorates: 'api_platform.openapi.factory'
         arguments: ['@.inner']
+    
+    App\Controller\RegisterController\:
+        resource: '../src/Controller/RegisterController.php'
+        tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
