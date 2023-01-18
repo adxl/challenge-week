@@ -10,7 +10,7 @@ class BlueMailer {
   public function __construct() {
   }
 
-  public function sendEmail(User $to, integer $template, array $params = []): void {
+  public function sendEmail(User $to, int $template, array $params = []): void {
 
     $client = new Client();
 

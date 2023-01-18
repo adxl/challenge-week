@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Service\MailerService;
+use App\Service\BlueMailer;
 use App\Service\TokenGeneration;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -16,7 +16,7 @@ class RegisterController extends AbstractController
     {
     }
 
-    public function __invoke(User $user, ManagerRegistry $doctrine, MailerService $mailer): User
+    public function __invoke(User $user, ManagerRegistry $doctrine): User
     {
         $em = $doctrine->getManager();
         $token = TokenGeneration::generateToken();
