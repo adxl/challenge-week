@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "flowbite": "^1.6.2",
-    "vue": "^3.2.45"
+    "vue": "^3.2.45",
     "axios": "^1.2.2",
     "vue-router": "^4.1.6"
   },
