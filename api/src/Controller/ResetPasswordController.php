@@ -39,6 +39,10 @@ class ResetPasswordController extends AbstractController
         if (!$user = $this->managerRegistry->getRepository(User::class)->findOneBy(['token' => $token])) {
             throw $this->createNotFoundException();
         }
+      
+        if ($user->getStatus() === "INACTIVE") {
+            $user->setStatus("ACTIVE");
+        }
 
         $user->setPassword($passwordHasher->hashPassword($user, $password));
         $user->setToken(null);
