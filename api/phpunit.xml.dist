@@ -19,11 +19,6 @@
         <!-- ###+ symfony/mailer ### -->
         <!-- MAILER_DSN=null://null -->
         <!-- ###- symfony/mailer ### -->
-
-        <!-- ###+ symfony/sendinblue-mailer ### -->
-        <!-- MAILER_DSN=sendinblue+api://KEY@default -->
-        <!-- MAILER_DSN=sendinblue+smtp://USERNAME:PASSWORD@default -->
-        <!-- ###- symfony/sendinblue-mailer ### -->
     </php>
 
     <testsuites>

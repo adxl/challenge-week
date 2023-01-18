@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Persistence\ManagerRegistry;
 
 #[AsController]
@@ -19,11 +20,10 @@ class VerifyTokenController extends AbstractController
         path: '/users/verify/{token}',
         methods: ['POST'],
         defaults: [
-            '_api_resource_class' => User::class,
             '_api_operation_name' => '_api_/users/verify/{token}',
         ],
     )]
-    public function __invoke(string $token, ManagerRegistry $doctrine): void
+    public function __invoke(string $token, ManagerRegistry $doctrine): Response
     {
       $em = $doctrine->getManager();
 
@@ -34,5 +34,10 @@ class VerifyTokenController extends AbstractController
         $user->setStatus('ACTIVE');
         $em->flush();
       }
+
+      return $this->json([
+        "code" => 200,
+        "message" => "User verified"
+      ]);
     }
 }
