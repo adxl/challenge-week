@@ -12,8 +12,9 @@ import ProductCategory from "@/views/ProductCategory/ProductCategory.vue";
 import ProductCategoryList from "@/views/ProductCategory/ProductCategoryList.vue";
 import Product from "@/views/Product/Product.vue";
 import ProductList from "@/views/Product/ProductList.vue";
+import { useGetCurrentUser } from "@/services";
 
-import { REGISTER_CLIENT, REGISTER_DELIVERER } from "./constants";
+import { REGISTER_CLIENT, REGISTER_DELIVERER, PROFIL_DELIVERER, PROFIL_USER } from "./constants";
 
 const routes = [
   {
@@ -37,6 +38,7 @@ const routes = [
     name: "login",
     path: "/login",
     component: Login,
+    meta: { alreadyLoggedIn: true },
   },
   {
     path: "/users/verify/:token",
@@ -99,15 +101,51 @@ const routes = [
     component: Product,
   },
   {
+    path: "/admin/",
+    meta: { authorize: ["ROLE_ADMIN"] },
+    children: [
+      {
+        name: "admin-dashboard",
+        path: "",
+        component: () => import("@/views/DashboardAdmin.vue"),
+      },
+      {
+        name: "admin-profils-clients",
+        path: "profils/clients",
+        component: () => import("@/views/Profils/ProfilsList.vue"),
+        props: { source: PROFIL_USER },
+      },
+      {
+        name: "admin-profils-deliverers",
+        path: "profils/deliverers",
+        component: () => import("@/views/Profils/ProfilsList.vue"),
+        props: { source: PROFIL_DELIVERER },
+      },
+    ],
+  },
+  {
     name: "catchAll",
     path: "/:pathMatch(.*)*",
     component: NotFound,
   },
 ];
-
 const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+router.beforeEach(async (to, from) => {
+  const currentUser = await useGetCurrentUser().catch(() => null);
+  if (to.meta.authorize && !currentUser?.roles.some((r) => to.meta.authorize?.includes(r))) {
+    return {
+      path: "/login",
+      query: { redirect: to.fullPath },
+    };
+  }
 
+  if (to.meta.alreadyLoggedIn && currentUser) {
+    return {
+      path: "/",
+    };
+  }
+});
 export default router;
