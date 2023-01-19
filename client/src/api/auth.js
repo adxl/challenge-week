@@ -4,12 +4,10 @@ export function getCurrentUser() {
   return _get("/me");
 }
 
-export function register({ name, email, password }) {
-  const data = { name, email, password };
+export function register(data) {
   return _post("/users", data);
 }
 
-export function login({ email, password }) {
-  const data = { email, password };
+export function login(data) {
   return _post("/auth", data);
 }
