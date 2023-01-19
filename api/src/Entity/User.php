@@ -18,288 +18,314 @@ use ApiPlatform\Metadata\Delete;
 use App\Controller\RegisterController;
 use App\Controller\VerifyTokenController;
 use App\Controller\ResetPasswordController;
+use App\State\UserPasswordHasher;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiResource(mercure: true, operations: [
-    new Get(security: 'is_granted("PUBLIC_ACCESS")'),
-    new GetCollection(security: 'is_granted("PUBLIC_ACCESS")'),
-    new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'register', controller: RegisterController::class),
-    new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'verify_token', controller: VerifyTokenController::class),
-    new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'reset_password_email', controller: ResetPasswordController::class),
-    new Put(),
-    new Patch(),
-    new Patch(
-        security: 'is_granted("PUBLIC_ACCESS")',
-        uriTemplate: '/users/reset-password/{token}',
-        name: 'reset_password',
-        controller: ResetPasswordController::class,
-    ),
-    new Delete(),
+  new Get(security: 'is_granted("PUBLIC_ACCESS")'),
+  new GetCollection(security: 'is_granted("PUBLIC_ACCESS")'),
+  new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'register', processor: UserPasswordHasher::class, controller: RegisterController::class),
+  new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'verify_token', controller: VerifyTokenController::class),
+  new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'reset_password_email', controller: ResetPasswordController::class),
+  new Put(processor: UserPasswordHasher::class),
+  new Patch(processor: UserPasswordHasher::class),
+  new Patch(
+    security: 'is_granted("PUBLIC_ACCESS")',
+    uriTemplate: '/users/reset-password/{token}',
+    name: 'reset_password',
+    controller: ResetPasswordController::class,
+  ),
+  new Delete(),
+  new Post(),
 ])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+  public const STATUS = [
+    "INACTIVE" => "INACTIVE",
+    "ACTIVE" => "ACTIVE",
+    "OPERATIVE" => "OPERATIVE",
+    "SUSPENDED" => "SUSPENDED",
+    "BANNED" => "BANNED"
+  ];
 
-    #[ORM\Column(length: 180, unique: true)]
-    private ?string $email = null;
+  #[ORM\Id]
+  #[ORM\GeneratedValue]
+  #[ORM\Column]
+  private ?int $id = null;
 
-    #[ORM\Column]
-    private array $roles = [];
+  #[ORM\Column(length: 180, unique: true)]
+  private ?string $email = null;
 
-    /**
-     * @var string The hashed password
-     */
-    #[ORM\Column]
-    private ?string $password = null;
+  #[ORM\Column]
+  private array $roles = [];
 
-    #[ORM\Column(length: 255)]
-    private ?string $firstname = null;
+  /**
+   * @var string The hashed password
+   */
+  #[ORM\Column]
+  private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $lastname = null;
+  #[Assert\NotBlank(groups: ['user:create'])]
+  private ?string $plainPassword = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $birthday_at = null;
+  #[ORM\Column(length: 255)]
+  private ?string $firstname = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
+  #[ORM\Column(length: 255)]
+  private ?string $lastname = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $address = null;
+  #[ORM\Column(nullable: true)]
+  private ?\DateTimeImmutable $birthday_at = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $token = null;
+  #[ORM\Column(length: 255)]
+  private ?string $status = null;
 
-    #[ORM\OneToOne(inversedBy: 'deliverer', cascade: ['persist', 'remove'], )]
-    private ?Kyc $kyc = null;
+  #[ORM\Column(length: 255)]
+  private ?string $address = null;
 
-    #[ORM\OneToMany(mappedBy: 'deliverer', targetEntity: Order::class)]
-    private Collection $delivererOrders;
+  #[ORM\Column(length: 255, nullable: true)]
+  private ?string $token = null;
 
-    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Order::class)]
-    private Collection $clientOrders;
+  #[ORM\OneToOne(inversedBy: 'deliverer', cascade: ['persist', 'remove'],)]
+  private ?Kyc $kyc = null;
 
-    public function __construct()
-    {
-        $this->clientOrders = new ArrayCollection();
-        $this->delivererOrders = new ArrayCollection();
+  #[ORM\OneToMany(mappedBy: 'deliverer', targetEntity: Order::class)]
+  private Collection $delivererOrders;
+
+  #[ORM\OneToMany(mappedBy: 'client', targetEntity: Order::class)]
+  private Collection $clientOrders;
+
+  public function __construct()
+  {
+    $this->clientOrders = new ArrayCollection();
+    $this->delivererOrders = new ArrayCollection();
+    $this->status = self::STATUS['INACTIVE'];
+  }
+
+  public function getId(): ?int
+  {
+    return $this->id;
+  }
+
+  public function getEmail(): ?string
+  {
+    return $this->email;
+  }
+
+  public function setEmail(string $email): self
+  {
+    $this->email = $email;
+
+    return $this;
+  }
+
+  /**
+   * A visual identifier that represents this user.
+   *
+   * @see UserInterface
+   */
+  public function getUserIdentifier(): string
+  {
+    return (string) $this->email;
+  }
+
+  /**
+   * @see UserInterface
+   */
+  public function getRoles(): array
+  {
+    $roles = $this->roles;
+    // guarantee every user at least has ROLE_USER
+    $roles[] = 'ROLE_USER';
+
+    return array_unique($roles);
+  }
+
+  public function setRoles(array $roles): self
+  {
+    $this->roles = $roles;
+
+    return $this;
+  }
+
+  /**
+   * @see PasswordAuthenticatedUserInterface
+   */
+  public function getPassword(): string
+  {
+    return $this->password;
+  }
+
+  public function setPassword(string $password): self
+  {
+    $this->password = $password;
+
+    return $this;
+  }
+
+  public function getPlainPassword(): ?string
+  {
+    return $this->plainPassword;
+  }
+
+  public function setPlainPassword(?string $painPassword): self
+  {
+    $this->plainPassword = $painPassword;
+
+    return $this;
+  }
+
+  /**
+   * @see UserInterface
+   */
+  public function eraseCredentials()
+  {
+    $this->plainPassword = null;
+  }
+
+  public function getFirstname(): ?string
+  {
+    return $this->firstname;
+  }
+
+  public function setFirstname(string $firstname): self
+  {
+    $this->firstname = $firstname;
+
+    return $this;
+  }
+
+  public function getLastname(): ?string
+  {
+    return $this->lastname;
+  }
+
+  public function setLastname(string $lastname): self
+  {
+    $this->lastname = $lastname;
+
+    return $this;
+  }
+
+  public function getBirthdayAt(): ?\DateTimeImmutable
+  {
+    return $this->birthday_at;
+  }
+
+  public function setBirthdayAt(?\DateTimeImmutable $birthday_at): self
+  {
+    $this->birthday_at = $birthday_at;
+
+    return $this;
+  }
+
+  public function getStatus(): ?string
+  {
+    return $this->status;
+  }
+
+  public function setStatus(string $status): self
+  {
+    $this->status = $status;
+
+    return $this;
+  }
+
+  public function getAddress(): ?string
+  {
+    return $this->address;
+  }
+
+  public function setAddress(string $address): self
+  {
+    $this->address = $address;
+
+    return $this;
+  }
+
+  public function getToken(): ?string
+  {
+    return $this->token;
+  }
+
+  public function setToken(?string $token): self
+  {
+    $this->token = $token;
+
+    return $this;
+  }
+
+  public function getKyc(): ?Kyc
+  {
+    return $this->kyc;
+  }
+
+  public function setKyc(?Kyc $kyc): self
+  {
+    $this->kyc = $kyc;
+
+    return $this;
+  }
+
+  /**
+   * @return Collection<int, Order>
+   */
+  public function getDelivererOrders(): Collection
+  {
+    return $this->delivererOrders;
+  }
+
+  public function addDelivererOrder(Order $order): self
+  {
+    if (!$this->delivererOrders->contains($order)) {
+      $this->delivererOrders->add($order);
+      $order->setDeliverer($this);
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
+    return $this;
+  }
+
+  public function removeDelivererOrder(Order $order): self
+  {
+    if ($this->delivererOrders->removeElement($order)) {
+      // set the owning side to null (unless already changed)
+      if ($order->getDeliverer() === $this) {
+        $order->setDeliverer(null);
+      }
     }
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
+    return $this;
+  }
+
+  /**
+   * @return Collection<int, Order>
+   */
+  public function getClientOrders(): Collection
+  {
+    return $this->clientOrders;
+  }
+
+  public function addClientOrder(Order $order): self
+  {
+    if (!$this->clientOrders->contains($order)) {
+      $this->clientOrders->add($order);
+      $order->setDeliverer($this);
     }
 
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
+    return $this;
+  }
 
-        return $this;
+  public function removeClientOrder(Order $order): self
+  {
+    if ($this->clientOrders->removeElement($order)) {
+      // set the owning side to null (unless already changed)
+      if ($order->getDeliverer() === $this) {
+        $order->setDeliverer(null);
+      }
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUserIdentifier(): string
-    {
-        return (string) $this->email;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials()
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
-    }
-
-    public function getFirstname(): ?string
-    {
-        return $this->firstname;
-    }
-
-    public function setFirstname(string $firstname): self
-    {
-        $this->firstname = $firstname;
-
-        return $this;
-    }
-
-    public function getLastname(): ?string
-    {
-        return $this->lastname;
-    }
-
-    public function setLastname(string $lastname): self
-    {
-        $this->lastname = $lastname;
-
-        return $this;
-    }
-
-    public function getBirthdayAt(): ?\DateTimeImmutable
-    {
-        return $this->birthday_at;
-    }
-
-    public function setBirthdayAt(\DateTimeImmutable $birthday_at): self
-    {
-        $this->birthday_at = $birthday_at;
-
-        return $this;
-    }
-
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(string $status): self
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
-
-    public function setAddress(string $address): self
-    {
-        $this->address = $address;
-
-        return $this;
-    }
-
-    public function getToken(): ?string
-    {
-        return $this->token;
-    }
-
-    public function setToken(?string $token): self
-    {
-        $this->token = $token;
-
-        return $this;
-    }
-
-    public function getKyc(): ?Kyc
-    {
-        return $this->kyc;
-    }
-
-    public function setKyc(?Kyc $kyc): self
-    {
-        $this->kyc = $kyc;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Order>
-     */
-    public function getDelivererOrders(): Collection
-    {
-        return $this->delivererOrders;
-    }
-
-    public function addDelivererOrder(Order $order): self
-    {
-        if (!$this->delivererOrders->contains($order)) {
-            $this->delivererOrders->add($order);
-            $order->setDeliverer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDelivererOrder(Order $order): self
-    {
-        if ($this->delivererOrders->removeElement($order)) {
-            // set the owning side to null (unless already changed)
-            if ($order->getDeliverer() === $this) {
-                $order->setDeliverer(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Order>
-     */
-    public function getClientOrders(): Collection
-    {
-        return $this->clientOrders;
-    }
-
-    public function addClientOrder(Order $order): self
-    {
-        if (!$this->clientOrders->contains($order)) {
-            $this->clientOrders->add($order);
-            $order->setDeliverer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeClientOrder(Order $order): self
-    {
-        if ($this->clientOrders->removeElement($order)) {
-            // set the owning side to null (unless already changed)
-            if ($order->getDeliverer() === $this) {
-                $order->setDeliverer(null);
-            }
-        }
-
-        return $this;
-    }
+    return $this;
+  }
 }

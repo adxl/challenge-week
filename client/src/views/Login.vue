@@ -7,10 +7,9 @@ const _inputsLogin = reactive({
   password: "",
 });
 
-function handleRegister() {
+function handleLogin() {
   login({ ..._inputsLogin })
     .then(({ data }) => {
-      console.log(data);
       sessionStorage.setItem("cw-app-token", JSON.stringify(data.token));
     })
     .catch((error) => {
@@ -20,61 +19,59 @@ function handleRegister() {
 </script>
 
 <template>
-  <section class="vh-100 gradient-custom">
-    <div class="container py-5 h-100">
-      <div class="row justify-content-center align-items-center h-100">
-        <div class="col-12 col-lg-9 col-xl-7">
-          <div
-            class="card shadow-2-strong card-registration"
-            style="border-radius: 15px"
+  <div class="block">
+    <form @submit.prevent="handleLogin">
+      <div class="mb-6">
+        <div class="mb-6">
+          <label class="block mb-2 text-sm font-medium text-gray-900"
+            >Email</label
           >
-            <div class="card-body p-4 p-md-5">
-              <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Connexion</h3>
-              <form>
-                <div class="row">
-                  <div class="col-md-6 mb-4 pb-2">
-                    <div class="form-outline">
-                      <input
-                        type="email"
-                        class="form-control form-control-lg"
-                        id="email"
-                        v-model="_inputsLogin.email"
-                        required
-                      />
-                      <label class="form-label" for="email">Email</label>
-                    </div>
-                  </div>
-                  <div class="col-md-6 mb-4">
-                    <div class="form-outline">
-                      <input
-                        type="password"
-                        id="password"
-                        class="form-control form-control-lg"
-                        v-model="_inputsLogin.password"
-                        required
-                      />
-                      <label class="form-label" for="password"
-                        >Mot de passe</label
-                      >
-                    </div>
-                  </div>
-                </div>
-
-                <div class="mt-4 pt-2">
-                  <input
-                    class="btn btn-primary btn-lg"
-                    type="submit"
-                    value="S'inscrire"
-                    @click.prevent="handleRegister"
-                  />
-                </div>
-              </form>
-            </div>
-          </div>
+          <input
+            type="email"
+            v-model="_inputsLogin.email"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            required
+          />
+        </div>
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-900"
+            >Mot de passe</label
+          >
+          <input
+            type="password"
+            v-model="_inputsLogin.plainPassword"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            required
+          />
+        </div>
+        <div class="flex justify-end">
+          <router-link
+            class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+            :to="{ name: 'Reset Password' }"
+          >
+            Mot de passe oublié</router-link
+          >
         </div>
       </div>
-    </div>
-  </section>
+
+      <button
+        type="submit"
+        class="mb-10 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center"
+      >
+        S'inscrire
+      </button>
+
+      <div class="flex justify-center">
+        <p>Vous n'avez pas de compte ?&nbsp;</p>
+        <router-link
+          class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+          :to="{ name: 'registerClient' }"
+        >
+          S'inscrire ici</router-link
+        >
+      </div>
+    </form>
+  </div>
 </template>
 
 <style scoped>
