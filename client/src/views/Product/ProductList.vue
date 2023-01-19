@@ -1,22 +1,20 @@
 <script setup>
-import {
-  getAllProductCategory,
-  deleteProductCategory,
-} from "@/api/productCategory";
+import { getAllProducts, deleteProduct } from "@/api/product";
+import { getProductType } from "@/api/productType";
 import { onMounted, reactive } from "vue";
 
 const productTypes = reactive([]);
 
 onMounted(() => {
-  getAllProductCategory().then((res) => {
+  getAllProducts().then((res) => {
     productTypes.value = res.data.items;
   });
 });
 
 function handleDelete(value) {
-  deleteProductCategory(value.id)
+  deleteProduct(value.id)
     .then(({ data }) => {
-      getAllProductCategory().then((res) => {
+      getAllProducts().then((res) => {
         productTypes.value = res.data.items;
       });
     })
@@ -30,10 +28,10 @@ function handleDelete(value) {
   <div class="container mx-auto px-4 sm:px-8">
     <div class="m-4">
       <router-link
-        :to="{ name: 'product-category-create' }"
+        :to="{ name: 'product-create' }"
         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
         aria-current="page"
-        >Ajouter une catégorie de produit</router-link
+        >Ajouter un produit</router-link
       >
     </div>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -42,7 +40,11 @@ function handleDelete(value) {
           class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
         >
           <tr>
+            <th scope="col" class="px-6 py-3">name</th>
             <th scope="col" class="px-6 py-3">Catégorie produit</th>
+            <th scope="col" class="px-6 py-3">Type produit</th>
+            <th scope="col" class="px-6 py-3">Prix</th>
+            <th scope="col" class="px-6 py-3">Quantitée</th>
             <th scope="col" class="px-6 py-3"></th>
             <th scope="col" class="px-6 py-3"></th>
           </tr>
@@ -59,10 +61,34 @@ function handleDelete(value) {
             >
               {{ item.name }}
             </th>
+            <th
+              scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            >
+              {{ item.category.name }}
+            </th>
+            <th
+              scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            >
+              {{ item.type.name }}
+            </th>
+            <th
+              scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            >
+              {{ item.price }}
+            </th>
+            <th
+              scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            >
+              {{ item.quantity }}
+            </th>
             <td class="px-6 py-4">
               <router-link
                 :to="{
-                  name: 'product-category',
+                  name: 'product',
                   params: { id: item.id },
                 }"
                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline"

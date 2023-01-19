@@ -8,13 +8,11 @@ export function getProductType(id) {
   return _get("/product_types/" + id);
 }
 
-export function addProductType({ name, unit, label }) {
-  const data = { name, unit, label };
+export function addProductType(data) {
   return _post("/product_types", data);
 }
 
-export function updateProductType(id, { name, unit, label }) {
-  const data = { name, unit, label };
+export function updateProductType(id, data) {
   return _patch("/product_types/" + id, data);
 }
 
