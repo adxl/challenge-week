@@ -9,6 +9,7 @@ import NewPasswordForm from "@/views/ResetPassword/NewPwdForm.vue";
 import EmailForm from "@/views/ResetPassword/EmailForm.vue";
 import ProductType from "@/views/ProductType/ProductType.vue";
 import ProductTypeList from "@/views/ProductType/ProductTypeList.vue";
+import OrderList from "@/views/Order/OrderList.vue";
 import ProductCategory from "@/views/ProductCategory/ProductCategory.vue";
 import ProductCategoryList from "@/views/ProductCategory/ProductCategoryList.vue";
 import Product from "@/views/Product/Product.vue";
@@ -70,6 +71,11 @@ const routes = [
     name: "product-type",
     path: "/product-type/:id",
     component: ProductType,
+  },
+  {
+    name: "orders",
+    path: "/orders",
+    component: OrderList,
   },
   {
     name: "product-categorys",

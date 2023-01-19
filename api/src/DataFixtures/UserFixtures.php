@@ -44,17 +44,17 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 		$admin->setAddress($faker->address());
 		$manager->persist($admin);
 
-		$admin = new User();
-		$password = $this->hasher->hashPassword($admin, 'esgi');
-		$admin->setFirstname('Thomas');
-		$admin->setLastname('Geofrron');
-		$admin->setEmail('thomas@esgi.fr');
-		$admin->setPassword($password);
-		$admin->setRoles(self::ROLE_ADMIN);
-		$admin->setStatus(self::ACTIVE);
-		$admin->setBirthdayAt(DateTimeImmutable::createFromMutable($birthdateInterval));
-		$admin->setAddress($faker->address());
-		$manager->persist($admin);
+    $admin = new User();
+    $password = $this->hasher->hashPassword($admin, 'esgi');
+    $admin->setFirstname('Thomas');
+    $admin->setLastname('Geoffron');
+    $admin->setEmail('thomas@esgi.fr');
+    $admin->setPassword($password);
+    $admin->setRoles(self::ROLE_ADMIN);
+    $admin->setStatus(self::ACTIVE);
+    $admin->setBirthdayAt(DateTimeImmutable::createFromMutable($birthdateInterval));
+    $admin->setAddress($faker->address());
+    $manager->persist($admin);
 
 		$admin = new User();
 		$password = $this->hasher->hashPassword($admin, 'esgi');
