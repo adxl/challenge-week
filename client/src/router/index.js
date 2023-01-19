@@ -10,6 +10,8 @@ import ProductType from "@/views/ProductType/ProductType.vue";
 import ProductTypeList from "@/views/ProductType/ProductTypeList.vue";
 import ProductCategory from "@/views/ProductCategory/ProductCategory.vue";
 import ProductCategoryList from "@/views/ProductCategory/ProductCategoryList.vue";
+import Product from "@/views/Product/Product.vue";
+import ProductList from "@/views/Product/ProductList.vue";
 
 import { REGISTER_CLIENT, REGISTER_DELIVERER } from "./constants";
 
@@ -80,6 +82,21 @@ const routes = [
     name: "product-category",
     path: "/product-category/:id",
     component: ProductCategory,
+  },
+  {
+    name: "products",
+    path: "/products",
+    component: ProductList,
+  },
+  {
+    name: "product-create",
+    path: "/product/create",
+    component: Product,
+  },
+  {
+    name: "product",
+    path: "/product/:id",
+    component: Product,
   },
   {
     name: "catchAll",

@@ -11,14 +11,14 @@ import { onMounted, reactive } from "vue";
 const route = useRouter();
 const id = route.currentRoute.value.params.id ?? null;
 
-const formValues = reactive({
+const _formValues = reactive({
   name: "",
 });
 
 onMounted(() => {
   if (!id) return;
   getProductCategory(id).then((res) => {
-    formValues.name = res.data.items.name;
+    _formValues.name = res.data.items.name;
   });
 });
 
@@ -58,10 +58,10 @@ function handleRegister(values) {
     <h3
       class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl"
     >
-      {{ id ? "Modification" : "Création" }} d'un type de produit
+      {{ id ? "Modification " + _formValues.name : "Création d'un catégorie" }}
     </h3>
     <Form
-      :initial-values="formValues"
+      :initial-values="_formValues"
       @submit="handleRegister"
       :validation-schema="simpleSchema"
     >
@@ -76,8 +76,7 @@ function handleRegister(values) {
         <ErrorMessage
           class="p-1 mb-1 text-sm text-red-700 borderrounded-lg"
           name="name"
-        >
-        </ErrorMessage>
+        />
       </div>
       <button
         type="submit"
