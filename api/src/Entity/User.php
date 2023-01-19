@@ -18,14 +18,22 @@ use ApiPlatform\Metadata\Delete;
 use App\Controller\RegisterController;
 use App\Controller\VerifyTokenController;
 use App\Controller\ResetPasswordController;
+use App\Controller\SelfAuthController;
 use App\State\UserPasswordHasher;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiResource(mercure: true, operations: [
-  new Get(security: 'is_granted("PUBLIC_ACCESS")'),
-  new GetCollection(security: 'is_granted("PUBLIC_ACCESS")'),
+  new GetCollection(
+    name: "self_auth",
+    uriTemplate: '/users/me',
+    requirements: [],
+    controller: SelfAuthController::class,
+  ),
+  new Get(),
+  new GetCollection(),
   new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'register', processor: UserPasswordHasher::class, controller: RegisterController::class),
   new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'verify_token', controller: VerifyTokenController::class),
   new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'reset_password_email', controller: ResetPasswordController::class),
@@ -39,7 +47,7 @@ use Symfony\Component\Validator\Constraints as Assert;
   ),
   new Delete(),
   new Post(),
-])]
+], normalizationContext: ["groups" => ["self"]])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
   public const STATUS = [
@@ -56,9 +64,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   private ?int $id = null;
 
   #[ORM\Column(length: 180, unique: true)]
+  #[Groups(["self"])]
   private ?string $email = null;
 
   #[ORM\Column]
+  #[Groups(["self"])]
   private array $roles = [];
 
   /**
@@ -71,18 +81,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   private ?string $plainPassword = null;
 
   #[ORM\Column(length: 255)]
+  #[Groups(["self"])]
   private ?string $firstname = null;
 
   #[ORM\Column(length: 255)]
+  #[Groups(["self"])]
   private ?string $lastname = null;
 
   #[ORM\Column(nullable: true)]
+  #[Groups(["self"])]
   private ?\DateTimeImmutable $birthday_at = null;
 
   #[ORM\Column(length: 255)]
+  #[Groups(["self"])]
   private ?string $status = null;
 
   #[ORM\Column(length: 255)]
+  #[Groups(["self"])]
   private ?string $address = null;
 
   #[ORM\Column(length: 255, nullable: true)]
@@ -92,9 +107,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   private ?Kyc $kyc = null;
 
   #[ORM\OneToMany(mappedBy: 'deliverer', targetEntity: Order::class)]
+  #[Groups(["self"])]
   private Collection $delivererOrders;
 
   #[ORM\OneToMany(mappedBy: 'client', targetEntity: Order::class)]
+  #[Groups(["self"])]
   private Collection $clientOrders;
 
   public function __construct()
