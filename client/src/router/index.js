@@ -8,6 +8,8 @@ import NewPasswordForm from "@/views/ResetPassword/NewPwdForm.vue";
 import EmailForm from "@/views/ResetPassword/EmailForm.vue";
 import ProductType from "@/views/ProductType/ProductType.vue";
 import ProductTypeList from "@/views/ProductType/ProductTypeList.vue";
+import ProductCategory from "@/views/ProductCategory/ProductCategory.vue";
+import ProductCategoryList from "@/views/ProductCategory/ProductCategoryList.vue";
 
 import { REGISTER_CLIENT, REGISTER_DELIVERER } from "./constants";
 
@@ -63,6 +65,21 @@ const routes = [
     name: "product-type",
     path: "/product-type/:id",
     component: ProductType,
+  },
+  {
+    name: "product-categorys",
+    path: "/product-categorys",
+    component: ProductCategoryList,
+  },
+  {
+    name: "product-category-create",
+    path: "/product-category/create",
+    component: ProductCategory,
+  },
+  {
+    name: "product-category",
+    path: "/product-category/:id",
+    component: ProductCategory,
   },
   {
     name: "catchAll",
