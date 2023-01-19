@@ -23,27 +23,59 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container mx-auto px-4 sm:px-8">
-    <div
-      class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700"
+  <div
+    class="max-w-sm w-full bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700"
+  >
+    <h5
+      class="my-2 text-2xl text-center font-bold tracking-tight text-gray-900 dark:text-white"
     >
-      <h5
-        class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-      >
-        Commande N°{{ order.value.id }}
-      </h5>
-      <div class="flow-root">
-        <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
-          <li class="py-3 sm:py-4">
+      Commande N° {{ order.value.id }}
+    </h5>
+    <div class="flow-root">
+      <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
+        <li class="py-3 sm:py-4">
+          <div class="flex items-center justify-around">
+            <p class="text-lg font-medium text-gray-900 dark:text-white">
+              Client :
+            </p>
             <p
-              class="text-sm font-medium text-gray-900 truncate dark:text-white"
+              class="text-lg font-medium text-gray-900 truncate dark:text-white"
             >
               {{ order.value.client?.firstname }}
               {{ order.value.client?.lastname }}
             </p>
-          </li>
-        </ul>
-      </div>
+          </div>
+        </li>
+        <li class="py-3 sm:py-4">
+          <div class="flex items-center justify-around mb-3">
+            <p class="text-2xl font-medium text-gray-900 dark:text-white">
+              Produits
+            </p>
+          </div>
+          <table
+            class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+          >
+            <thead
+              class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+            >
+              <tr>
+                <th class="px-4 py-2">Nom</th>
+                <th class="px-4 py-2">Quantité</th>
+                <th class="px-4 py-2">Prix</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+              >
+                <td class="px-6 py-4">Produit</td>
+                <td class="px-6 py-4">2</td>
+                <td class="px-6 py-4">50€</td>
+              </tr>
+            </tbody>
+          </table>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
