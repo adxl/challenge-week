@@ -23,7 +23,7 @@ class DelivererReview
     private ?string $comment = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Order $ProductOrder = null;
 
     public function getId(): ?int
