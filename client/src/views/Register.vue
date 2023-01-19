@@ -20,12 +20,12 @@ const isClient = ref(false);
 const isDeliverer = ref(false);
 
 const _inputsRegister = reactive({
-  firstname: "adel",
-  lastname: "sen",
-  email: "adelsen@esgi",
+  firstname: "",
+  lastname: "",
+  email: "",
   roles: "",
-  plainPassword: "esgi",
-  address: "paris",
+  plainPassword: "",
+  address: "",
   birthday_at: new Date().toISOString().slice(0, 10),
 });
 
@@ -68,18 +68,6 @@ function handleRegister() {
 
     <div class="block">
       <form @submit.prevent="handleRegister">
-        <div class="mb-6">
-          <label class="block mb-2 text-sm font-medium text-gray-900"
-            >Email</label
-          >
-          <input
-            type="email"
-            v-model="_inputsRegister.email"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            required
-          />
-        </div>
-
         <div class="grid md:grid-cols-2 md:gap-6">
           <div class="mb-6">
             <label class="block mb-2 text-sm font-medium text-gray-900"
@@ -130,16 +118,29 @@ function handleRegister() {
           />
         </div>
 
-        <div class="mb-6">
-          <label class="block mb-2 text-sm font-medium text-gray-900"
-            >Mot de passe</label
-          >
-          <input
-            type="password"
-            v-model="_inputsRegister.plainPassword"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            required
-          />
+        <div class="grid md:grid-cols-2 md:gap-6">
+          <div class="mb-6">
+            <label class="block mb-2 text-sm font-medium text-gray-900"
+              >Email</label
+            >
+            <input
+              type="email"
+              v-model="_inputsRegister.email"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              required
+            />
+          </div>
+          <div class="mb-6">
+            <label class="block mb-2 text-sm font-medium text-gray-900"
+              >Mot de passe</label
+            >
+            <input
+              type="password"
+              v-model="_inputsRegister.plainPassword"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              required
+            />
+          </div>
         </div>
 
         <button
