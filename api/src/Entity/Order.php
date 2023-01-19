@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
 #[ApiResource(operations: [
-    new Get(),
+    new Get(security: 'is_granted("ROLE_ADMIN") or object.getClient() == user'),
     new GetCollection(controller: GetAllOrderController::class),
     new Post(),
     new Put(),

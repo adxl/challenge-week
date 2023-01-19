@@ -10,6 +10,7 @@ import EmailForm from "@/views/ResetPassword/EmailForm.vue";
 import ProductType from "@/views/ProductType/ProductType.vue";
 import ProductTypeList from "@/views/ProductType/ProductTypeList.vue";
 import OrderList from "@/views/Order/OrderList.vue";
+import Order from "@/views/Order/Order.vue";
 import ProductCategory from "@/views/ProductCategory/ProductCategory.vue";
 import ProductCategoryList from "@/views/ProductCategory/ProductCategoryList.vue";
 import Product from "@/views/Product/Product.vue";
@@ -76,6 +77,11 @@ const routes = [
     name: "orders",
     path: "/orders",
     component: OrderList,
+  },
+  {
+    name: "order-detail",
+    path: "/orders/:id",
+    component: Order,
   },
   {
     name: "product-categorys",
