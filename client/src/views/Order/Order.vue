@@ -39,6 +39,12 @@ onMounted(() => {
               {{ order.value.client?.lastname }}
             </p>
           </div>
+          <div class="flex items-center justify-around">
+            <p class="text-lg font-medium text-gray-900 dark:text-white">Adresse :</p>
+            <p class="text-md font-medium text-gray-900 truncate dark:text-white">
+              {{ order.value.client?.address }}
+            </p>
+          </div>
         </li>
         <li class="py-3 sm:py-4">
           <div class="flex items-center justify-around mb-3">

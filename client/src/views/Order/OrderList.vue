@@ -74,7 +74,10 @@ const handleRefreshOrders = () => {
             <td class="px-6 py-4">{{ item.id }}</td>
             <td class="px-6 py-4">{{ item.status }}</td>
             <td class="px-6 py-4">
-              {{ item.client.firstname }} {{ item.client.lastname }} {{ pending.value }}
+              <p class="text-sm font-medium text-gray-900 dark:text-white">
+                {{ item.client.firstname }} {{ item.client.lastname }}
+              </p>
+              {{ item.client.address }}
             </td>
             <td
               class="px-6 py-4"

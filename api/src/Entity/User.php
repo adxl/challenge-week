@@ -114,7 +114,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	private ?string $status = null;
 
 	#[ORM\Column(length: 255)]
-	#[Groups(["self"])]
+	#[Groups(["self", "order:read", "order:detail"])]
 	private ?string $address = null;
 
 	#[ORM\Column(length: 255, nullable: true)]
