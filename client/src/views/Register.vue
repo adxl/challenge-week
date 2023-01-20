@@ -54,7 +54,7 @@ function handleRegister() {
       route.push({ name: "login" });
     })
     .catch((error) => {
-      console.error(error.response.data);
+      console.error(error);
     });
 }
 </script>

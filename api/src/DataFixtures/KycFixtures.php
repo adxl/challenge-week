@@ -20,16 +20,14 @@ class KycFixtures extends Fixture
         $kyc = new Kyc();
         $kyc->setReason(NULL);
         $kyc->setStatus('PENDING');
-        $kyc->setIdentity('placeholder.png');
-        $kyc->setLicense('placeholder.png');
+        $kyc->setSiret('8492389238293212');
         $manager->persist($kyc);
         $this->addReference(self::KYC_PENDING, $kyc);
 
         $kyc = new Kyc();
         $kyc->setReason("La photo de l'identité n'est pas lisible");
         $kyc->setStatus('REFUSED');
-        $kyc->setIdentity('placeholder.png');
-        $kyc->setLicense('placeholder.png');
+        $kyc->setSiret('4298739283923892382');
         $manager->persist($kyc);
         $this->addReference(self::KYC_REFUSED, $kyc);
 
@@ -37,8 +35,7 @@ class KycFixtures extends Fixture
           $kyc = new Kyc();
           $kyc->setReason(NULL);
           $kyc->setStatus('VALIDATED');
-          $kyc->setIdentity('placeholder.png');
-          $kyc->setLicense('placeholder.png');
+          $kyc->setSiret('4982938293892389293');
           $manager->persist($kyc);
           $this->addReference(self::KYC_VALIDATED . '_' .$i, $kyc);
         }

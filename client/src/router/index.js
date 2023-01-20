@@ -5,6 +5,7 @@ import HelloWorld from "@/components/HelloWorld.vue";
 import NotFound from "@/views/NotFound.vue";
 import AdminDashboard from "@/views/AdminDashboard.vue";
 import VerifyToken from "@/views/VerifyToken.vue";
+import KycList from "@/views/Kyc/KycList.vue";
 import NewPasswordForm from "@/views/ResetPassword/NewPwdForm.vue";
 import EmailForm from "@/views/ResetPassword/EmailForm.vue";
 import ProductType from "@/views/ProductType/ProductType.vue";
@@ -47,6 +48,11 @@ const routes = [
     path: "/users/verify/:token",
     name: "Verify Token",
     component: VerifyToken,
+  },
+  {
+    path: "/admin/verify/kyc",
+    name: "Verify KYC",
+    component: KycList,
   },
   {
     path: "/reset-password/:token",

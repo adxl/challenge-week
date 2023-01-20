@@ -17,10 +17,7 @@ class Kyc
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $identity = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $license = null;
+    private ?string $siret = null;
 
     #[ORM\Column(length: 255)]
     private ?string $status = null;
@@ -36,26 +33,14 @@ class Kyc
         return $this->id;
     }
 
-    public function getIdentity(): ?string
+    public function getSiret(): ?string
     {
-        return $this->identity;
+        return $this->siret;
     }
 
-    public function setIdentity(string $identity): self
+    public function setSiret(string $siret): self
     {
-        $this->identity = $identity;
-
-        return $this;
-    }
-
-    public function getLicense(): ?string
-    {
-        return $this->license;
-    }
-
-    public function setLicense(string $license): self
-    {
-        $this->license = $license;
+        $this->siret = $siret;
 
         return $this;
     }
