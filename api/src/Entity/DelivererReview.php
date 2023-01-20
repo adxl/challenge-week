@@ -13,13 +13,12 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
-use App\Controller\DelivererReviewsController;
 
 #[ORM\Entity(repositoryClass: DelivererReviewRepository::class)]
 #[ApiResource(
   operations: [
-    new Get(security: 'is_granted("ROLE_ADMIN") or object.getProductOrder().getClient() == user'),
-    new GetCollection(controller: DelivererReviewsController::class, security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_CLIENT")'),
+    new Get(security: 'is_granted("ROLE_ADMIN")'),
+    new GetCollection(security: 'is_granted("ROLE_ADMIN")'),
     new Post(),
     new Put(),
     new Patch(),

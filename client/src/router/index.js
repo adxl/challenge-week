@@ -104,6 +104,11 @@ const routes = [
         props: { source: PROFIL_DELIVERER },
       },
       {
+        name: "adminReviews",
+        path: "reviews",
+        component: () => import("@/views/ReviewsList.vue"),
+      },
+      {
         path: "products",
         name: "admin-products",
         component: ProductList,
