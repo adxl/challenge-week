@@ -9,6 +9,7 @@ provide("app_refresh", refreshUser);
 
 async function refreshUser() {
   currentUser.value = await useGetCurrentUser().catch(() => null);
+  return currentUser.value;
 }
 
 onMounted(async () => {
@@ -19,7 +20,7 @@ onMounted(async () => {
 <template>
   <div className="h-screen">
     <Header />
-    <main className="">
+    <main className="flex items-center justify-center">
       <router-view />
     </main>
   </div>

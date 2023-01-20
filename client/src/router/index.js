@@ -7,6 +7,7 @@ import AdminDashboard from "@/views/AdminDashboard.vue";
 import VerifyToken from "@/views/VerifyToken.vue";
 import KycList from "@/views/Kyc/KycList.vue";
 import Kyc from "@/views/Kyc/Kyc.vue";
+import Store from "@/views/Store/Store.vue";
 import NewPasswordForm from "@/views/ResetPassword/NewPwdForm.vue";
 import EmailForm from "@/views/ResetPassword/EmailForm.vue";
 import ProductType from "@/views/ProductType/ProductType.vue";
@@ -64,6 +65,11 @@ const routes = [
     path: "/reset-password",
     name: "Reset Password",
     component: EmailForm,
+  },
+  {
+    name: "store",
+    path: "/store",
+    component: Store,
   },
   {
     name: "orders",

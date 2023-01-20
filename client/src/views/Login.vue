@@ -14,10 +14,14 @@ const _inputsLogin = reactive({
 
 function handleLogin() {
   login({ ..._inputsLogin })
-    .then(({ data }) => {
+    .then(async ({ data }) => {
       sessionStorage.setItem("cw-app-token", JSON.stringify(data.token));
-      refreshUser();
-      route.push({ name: "home" });
+      const user = await refreshUser();
+      if (user.isAdmin) {
+        route.push({ name: "admin-dashboard" });
+      } else {
+        route.push({ name: "store" });
+      }
     })
     .catch((error) => {
       console.log(error);
