@@ -1,22 +1,50 @@
 <script setup>
-import { getAllKyc } from "@/api/kyc";
-import { onMounted, reactive } from "vue";
+import { getPendingKyc, getValidatedKyc, getRefusedKyc } from "@/api/kyc";
+import { onMounted, reactive, ref } from "vue";
 
 const kyc = reactive([]);
 
 onMounted(() => {
-  getAllKyc().then((res) => {
+  getPendingKyc().then((res) => {
     kyc.value = res.data.items;
   });
 });
 
-function status(status) {
-  if (status === "pending") {
-    return "⌛";
-  } else if (status === "approved") {
-    return "✅";
-  } else if (status === "rejected") {
-    return "🚫";
+const STATUS = {
+  PENDING: "⌛",
+  VALIDATED: "✅",
+  REFUSED: "🚫",
+};
+
+function getTabClass(value) {
+  return [
+    {
+      "text-blue-600 bg-gray-100": statusActive.value === value,
+    },
+    "inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300",
+  ];
+}
+
+function handleChangeStatus(value) {
+  statusActive.value = value;
+  switch (value) {
+    case "PENDING":
+      getPendingKyc().then((res) => {
+        kyc.value = res.data.items;
+      });
+      break;
+    case "VALIDATED":
+      getValidatedKyc().then((res) => {
+        kyc.value = res.data.items;
+      });
+      break;
+    case "REFUSED":
+      getRefusedKyc().then((res) => {
+        kyc.value = res.data.items;
+      });
+      break;
+    default:
+      break;
   }
 }
 
@@ -35,15 +63,34 @@ function status(status) {
 
 <template>
   <div class="container mx-auto px-4 sm:px-8">
-    <div class="m-4">
-      <router-link
-        :to="{ name: 'product-type-create' }"
-        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-        aria-current="page"
-        >Ajouter un type de produit</router-link
-      >
-    </div>
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <ul
+      class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400"
+    >
+      <li class="mr-2">
+        <a
+          @click.prevent="handleChangeStatus('PENDING')"
+          aria-current="page"
+          :class="getTabClass('PENDING')"
+          >En Attente</a
+        >
+      </li>
+      <li class="mr-2">
+        <a
+          @click.prevent="handleChangeStatus('REFUSED')"
+          :class="getTabClass('REFUSED')"
+          >Refuser</a
+        >
+      </li>
+      <li class="mr-2">
+        <a
+          @click.prevent="handleChangeStatus('VALIDATED')"
+          :class="getTabClass('VALIDATED')"
+          >Valider</a
+        >
+      </li>
+    </ul>
+
+    <div class="relative overflow-x-auto shadow-md">
       <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead
           class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
@@ -66,7 +113,7 @@ function status(status) {
             <td class="px-6 py-4">
               <router-link
                 :to="{
-                  name: 'product-type',
+                  name: 'Edit KYC',
                   params: { id: item.id },
                 }"
                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline"

@@ -4,6 +4,18 @@ export function getAllKyc() {
   return _getAll("/kycs");
 }
 
+export function getPendingKyc() {
+  return _getAll("/kycs?status=PENDING");
+}
+
+export function getValidatedKyc() {
+  return _getAll("/kycs?status=VALIDATED");
+}
+
+export function getRefusedKyc() {
+  return _getAll("/kycs?status=REFUSED");
+}
+
 export function getKyc(id) {
   return _get("/kycs/" + id);
 }

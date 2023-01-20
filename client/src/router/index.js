@@ -6,6 +6,7 @@ import NotFound from "@/views/NotFound.vue";
 import AdminDashboard from "@/views/AdminDashboard.vue";
 import VerifyToken from "@/views/VerifyToken.vue";
 import KycList from "@/views/Kyc/KycList.vue";
+import Kyc from "@/views/Kyc/Kyc.vue";
 import NewPasswordForm from "@/views/ResetPassword/NewPwdForm.vue";
 import EmailForm from "@/views/ResetPassword/EmailForm.vue";
 import ProductType from "@/views/ProductType/ProductType.vue";
@@ -18,7 +19,12 @@ import Product from "@/views/Product/Product.vue";
 import ProductList from "@/views/Product/ProductList.vue";
 import { useGetCurrentUser } from "@/services";
 
-import { REGISTER_CLIENT, REGISTER_DELIVERER, PROFIL_DELIVERER, PROFIL_USER } from "./constants";
+import {
+  REGISTER_CLIENT,
+  REGISTER_DELIVERER,
+  PROFIL_DELIVERER,
+  PROFIL_USER,
+} from "./constants";
 
 const routes = [
   {
@@ -53,6 +59,11 @@ const routes = [
     path: "/admin/verify/kyc",
     name: "Verify KYC",
     component: KycList,
+  },
+  {
+    path: "/admin/verify/kyc/:id",
+    name: "Edit KYC",
+    component: Kyc,
   },
   {
     path: "/reset-password/:token",
@@ -157,7 +168,10 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const currentUser = await useGetCurrentUser().catch(() => null);
 
-  if (to.meta.authorize && !currentUser?.roles.some((r) => to.meta.authorize?.includes(r))) {
+  if (
+    to.meta.authorize &&
+    !currentUser?.roles.some((r) => to.meta.authorize?.includes(r))
+  ) {
     return {
       path: "/login",
       query: { redirect: to.fullPath },
