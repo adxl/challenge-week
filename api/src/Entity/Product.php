@@ -43,6 +43,7 @@ class Product
 
 	#[ORM\ManyToOne]
 	#[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+	#[Groups(['product:read'])]
 	private ?ProductCategory $category = null;
 
 	#[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductReview::class, orphanRemoval: true)]

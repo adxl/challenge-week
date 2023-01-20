@@ -18,14 +18,13 @@ class DelivererReviewFixtures extends Fixture implements DependentFixtureInterfa
 			[OrderFixtures::DONE]
 		);
 
-		foreach ($orders as $order) {
-
-			$delivererReview = new DelivererReview();
-			$delivererReview->setOrder($order);
-			$delivererReview->setComment($faker->sentence(10));
-			$delivererReview->setRating($faker->numberBetween(0, 5));
-			$manager->persist($delivererReview);
-		}
+    foreach($orders as $order) {
+      $delivererReview = new DelivererReview();
+      $delivererReview->setOriginOrder($order);
+      $delivererReview->setComment($faker->sentence(10));
+      $delivererReview->setRating($faker->randomNumber(1, 5));
+      $manager->persist($delivererReview);
+    } 
 
 		$manager->flush();
 	}
