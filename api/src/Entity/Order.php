@@ -11,31 +11,33 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use App\Repository\OrderRepository;
 use App\Controller\Order\GetAllOrderController;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
 #[ApiResource(operations: [
-    new Get(security: 'is_granted("ROLE_ADMIN") or object.getClient() == user'),
-    new GetCollection(controller: GetAllOrderController::class),
+    new Get(security: 'is_granted("ROLE_ADMIN") or object.getClient() == user', normalizationContext: ["groups" => ['order:detail']]),
+    new GetCollection(controller: GetAllOrderController::class, normalizationContext: ["groups" => ['order:read']]),
     new Post(),
     new Put(),
     new Patch(security: 'is_granted("ROLE_ADMIN") 
         or (is_granted("ROLE_DELIVERER") and user.getStatus() == "OPERATIVE" and object.getDeliverer() == null) 
         or (is_granted("ROLE_USER") and user.getClient() == user)'),
     new Delete(),
-], normalizationContext: ['groups' => ['order:read']], )]
+], normalizationContext: ['groups' => ['order:read', 'order:detail']], )]
 class Order
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['order:read', 'delivererReviews'])]
+    #[Groups(['order:read', 'order:detail', 'delivererReviews'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['order:read', 'delivererReviews'])]
+    #[Groups(['order:read', 'order:detail', 'delivererReviews'])]
     private ?string $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'delivererOrders')]
@@ -43,12 +45,16 @@ class Order
     private ?User $deliverer = null;
 
     #[ORM\ManyToOne(inversedBy: 'clientOrders')]
-    #[Groups(['order:read', 'delivererReviews'])]
+    #[Groups(['order:read', 'delivererReviews', 'order:detail'])]
     private ?User $client = null;
 
     #[ORM\OneToOne(inversedBy: 'originOrder', cascade: ['persist', 'remove'])]
     #[Groups(['delivererReviews'])]
     private ?DelivererReview $delivererReview = null;
+
+    #[ORM\OneToMany(mappedBy: 'productOrder', targetEntity: OrderProduct::class)]
+    #[Groups(['order:detail'])]
+    private Collection $products;
 
     /* #[ORM\OneToOne(inversedBy: 'productOrder', cascade: ['persist', 'remove'])] */
     /* private ?DelivererReview $delivererReview = null; */
@@ -110,6 +116,36 @@ class Order
     public function setDelivererReview(?DelivererReview $delivererReview): self
     {
         $this->delivererReview = $delivererReview;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderProduct>
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(OrderProduct $product): self
+    {
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+            $product->setProductOrder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(OrderProduct $product): self
+    {
+        if ($this->products->removeElement($product)) {
+            // set the owning side to null (unless already changed)
+            if ($product->getProductOrder() === $this) {
+                $product->setProductOrder(null);
+            }
+        }
 
         return $this;
     }

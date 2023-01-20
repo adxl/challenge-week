@@ -55,10 +55,14 @@ onMounted(() => {
               </tr>
             </thead>
             <tbody>
-              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <td class="px-6 py-4">Produit</td>
-                <td class="px-6 py-4">2</td>
-                <td class="px-6 py-4">50€</td>
+              <tr
+                v-for="product in order.value.products"
+                :key="product.id"
+                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+              >
+                <td class="px-6 py-4">{{ product.product.name }}</td>
+                <td class="px-6 py-4">{{ product.quantity }}</td>
+                <td class="px-6 py-4">{{ product.quantity * product.product.price }}€</td>
               </tr>
             </tbody>
           </table>
