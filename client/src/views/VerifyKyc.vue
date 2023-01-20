@@ -1,9 +1,5 @@
 <script setup>
-import { useRoute } from "vue-router";
-import { verifyToken } from "@/api/account";
 import { onMounted } from "vue";
-const route = useRoute();
-const token = route.params.token;
 
 onMounted(async () => {});
 </script>
