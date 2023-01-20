@@ -4,6 +4,8 @@ import { onMounted, reactive, ref } from "vue";
 
 const kyc = reactive([]);
 
+const statusActive = ref("PENDING");
+
 onMounted(() => {
   getPendingKyc().then((res) => {
     kyc.value = res.data.items;
@@ -47,18 +49,6 @@ function handleChangeStatus(value) {
       break;
   }
 }
-
-// function handleDelete(value) {
-//   deleteProductType(value.id)
-//     .then(({ data }) => {
-//       getAllProductType().then((res) => {
-//         productTypes.value = res.data.items;
-//       });
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
-// }
 </script>
 
 <template>
@@ -109,11 +99,11 @@ function handleChangeStatus(value) {
             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
           >
             <td class="px-6 py-4">{{ item.siret }}</td>
-            <td class="px-6 py-4">{{ status(item.status) }}</td>
+            <td class="px-6 py-4">{{ STATUS[item.status] }}</td>
             <td class="px-6 py-4">
               <router-link
                 :to="{
-                  name: 'Edit KYC',
+                  name: 'product-type',
                   params: { id: item.id },
                 }"
                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
