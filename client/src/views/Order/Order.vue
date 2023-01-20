@@ -39,6 +39,12 @@ onMounted(() => {
               {{ order.value.client?.lastname }}
             </p>
           </div>
+          <div class="flex items-center justify-around">
+            <p class="text-lg font-medium text-gray-900 dark:text-white">Adresse :</p>
+            <p class="text-md font-medium text-gray-900 truncate dark:text-white">
+              {{ order.value.client?.address }}
+            </p>
+          </div>
         </li>
         <li class="py-3 sm:py-4">
           <div class="flex items-center justify-around mb-3">
@@ -55,10 +61,14 @@ onMounted(() => {
               </tr>
             </thead>
             <tbody>
-              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <td class="px-6 py-4">Produit</td>
-                <td class="px-6 py-4">2</td>
-                <td class="px-6 py-4">50€</td>
+              <tr
+                v-for="product in order.value.products"
+                :key="product.id"
+                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+              >
+                <td class="px-6 py-4">{{ product.product.name }}</td>
+                <td class="px-6 py-4">{{ product.quantity }}</td>
+                <td class="px-6 py-4">{{ product.quantity * product.product.price }}€</td>
               </tr>
             </tbody>
           </table>
