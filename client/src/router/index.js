@@ -56,16 +56,6 @@ const routes = [
     component: VerifyToken,
   },
   {
-    path: "/admin/verify/kyc",
-    name: "Verify KYC",
-    component: KycList,
-  },
-  {
-    path: "/admin/verify/kyc/:id",
-    name: "Edit KYC",
-    component: Kyc,
-  },
-  {
     path: "/reset-password/:token",
     name: "New Password Form",
     component: NewPasswordForm,
@@ -76,21 +66,6 @@ const routes = [
     component: EmailForm,
   },
   {
-    name: "product-types",
-    path: "/product-types",
-    component: ProductTypeList,
-  },
-  {
-    name: "product-type-create",
-    path: "/product-type/create",
-    component: ProductType,
-  },
-  {
-    name: "product-type",
-    path: "/product-type/:id",
-    component: ProductType,
-  },
-  {
     name: "orders",
     path: "/orders",
     component: OrderList,
@@ -99,36 +74,6 @@ const routes = [
     name: "order-detail",
     path: "/orders/:id",
     component: Order,
-  },
-  {
-    name: "product-categorys",
-    path: "/product-categorys",
-    component: ProductCategoryList,
-  },
-  {
-    name: "product-category-create",
-    path: "/product-category/create",
-    component: ProductCategory,
-  },
-  {
-    name: "product-category",
-    path: "/product-category/:id",
-    component: ProductCategory,
-  },
-  {
-    name: "products",
-    path: "/products",
-    component: ProductList,
-  },
-  {
-    name: "product-create",
-    path: "/product/create",
-    component: Product,
-  },
-  {
-    name: "product",
-    path: "/product/:id",
-    component: Product,
   },
   {
     path: "/admin/",
@@ -151,6 +96,61 @@ const routes = [
         path: "profils/deliverers",
         component: () => import("@/views/Profils/ProfilsList.vue"),
         props: { source: PROFIL_DELIVERER },
+      },
+      {
+        path: "products",
+        name: "admin-products",
+        component: ProductList,
+      },
+      {
+        path: "product/create",
+        name: "admin-product-create",
+        component: Product,
+      },
+      {
+        path: "product/:id",
+        name: "admin-product",
+        component: Product,
+      },
+      {
+        path: "product-categorys",
+        name: "admin-product-categorys",
+        component: ProductCategoryList,
+      },
+      {
+        path: "product-category/create",
+        name: "admin-product-category-create",
+        component: ProductCategory,
+      },
+      {
+        path: "product-category/:id",
+        name: "admin-product-category",
+        component: ProductCategory,
+      },
+      {
+        path: "product-types",
+        name: "admin-product-types",
+        component: ProductTypeList,
+      },
+      {
+        path: "product-type/create",
+        name: "admin-product-type-create",
+        component: ProductType,
+      },
+      {
+        path: "product-type/:id",
+        name: "admin-product-type",
+        component: ProductType,
+      },
+      {
+        path: "verify/kyc",
+        name: "admin-kyc-list",
+        component: KycList,
+      },
+      {
+        path: "verify/kyc/:id",
+        name: "admin-kyc",
+        component: Kyc,
       },
     ],
   },

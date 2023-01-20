@@ -103,7 +103,7 @@ function handleChangeStatus(value) {
             <td class="px-6 py-4">
               <router-link
                 :to="{
-                  name: 'product-type',
+                  name: 'admin-kyc',
                   params: { id: item.id },
                 }"
                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline"

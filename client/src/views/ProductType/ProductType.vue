@@ -56,7 +56,7 @@ function handleRegister(values) {
   if (id) {
     updateProductType(id, { ...values })
       .then(({ data }) => {
-        route.push({ name: "product-types" });
+        route.push({ name: "admin-product-types" });
       })
       .catch((error) => {
         console.log(error);
@@ -65,7 +65,7 @@ function handleRegister(values) {
   } else {
     addProductType({ id, ...values })
       .then(({ data }) => {
-        route.push({ name: "product-types" });
+        route.push({ name: "admin-product-types" });
       })
       .catch((error) => {
         console.log(error);

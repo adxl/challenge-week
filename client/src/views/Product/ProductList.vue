@@ -6,7 +6,6 @@ const products = reactive([]);
 
 onMounted(() => {
   getAllProducts().then((res) => {
-    console.log(res.data.items);
     products.value = res.data.items;
   });
 });
@@ -28,7 +27,7 @@ function handleDelete(value) {
   <div class="container mx-auto px-4 sm:px-8">
     <div class="m-4">
       <router-link
-        :to="{ name: 'product-create' }"
+        :to="{ name: 'admin-product-create' }"
         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
         aria-current="page"
         >Ajouter un produit</router-link
@@ -88,7 +87,7 @@ function handleDelete(value) {
             <td class="px-6 py-4">
               <router-link
                 :to="{
-                  name: 'product',
+                  name: 'admin-product',
                   params: { id: item.id },
                 }"
                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline"

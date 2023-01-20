@@ -1,5 +1,6 @@
 <script setup>
 import { getKyc, updateKyc } from "@/api/kyc";
+import { updateUser } from "@/api/user";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { useRouter } from "vue-router";
 import { onMounted, reactive } from "vue";
@@ -38,7 +39,12 @@ onMounted(() => {
 function handleUpdate(values) {
   updateKyc(id, { ...values })
     .then(({ data }) => {
-      route.push({ name: "Verify KYC" });
+      console.log(data.siret);
+      updateUser(data.deliverer["id"], {
+        status: "OPERATIVE",
+      }).then(() => {
+        route.push({ name: "admin-kyc" });
+      });
     })
     .catch((error) => {
       console.log(error);

@@ -19,7 +19,7 @@ onMounted(async () => {
 <template>
   <div className="h-screen">
     <Header />
-    <main className="flex items-center justify-center h-full">
+    <main className="">
       <router-view />
     </main>
   </div>

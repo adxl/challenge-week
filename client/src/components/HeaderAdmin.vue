@@ -6,7 +6,7 @@ const handleLogout = () => {
 </script>
 
 <template>
-  <aside class="w-64" aria-label="Sidebar">
+  <aside class="h-full w-64" aria-label="Sidebar">
     <div class="px-3 py-4 h-full overflow-y-auto bg-gray-50 dark:bg-gray-800">
       <ul class="space-y-2">
         <li>
@@ -24,7 +24,10 @@ const handleLogout = () => {
               <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
               <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
             </svg>
-            <router-link class="h-full w-full" :to="{ name: 'admin-dashboard' }">
+            <router-link
+              class="h-full w-full"
+              :to="{ name: 'admin-dashboard' }"
+            >
               <span class="ml-3"> Tableau de bord</span></router-link
             >
           </a>
@@ -49,7 +52,11 @@ const handleLogout = () => {
                 clip-rule="evenodd"
               ></path>
             </svg>
-            <span class="flex-1 ml-3 text-left whitespace-nowrap" sidebar-toggle-item>Profils</span>
+            <span
+              class="flex-1 ml-3 text-left whitespace-nowrap"
+              sidebar-toggle-item
+              >Profils</span
+            >
             <svg
               sidebar-toggle-item
               class="w-6 h-6"
@@ -99,14 +106,37 @@ const handleLogout = () => {
                 d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
               ></path>
             </svg>
-            <span class="flex-1 ml-3 whitespace-nowrap">Liste des commandes</span>
+            <span class="flex-1 ml-3 whitespace-nowrap"
+              >Liste des commandes</span
+            >
           </a>
         </li>
-
         <li>
-          <router-link
+          <a
+            href="#"
             class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            :to="{ name: 'product-types' }"
+          >
+            <svg
+              aria-hidden="true"
+              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+              <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+            </svg>
+            <router-link class="h-full w-full" :to="{ name: 'admin-kyc-list' }">
+              <span class="ml-3">Vérification des KYC</span></router-link
+            >
+          </a>
+        </li>
+        <li>
+          <button
+            type="button"
+            class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+            aria-controls="dropdown-example"
+            data-collapse-toggle="dropdown-example"
           >
             <svg
               aria-hidden="true"
@@ -121,8 +151,51 @@ const handleLogout = () => {
                 clip-rule="evenodd"
               ></path>
             </svg>
-            <span class="flex-1 ml-3 whitespace-nowrap">Liste des produits</span>
-          </router-link>
+            <span
+              class="flex-1 ml-3 text-left whitespace-nowrap"
+              sidebar-toggle-item
+              >Profils</span
+            >
+            <svg
+              sidebar-toggle-item
+              class="w-6 h-6"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </button>
+          <ul id="dropdown-example" class="py-2 space-y-2">
+            <li>
+              <router-link
+                class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                :to="{ name: 'admin-products' }"
+              >
+                Produits
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                class="h-full flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                :to="{ name: 'admin-product-types' }"
+              >
+                Type produit</router-link
+              >
+            </li>
+            <li>
+              <router-link
+                class="h-full flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                :to="{ name: 'admin-product-categorys' }"
+              >
+                Catégorie de produit</router-link
+              >
+            </li>
+          </ul>
         </li>
         <li>
           <a
@@ -143,7 +216,9 @@ const handleLogout = () => {
                 clip-rule="evenodd"
               ></path>
             </svg>
-            <span class="flex-1 ml-3 text-red-500 whitespace-nowrap">Déconnexion</span>
+            <span class="flex-1 ml-3 text-red-500 whitespace-nowrap"
+              >Déconnexion</span
+            >
           </a>
         </li>
       </ul>
