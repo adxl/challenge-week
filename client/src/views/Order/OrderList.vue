@@ -1,5 +1,5 @@
 <script setup>
-import { getAllOrders } from "@/api/order";
+import { getAllOrders, takeOrder } from "@/api/order";
 import { useGetCurrentUser } from "@/services";
 import { onMounted, reactive, ref } from "vue";
 
@@ -9,18 +9,36 @@ const pending = ref(false);
 
 onMounted(async () => {
   currentUser.value = await useGetCurrentUser();
+  handleRefreshOrders();
+});
+
+const handleTakeOrder = (id) => {
+  takeOrder(id, currentUser.value.id)
+    .then(() => {
+      pending.value = false;
+      handleRefreshOrders();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+const handleRefreshOrders = () => {
   getAllOrders()
     .then((res) => {
       orderList.value = res.data.items;
 
-      if (orderList.value.length > 0 && orderList.value[0].status === "PENDING") {
+      console.log(res.data.items);
+
+      if (res.data.items.length > 0 && res.data.items[0].status === "PENDING") {
+        console.log("pending");
         pending.value = true;
       }
     })
     .catch((error) => {
       console.log(error);
     });
-});
+};
 </script>
 
 <template>
@@ -74,6 +92,7 @@ onMounted(async () => {
                   !currentUser.value.roles.includes('ROLE_ADMIN') &&
                   pending === true
                 "
+                @click="handleTakeOrder(item.id)"
               >
                 Prendre en charge
               </button>

@@ -21,7 +21,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
     new GetCollection(controller: GetAllOrderController::class),
     new Post(),
     new Put(),
-    new Patch(),
+    new Patch(security: 'is_granted("ROLE_ADMIN") 
+        or (is_granted("ROLE_DELIVERER") and user.getStatus() == "OPERATIVE" and object.getDeliverer() == null) 
+        or (is_granted("ROLE_USER") and user.getClient() == user)'),
     new Delete(),
 ], normalizationContext: ['groups' => ['order:read']], )]
 class Order
