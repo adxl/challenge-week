@@ -98,11 +98,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	private ?string $plainPassword = null;
 
   #[ORM\Column(length: 255)]
-  #[Groups(['order:read', 'self', 'delivererReviews'])]
+  #[Groups(['order:read', 'self', 'delivererReviews', 'kyc:read'])]
   private ?string $firstname = null;
 
   #[ORM\Column(length: 255)]
-  #[Groups(['order:read', 'self', 'delivererReviews'])]
+  #[Groups(["self",'delivererReviews', 'kyc:read'])]
   private ?string $lastname = null;
 
 	#[ORM\Column(nullable: true)]

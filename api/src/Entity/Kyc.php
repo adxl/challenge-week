@@ -6,26 +6,35 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\KycRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: KycRepository::class)]
-#[ApiResource]
+#[ApiResource(normalizationContext: ['groups' => ['kyc:read']])]
+#[ApiFilter(SearchFilter::class, properties: ['status' => 'exact'])]
 class Kyc
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+	#[Groups(['kyc:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+	#[Groups(['kyc:read'])]
     private ?string $siret = null;
 
     #[ORM\Column(length: 255)]
+	#[Groups(['kyc:read'])]
     private ?string $status = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+	#[Groups(['kyc:read'])]
     private ?string $reason = null;
 
     #[ORM\OneToOne(mappedBy: 'kyc', cascade: ['persist', 'remove'])]
+	#[Groups(['kyc:read'])]
     private ?User $deliverer = null;
 
     public function getId(): ?int
