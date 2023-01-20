@@ -5,6 +5,8 @@ import HelloWorld from "@/components/HelloWorld.vue";
 import NotFound from "@/views/NotFound.vue";
 import AdminDashboard from "@/views/AdminDashboard.vue";
 import VerifyToken from "@/views/VerifyToken.vue";
+import KycList from "@/views/Kyc/KycList.vue";
+import Kyc from "@/views/Kyc/Kyc.vue";
 import NewPasswordForm from "@/views/ResetPassword/NewPwdForm.vue";
 import EmailForm from "@/views/ResetPassword/EmailForm.vue";
 import ProductType from "@/views/ProductType/ProductType.vue";
@@ -17,7 +19,12 @@ import Product from "@/views/Product/Product.vue";
 import ProductList from "@/views/Product/ProductList.vue";
 import { useGetCurrentUser } from "@/services";
 
-import { REGISTER_CLIENT, REGISTER_DELIVERER, PROFIL_DELIVERER, PROFIL_USER } from "./constants";
+import {
+  REGISTER_CLIENT,
+  REGISTER_DELIVERER,
+  PROFIL_DELIVERER,
+  PROFIL_USER,
+} from "./constants";
 
 const routes = [
   {
@@ -59,21 +66,6 @@ const routes = [
     component: EmailForm,
   },
   {
-    name: "product-types",
-    path: "/product-types",
-    component: ProductTypeList,
-  },
-  {
-    name: "product-type-create",
-    path: "/product-type/create",
-    component: ProductType,
-  },
-  {
-    name: "product-type",
-    path: "/product-type/:id",
-    component: ProductType,
-  },
-  {
     name: "orders",
     path: "/orders",
     component: OrderList,
@@ -82,36 +74,6 @@ const routes = [
     name: "order-detail",
     path: "/orders/:id",
     component: Order,
-  },
-  {
-    name: "product-categorys",
-    path: "/product-categorys",
-    component: ProductCategoryList,
-  },
-  {
-    name: "product-category-create",
-    path: "/product-category/create",
-    component: ProductCategory,
-  },
-  {
-    name: "product-category",
-    path: "/product-category/:id",
-    component: ProductCategory,
-  },
-  {
-    name: "products",
-    path: "/products",
-    component: ProductList,
-  },
-  {
-    name: "product-create",
-    path: "/product/create",
-    component: Product,
-  },
-  {
-    name: "product",
-    path: "/product/:id",
-    component: Product,
   },
   {
     path: "/admin/",
@@ -135,6 +97,61 @@ const routes = [
         component: () => import("@/views/Profils/ProfilsList.vue"),
         props: { source: PROFIL_DELIVERER },
       },
+      {
+        path: "products",
+        name: "admin-products",
+        component: ProductList,
+      },
+      {
+        path: "product/create",
+        name: "admin-product-create",
+        component: Product,
+      },
+      {
+        path: "product/:id",
+        name: "admin-product",
+        component: Product,
+      },
+      {
+        path: "product-categorys",
+        name: "admin-product-categorys",
+        component: ProductCategoryList,
+      },
+      {
+        path: "product-category/create",
+        name: "admin-product-category-create",
+        component: ProductCategory,
+      },
+      {
+        path: "product-category/:id",
+        name: "admin-product-category",
+        component: ProductCategory,
+      },
+      {
+        path: "product-types",
+        name: "admin-product-types",
+        component: ProductTypeList,
+      },
+      {
+        path: "product-type/create",
+        name: "admin-product-type-create",
+        component: ProductType,
+      },
+      {
+        path: "product-type/:id",
+        name: "admin-product-type",
+        component: ProductType,
+      },
+      {
+        path: "verify/kyc",
+        name: "admin-kyc-list",
+        component: KycList,
+      },
+      {
+        path: "verify/kyc/:id",
+        name: "admin-kyc",
+        component: Kyc,
+      },
     ],
   },
   {
@@ -151,7 +168,10 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const currentUser = await useGetCurrentUser().catch(() => null);
 
-  if (to.meta.authorize && !currentUser?.roles.some((r) => to.meta.authorize?.includes(r))) {
+  if (
+    to.meta.authorize &&
+    !currentUser?.roles.some((r) => to.meta.authorize?.includes(r))
+  ) {
     return {
       path: "/login",
       query: { redirect: to.fullPath },

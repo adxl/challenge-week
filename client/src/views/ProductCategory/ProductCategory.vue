@@ -35,7 +35,7 @@ function handleRegister(values) {
   if (id) {
     updateProductCategory(id, { ...values })
       .then(({ data }) => {
-        route.push({ name: "product-categorys" });
+        route.push({ name: "admin-product-categorys" });
       })
       .catch((error) => {
         console.log(error);
@@ -44,7 +44,7 @@ function handleRegister(values) {
   } else {
     addProductCategory({ id, ...values })
       .then(({ data }) => {
-        route.push({ name: "product-categorys" });
+        route.push({ name: "admin-product-categorys" });
       })
       .catch((error) => {
         console.log(error);

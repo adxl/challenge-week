@@ -87,7 +87,7 @@ function handleRegister(values) {
   if (id) {
     updateProduct(id, { ...values })
       .then(({ data }) => {
-        route.push({ name: "products" });
+        route.push({ name: "admin-products" });
       })
       .catch((error) => {
         console.log(error);
@@ -96,7 +96,7 @@ function handleRegister(values) {
   } else {
     addProduct({ id, ...values })
       .then(({ data }) => {
-        route.push({ name: "products" });
+        route.push({ name: "admin-products" });
       })
       .catch((error) => {
         console.log(error);

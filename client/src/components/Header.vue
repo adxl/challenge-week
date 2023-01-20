@@ -6,7 +6,9 @@ const currentUser = inject("auth_user");
 <template>
   <header class="sticky top-0">
     <nav class="bg-white border-gray-200 px-2 sm:px-4 py-2.5 dark:bg-gray-900">
-      <div class="container flex flex-wrap items-center justify-between mx-auto">
+      <div
+        class="container flex flex-wrap items-center justify-between mx-auto"
+      >
         <router-link to="/" class="flex items-center">
           <img src="/logo.png" class="h-10" alt="Flowbite Logo" />
         </router-link>
@@ -41,34 +43,6 @@ const currentUser = inject("auth_user");
                 :to="{ name: 'login' }"
                 class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >Se connecter</router-link
-              >
-            </li>
-            <li>
-              <router-link
-                :to="{ name: 'product-types' }"
-                class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >productTypes</router-link
-              >
-            </li>
-            <li>
-              <router-link
-                :to="{ name: 'product-categorys' }"
-                class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >productCategorie</router-link
-              >
-            </li>
-            <li>
-              <router-link
-                :to="{ name: 'products' }"
-                class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >product</router-link
-              >
-            </li>
-            <li>
-              <router-link
-                :to="{ name: 'orders' }"
-                class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >orders</router-link
               >
             </li>
           </ul>
