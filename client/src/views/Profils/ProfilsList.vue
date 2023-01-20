@@ -1,13 +1,12 @@
 <script setup>
 import { getClients, getDeliverers } from "@/api/account";
 import { USER_STATUS, PROFIL_DELIVERER, PROFIL_USER } from "@/router/constants";
-import { onMounted, reactive, ref, watch, inject } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 
 const users = reactive({ value: [] });
 
 const isClientProfil = ref(false);
 const isDelivererProfil = ref(false);
-const currentUser = inject("auth_user");
 
 const props = defineProps({
   source: {

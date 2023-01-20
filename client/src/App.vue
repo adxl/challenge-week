@@ -1,40 +1,26 @@
 <script setup>
 import Header from "./components/Header.vue";
-import HeaderAdmin from "./components/HeaderAdmin.vue";
 import { useGetCurrentUser } from "@/services";
-import { onMounted, onUpdated, provide, ref, watch } from "vue";
+import { onMounted, provide, reactive } from "vue";
 
-let currentUser = null;
-const loading = ref(false);
+const currentUser = reactive({ value: {} });
 provide("auth_user", currentUser);
+provide("app_refresh", refreshUser);
 
 async function refreshUser() {
-  currentUser = await useGetCurrentUser().catch(() => null);
+  currentUser.value = await useGetCurrentUser().catch(() => null);
 }
-
-watch(currentUser, () => {
-  provide("auth_user", currentUser);
-});
 
 onMounted(async () => {
   await refreshUser();
-  loading.value = true;
-});
-onUpdated(async () => {
-  await refreshUser();
-  loading.value = true;
 });
 </script>
 
 <template>
-  <div className="h-screen" v-if="loading">
+  <div className="h-screen">
     <Header />
-    <main v-if="currentUser?.isAdmin" className="main grid grid-cols-2 justify-items-start h-full">
-      <HeaderAdmin class="justify-self-start" />
-      <router-view class="justify-self-center self-center" />
-    </main>
-    <main v-else className="flex items-center justify-center h-full">
-      <router-view class="" />
+    <main className="flex items-center justify-center h-full">
+      <router-view />
     </main>
   </div>
 </template>

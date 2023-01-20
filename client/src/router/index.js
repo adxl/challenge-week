@@ -3,6 +3,7 @@ import Register from "@/views/Register.vue";
 import Login from "@/views/Login.vue";
 import HelloWorld from "@/components/HelloWorld.vue";
 import NotFound from "@/views/NotFound.vue";
+import AdminDashboard from "@/views/AdminDashboard.vue";
 import VerifyToken from "@/views/VerifyToken.vue";
 import NewPasswordForm from "@/views/ResetPassword/NewPwdForm.vue";
 import EmailForm from "@/views/ResetPassword/EmailForm.vue";
@@ -103,6 +104,7 @@ const routes = [
   {
     path: "/admin/",
     meta: { authorize: ["ROLE_ADMIN"] },
+    component: AdminDashboard,
     children: [
       {
         name: "admin-dashboard",
@@ -133,8 +135,10 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
-router.beforeEach(async (to, from) => {
+
+router.beforeEach(async (to) => {
   const currentUser = await useGetCurrentUser().catch(() => null);
+
   if (to.meta.authorize && !currentUser?.roles.some((r) => to.meta.authorize?.includes(r))) {
     return {
       path: "/login",

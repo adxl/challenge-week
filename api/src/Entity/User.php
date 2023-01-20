@@ -79,13 +79,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	#[ORM\Column]
 	private ?int $id = null;
 
-	#[ORM\Column(length: 180, unique: true)]
-	#[Groups(["self"])]
-	private ?string $email = null;
+  #[ORM\Column(length: 180, unique: true)]
+  #[Groups(["self",'delivererReviews'])]
+  private ?string $email = null;
 
-	#[ORM\Column]
-	#[Groups(["self"])]
-	private array $roles = [];
+  #[ORM\Column]
+  #[Groups(["self",'delivererReviews'])]
+  private array $roles = [];
 
 	/**
 	 * @var string The hashed password
@@ -96,13 +96,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	#[Assert\NotBlank(groups: ['user:create'])]
 	private ?string $plainPassword = null;
 
-	#[ORM\Column(length: 255)]
-	#[Groups(["self"])]
-	private ?string $firstname = null;
+  #[ORM\Column(length: 255)]
+  #[Groups(["self",'delivererReviews'])]
+  private ?string $firstname = null;
 
-	#[ORM\Column(length: 255)]
-	#[Groups(["self"])]
-	private ?string $lastname = null;
+  #[ORM\Column(length: 255)]
+  #[Groups(["self",'delivererReviews'])]
+  private ?string $lastname = null;
 
 	#[ORM\Column(nullable: true)]
 	#[Groups(["self"])]

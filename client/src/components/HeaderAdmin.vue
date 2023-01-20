@@ -1,3 +1,10 @@
+<script setup>
+const handleLogout = () => {
+  sessionStorage.removeItem("cw-app-token");
+  window.location.href = "/login";
+};
+</script>
+
 <template>
   <aside class="w-64" aria-label="Sidebar">
     <div class="px-3 py-4 h-full overflow-y-auto bg-gray-50 dark:bg-gray-800">
@@ -59,23 +66,19 @@
           </button>
           <ul id="dropdown-example" class="py-2 space-y-2">
             <li>
-              <a
-                href="#"
+              <router-link
                 class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                :to="{ name: 'admin-profils-clients' }"
               >
-                <router-link class="h-full w-full" :to="{ name: 'admin-profils-clients' }">
-                  Clients
-                </router-link>
-              </a>
+                Clients
+              </router-link>
             </li>
             <li>
-              <a
-                href="#"
-                class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+              <router-link
+                class="h-full flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                :to="{ name: 'admin-profils-deliverers' }"
               >
-                <router-link class="h-full w-full" :to="{ name: 'admin-profils-deliverers' }">
-                  Livreurs</router-link
-                ></a
+                Livreurs</router-link
               >
             </li>
           </ul>
@@ -101,9 +104,9 @@
         </li>
 
         <li>
-          <a
-            href="#"
+          <router-link
             class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            :to="{ name: 'product-types' }"
           >
             <svg
               aria-hidden="true"
@@ -119,12 +122,13 @@
               ></path>
             </svg>
             <span class="flex-1 ml-3 whitespace-nowrap">Liste des produits</span>
-          </a>
+          </router-link>
         </li>
         <li>
           <a
             href="#"
             class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            @click="handleLogout"
           >
             <svg
               aria-hidden="true"

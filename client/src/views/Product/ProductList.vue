@@ -1,21 +1,21 @@
 <script setup>
 import { getAllProducts, deleteProduct } from "@/api/product";
-import { getProductType } from "@/api/productType";
 import { onMounted, reactive } from "vue";
 
-const productTypes = reactive([]);
+const products = reactive([]);
 
 onMounted(() => {
   getAllProducts().then((res) => {
-    productTypes.value = res.data.items;
+    console.log(res.data.items);
+    products.value = res.data.items;
   });
 });
 
 function handleDelete(value) {
   deleteProduct(value.id)
-    .then(({ data }) => {
+    .then(() => {
       getAllProducts().then((res) => {
-        productTypes.value = res.data.items;
+        products.value = res.data.items;
       });
     })
     .catch((error) => {
@@ -52,7 +52,7 @@ function handleDelete(value) {
         <tbody>
           <tr
             :key="item.id"
-            v-for="item in productTypes.value"
+            v-for="item in products.value"
             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
           >
             <th

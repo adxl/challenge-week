@@ -7,6 +7,7 @@ axios.interceptors.response.use(
   function (error) {
     if (error?.response?.status === 401) {
       sessionStorage.removeItem("cw-app-token");
+      debugger;
       window.location.href = "/login";
     }
     return Promise.reject(error);

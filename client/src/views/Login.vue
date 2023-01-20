@@ -1,9 +1,11 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive, inject } from "vue";
 import { login } from "@/api/auth";
 import { useRouter } from "vue-router";
 
 const route = useRouter();
+
+const refreshUser = inject("app_refresh");
 
 const _inputsLogin = reactive({
   email: "",
@@ -14,6 +16,7 @@ function handleLogin() {
   login({ ..._inputsLogin })
     .then(({ data }) => {
       sessionStorage.setItem("cw-app-token", JSON.stringify(data.token));
+      refreshUser();
       route.push({ name: "home" });
     })
     .catch((error) => {
