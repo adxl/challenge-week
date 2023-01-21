@@ -49,7 +49,7 @@ class Order
     private ?User $client = null;
 
     #[ORM\OneToOne(inversedBy: 'originOrder', cascade: ['persist', 'remove'])]
-    #[Groups(['delivererReviews'])]
+    #[Groups(['order:read', 'order:detail', 'delivererReviews'])]
     private ?DelivererReview $delivererReview = null;
 
     #[ORM\OneToMany(mappedBy: 'productOrder', targetEntity: OrderProduct::class)]

@@ -1,21 +1,17 @@
 <script setup>
 import { getAllOrders, takeOrder } from "@/api/order";
-import { useGetCurrentUser } from "@/services";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, inject } from "vue";
 
 const orderList = reactive([]);
-const currentUser = reactive({});
-const pending = ref(false);
+const currentUser = inject("auth_user");
 
 onMounted(async () => {
-  currentUser.value = await useGetCurrentUser();
   handleRefreshOrders();
 });
 
 const handleTakeOrder = (id) => {
   takeOrder(id, currentUser.value.id)
     .then(() => {
-      pending.value = false;
       handleRefreshOrders();
     })
     .catch((error) => {
@@ -25,15 +21,9 @@ const handleTakeOrder = (id) => {
 
 const handleRefreshOrders = () => {
   getAllOrders()
-    .then((res) => {
-      orderList.value = res.data.items;
-
-      console.log(res.data.items);
-
-      if (res.data.items.length > 0 && res.data.items[0].status === "PENDING") {
-        console.log("pending");
-        pending.value = true;
-      }
+    .then(({ data }) => {
+      orderList.value = data.items;
+      console.log(data.items);
     })
     .catch((error) => {
       console.log(error);
@@ -52,17 +42,7 @@ const handleRefreshOrders = () => {
             <th class="px-6 py-4">N° Commande</th>
             <th class="px-6 py-4">Status</th>
             <th class="px-6 py-4">Client</th>
-            <th
-              class="px-6 py-4"
-              v-if="
-                (currentUser.value?.roles.includes('ROLE_DELIVERER') &&
-                  !currentUser.value?.roles.includes('ROLE_ADMIN') &&
-                  pending === true) ||
-                !currentUser.value?.roles.includes('ROLE_DELIVERER')
-              "
-            >
-              Actions
-            </th>
+            <th class="px-6 py-4"></th>
           </tr>
         </thead>
         <tbody>
@@ -79,32 +59,37 @@ const handleRefreshOrders = () => {
               </p>
               {{ item.client.address }}
             </td>
-            <td
-              class="px-6 py-4"
-              v-if="
-                (currentUser.value?.roles.includes('ROLE_DELIVERER') &&
-                  !currentUser.value?.roles.includes('ROLE_ADMIN') &&
-                  pending === true) ||
-                !currentUser.value?.roles.includes('ROLE_DELIVERER')
-              "
-            >
+            <td class="px-6 py-4">
               <button
                 class="block w-full px-4 py-2 mt-6 font-medium text-white uppercase transition-colors duration-200 transform bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600"
-                v-if="
-                  currentUser.value.roles.includes('ROLE_DELIVERER') &&
-                  !currentUser.value.roles.includes('ROLE_ADMIN') &&
-                  pending === true
-                "
+                v-if="currentUser.value.isDeliverer && item.status === 'PENDING'"
                 @click="handleTakeOrder(item.id)"
               >
                 Prendre en charge
               </button>
+              <button
+                class="block w-full px-4 py-2 mt-6 font-medium text-white uppercase transition-colors duration-200 transform bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600"
+                v-if="currentUser.value.isDeliverer && item.status === 'SHIPPING'"
+                @click="() => {}"
+              >
+                Valider réception
+              </button>
               <router-link :to="{ name: 'order-detail', params: { id: item.id } }">
                 <button
                   class="block w-full px-4 py-2 mt-6 font-medium text-white uppercase transition-colors duration-200 transform bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600"
-                  v-if="!currentUser.value?.roles.includes('ROLE_DELIVERER')"
+                  v-if="!currentUser.value.isDeliverer"
                 >
                   Détails
+                </button>
+              </router-link>
+              <router-link :to="{ name: 'order-detail', params: { id: item.id } }">
+                <button
+                  class="block w-full px-4 py-2 mt-6 font-medium text-white uppercase transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                  v-if="
+                    currentUser.value.isClient && !item.delivererReview && item.status == 'DONE'
+                  "
+                >
+                  Laisser un avis
                 </button>
               </router-link>
             </td>

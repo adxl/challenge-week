@@ -11,27 +11,35 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 class DelivererReviewFixtures extends Fixture implements DependentFixtureInterface
 {
 
-	public function load(ObjectManager $manager): void
-	{
-		$faker = \Faker\Factory::create('fr_FR');
-		$orders = $manager->getRepository(Order::class)->findByStatus(
-			[OrderFixtures::DONE]
-		);
+  public function load(ObjectManager $manager): void
+  {
+    $faker = \Faker\Factory::create('fr_FR');
+    $orders = $manager->getRepository(Order::class)->findByStatus(
+      [OrderFixtures::DONE]
+    );
 
-    foreach($orders as $order) {
+    foreach ($orders as $order) {
+
+      if (
+        $order->getClient() === $this->getReference("client_3")
+        && $order->getDeliverer() === $this->getReference('deliverer_1')
+      ) {
+        continue;
+      }
+
       $delivererReview = new DelivererReview();
       $delivererReview->setOriginOrder($order);
       $delivererReview->setComment($faker->sentence(10));
       $delivererReview->setRating($faker->randomNumber(1, 5));
       $manager->persist($delivererReview);
-    } 
+    }
 
-		$manager->flush();
-	}
-	public function getDependencies()
-	{
-		return [
-			OrderFixtures::class,
-		];
-	}
+    $manager->flush();
+  }
+  public function getDependencies()
+  {
+    return [
+      OrderFixtures::class,
+    ];
+  }
 }

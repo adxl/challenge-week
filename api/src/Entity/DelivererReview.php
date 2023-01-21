@@ -31,14 +31,15 @@ class DelivererReview
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
+  #[Groups(['delivererReviews', 'order:detail', 'order:read'])]
   private ?int $id = null;
 
   #[ORM\Column(nullable: true)]
-  #[Groups(['delivererReviews'])]
+  #[Groups(['delivererReviews', 'order:detail', 'order:read'])]
   private ?int $rating = null;
 
   #[ORM\Column(type: Types::TEXT, nullable: true)]
-  #[Groups(['delivererReviews'])]
+  #[Groups(['delivererReviews', 'order:detail', 'order:read'])]
   private ?string $comment = null;
 
   #[ORM\OneToOne(mappedBy: 'delivererReview', cascade: ['persist', 'remove'])]

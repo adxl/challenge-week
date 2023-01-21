@@ -8,3 +8,8 @@ export function getAllProductReviews() {
 export function getAllDelivererReviews() {
   return _getAll("/deliverer_reviews");
 }
+
+// data : { originOrder, rating, comment };
+export function sendDelivererReview(data) {
+  return _post("/deliverer_reviews", data);
+}

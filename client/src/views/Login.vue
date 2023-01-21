@@ -19,7 +19,10 @@ function handleLogin() {
       const user = await refreshUser();
       if (user.isAdmin) {
         route.push({ name: "admin-dashboard" });
+      } else if (user.isDeliverer) {
+        route.push({ name: "orders" });
       } else {
+        console.log(user);
         route.push({ name: "store" });
       }
     })
@@ -34,9 +37,7 @@ function handleLogin() {
     <form @submit.prevent="handleLogin">
       <div class="mb-6">
         <div class="mb-6">
-          <label class="block mb-2 text-sm font-medium text-gray-900"
-            >Email</label
-          >
+          <label class="block mb-2 text-sm font-medium text-gray-900">Email</label>
           <input
             type="email"
             v-model="_inputsLogin.email"
@@ -45,9 +46,7 @@ function handleLogin() {
           />
         </div>
         <div>
-          <label class="block mb-2 text-sm font-medium text-gray-900"
-            >Mot de passe</label
-          >
+          <label class="block mb-2 text-sm font-medium text-gray-900">Mot de passe</label>
           <input
             type="password"
             v-model="_inputsLogin.password"
@@ -98,11 +97,7 @@ function handleLogin() {
   );
 
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  background: linear-gradient(
-    to bottom right,
-    rgba(240, 147, 251, 1),
-    rgba(245, 87, 108, 1)
-  );
+  background: linear-gradient(to bottom right, rgba(240, 147, 251, 1), rgba(245, 87, 108, 1));
 }
 
 .card-registration .select-input.form-control[readonly]:not([disabled]) {
