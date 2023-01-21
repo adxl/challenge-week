@@ -22,7 +22,7 @@ class ProductReviewFixtures extends Fixture implements DependentFixtureInterface
       
       $productReview = new ProductReview();
       $productReview->setProduct($orderProduct->getProduct());
-      $productReview->setOrder($orderProduct->getOrder());
+      $productReview->setOriginOrder($orderProduct->getOriginOrder());
       $productReview->setRating($faker->boolean);
       $manager->persist($productReview);
     } 

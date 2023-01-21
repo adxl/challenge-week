@@ -7,22 +7,14 @@ use App\Repository\DelivererReviewRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Delete;
 
 #[ORM\Entity(repositoryClass: DelivererReviewRepository::class)]
 #[ApiResource(
   operations: [
-    new Get(security: 'is_granted("ROLE_ADMIN")'),
     new GetCollection(security: 'is_granted("ROLE_ADMIN")'),
     new Post(),
-    new Put(),
-    new Patch(),
-    new Delete(),
   ],
   normalizationContext: ['groups' => ['delivererReviews']]
 )]
@@ -45,10 +37,6 @@ class DelivererReview
   #[ORM\OneToOne(mappedBy: 'delivererReview', cascade: ['persist', 'remove'])]
   #[Groups(['delivererReviews'])]
   private ?Order $originOrder = null;
-
-  /* #[ORM\OneToOne(inversedBy: 'productOrder', cascade: ['persist', 'remove'])] */
-  /* #[Groups(['delivererReviews'])] */
-  /* private ?Order $productOrder = null; */
 
   public function getId(): ?int
   {
@@ -78,18 +66,6 @@ class DelivererReview
 
     return $this;
   }
-
-  /* public function getProductOrder(): ?Order */
-  /* { */
-  /*   return $this->productOrder; */
-  /* } */
-
-  /* public function setProductOrder(?Order $productOrder): self */
-  /* { */
-  /*   $this->productOrder = $productOrder; */
-
-  /*   return $this; */
-  /* } */
 
   public function getOriginOrder(): ?Order
   {

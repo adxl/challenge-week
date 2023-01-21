@@ -1,9 +1,9 @@
 <script setup>
 import { getOrder } from "@/api/order";
-import { reactive, onMounted, inject } from "vue";
+import { reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
-import { sendDelivererReview } from "@/api/reviews";
+import { sendDelivererReview, sendProductReview } from "@/api/reviews";
 
 import StarIcon from "@/components/icons/StarIcon.vue";
 
@@ -12,8 +12,6 @@ const notationRange = Array(5)
   .map((_, i) => i);
 
 const order = reactive({ value: {} });
-
-/* const currentUser = inject("auth_user"); */
 
 const delivererReviewInputs = reactive({
   originOrder: null,
@@ -42,6 +40,16 @@ function loadOrder() {
     })
     .catch(() => {
       route.push({ name: "orders" });
+    });
+}
+
+function handleReviewProduct(review, product, rating) {
+  sendProductReview(review, { product, rating, originOrder: order["@id"] })
+    .then(() => {
+      loadOrder();
+    })
+    .catch((error) => {
+      console.log(error);
     });
 }
 
@@ -98,68 +106,138 @@ onMounted(() => {
               >
                 <td class="px-6 py-4">{{ product.product.name }}</td>
                 <td class="px-6 py-4">{{ product.product.price }}€</td>
-                <td class="px-6 py-4">{{ product.quantity }}</td>
                 <td class="px-6 py-4">
-                  {{ (product.quantity * product.product.price).toFixed(2) }}€
+                  {{ product.quantity }}&nbsp;x&nbsp;{{ product.product.type.unit }}&nbsp;{{
+                    product.product.type.label
+                  }}
+                </td>
+                <td class="px-6 py-4">
+                  {{ (product.quantity * product.product.price).toFixed(2) }} €
                 </td>
               </tr>
             </tbody>
+            <tfoot>
+              <tr class="font-semibold text-gray-900 dark:text-white">
+                <th scope="row" class="px-6 py-3 text-base">Total</th>
+                <th class="px-6 py-3" />
+                <th class="px-6 py-3" />
+                <td class="px-6 py-3">
+                  {{
+                    order.value?.products?.reduce(
+                      (total, p) => total + Number((p.quantity * p.product.price).toFixed(2)),
+                      0
+                    )
+                  }}
+                  €
+                </td>
+              </tr>
+            </tfoot>
           </table>
         </li>
         <li class="py-3 sm:py-4 px-5">
           <div class="flex items-center justify-around mb-3">
             <p class="text-2xl font-medium text-gray-900 dark:text-white">Avis sur la commande</p>
           </div>
-          <div v-if="order.value?.delivererReview?.id">
-            <div class="dark:text-white">
-              <h1 class="text-2xl mb-5">Avis sur la livraison:</h1>
-              <div class="flex items-center">
-                <p>Note :</p>
+          <div class="mb-10">
+            <div v-if="order.value?.delivererReview?.id">
+              <div class="dark:text-white">
+                <h1 class="text-2xl mb-5">Avis sur la livraison:</h1>
                 <div class="flex items-center">
-                  <div v-for="item in notationRange" :key="item">
-                    <StarIcon :selected="item < order.value?.delivererReview?.rating" />
-                  </div>
-                </div>
-              </div>
-              <div class="flex items-center">
-                <p>Commentaire :&nbsp;</p>
-                <q>{{ order.value?.delivererReview?.comment }}</q>
-              </div>
-            </div>
-          </div>
-          <div v-else>
-            <form @submit.prevent="handleSendDelivererReview">
-              <div class="mb-6">
-                <div>
-                  <label class="block mb-2 text-sm font-medium text-white">Note</label>
+                  <p>Note :</p>
                   <div class="flex items-center">
-                    <div
-                      v-for="item in notationRange"
-                      :key="item"
-                      @click="delivererReviewInputs.rating = item + 1"
-                    >
-                      <StarIcon :selected="item < delivererReviewInputs.rating" />
+                    <div v-for="item in notationRange" :key="item">
+                      <StarIcon :selected="item < order.value?.delivererReview?.rating" />
                     </div>
                   </div>
                 </div>
-                <div class="mb-6">
-                  <label class="block mb-2 text-sm font-medium text-white">Commentaire</label>
-                  <input
-                    type="textarea"
-                    v-model="delivererReviewInputs.comment"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                    required
-                  />
+                <div class="flex items-center">
+                  <p>Commentaire :&nbsp;</p>
+                  <q>{{ order.value?.delivererReview?.comment }}</q>
                 </div>
               </div>
+            </div>
+            <div v-else>
+              <form @submit.prevent="handleSendDelivererReview">
+                <div class="mb-6">
+                  <div>
+                    <label class="block mb-2 text-sm font-medium text-white">Note</label>
+                    <div class="flex items-center">
+                      <div
+                        v-for="item in notationRange"
+                        :key="item"
+                        @click="delivererReviewInputs.rating = item + 1"
+                      >
+                        <StarIcon :selected="item < delivererReviewInputs.rating" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-6">
+                    <label class="block mb-2 text-sm font-medium text-white">Commentaire</label>
+                    <input
+                      type="textarea"
+                      v-model="delivererReviewInputs.comment"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                      required
+                    />
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  class="mb-10 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center"
+                >
+                  Laisser un avis
+                </button>
+              </form>
+            </div>
+          </div>
 
-              <button
-                type="submit"
-                class="mb-10 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center"
-              >
-                Laisser un avis
-              </button>
-            </form>
+          <div>
+            <h1 class="dark:text-white text-2xl mb-5">Avis sur les produits:</h1>
+            <div
+              v-for="review in order.value.productReviews"
+              :key="review.id"
+              class="dark:text-white"
+            >
+              <div class="flex items-center mb-5">
+                <div class="flex items-center">
+                  <p class="whitespace-nowrap mr-3">{{ review.product.name }}:</p>
+                  <button
+                    class="mr-2 whitespace-nowrap block w-full px-4 py-2 font-medium text-white uppercase transition-colors duration-200 transform rounded-md focus:outline-none"
+                    :class="[
+                      {
+                        'bg-purple-500 hover:bg-purple-600 focus:bg-purple-600 cursor-not-allowed':
+                          review.rating === false,
+                      },
+                      {
+                        'bg-gray-500 hover:bg-gray-600 focus:bg-gray-600 unselected':
+                          review.rating === true,
+                      },
+                    ]"
+                    @click="handleReviewProduct(review.id, review.product['@id'], false)"
+                    :disabled="!review.rating"
+                  >
+                    c'est soft 👎
+                  </button>
+                  <button
+                    class="whitespace-nowrap block w-full px-4 py-2 font-medium text-white uppercase transition-colors duration-200 transform rounded-md focus:outline-none"
+                    :class="[
+                      {
+                        'bg-green-500 hover:bg-green-600 focus:bg-green-600 cursor-not-allowed':
+                          review.rating === true,
+                      },
+                      {
+                        'bg-gray-500 hover:bg-gray-600 focus:bg-gray-600 unselected':
+                          review.rating === false,
+                      },
+                    ]"
+                    @click="handleReviewProduct(review.id, review.product['@id'], true)"
+                    :disabled="review.rating"
+                  >
+                    c'est high 💯
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </li>
       </ul>
@@ -167,4 +245,8 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.unselected {
+  opacity: 0.2;
+}
+</style>
