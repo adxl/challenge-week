@@ -20,12 +20,7 @@ import Product from "@/views/Product/Product.vue";
 import ProductList from "@/views/Product/ProductList.vue";
 import { useGetCurrentUser } from "@/services";
 
-import {
-  REGISTER_CLIENT,
-  REGISTER_DELIVERER,
-  PROFIL_DELIVERER,
-  PROFIL_USER,
-} from "./constants";
+import { REGISTER_CLIENT, REGISTER_DELIVERER, PROFIL_DELIVERER, PROFIL_USER } from "./constants";
 
 const routes = [
   {
@@ -104,6 +99,11 @@ const routes = [
         props: { source: PROFIL_DELIVERER },
       },
       {
+        name: "adminReviews",
+        path: "reviews",
+        component: () => import("@/views/ReviewsList.vue"),
+      },
+      {
         path: "products",
         name: "admin-products",
         component: ProductList,
@@ -174,10 +174,7 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const currentUser = await useGetCurrentUser().catch(() => null);
 
-  if (
-    to.meta.authorize &&
-    !currentUser?.roles.some((r) => to.meta.authorize?.includes(r))
-  ) {
+  if (to.meta.authorize && !currentUser?.roles.some((r) => to.meta.authorize?.includes(r))) {
     return {
       path: "/login",
       query: { redirect: to.fullPath },

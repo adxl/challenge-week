@@ -37,7 +37,7 @@ class Product
 	private ?float $price = null;
 
 	#[ORM\ManyToOne(inversedBy: 'products')]
-	#[Groups(['product:read'])]
+	#[Groups(['product:read', 'order:detail'])]
 	#[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
 	private ?ProductType $type = null;
 

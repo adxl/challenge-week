@@ -7,9 +7,11 @@ export function useGetCurrentUser() {
     }
 
     getCurrentUser()
-      .then((res) => {
-        const currentUser = res.data.items;
+      .then(({ data }) => {
+        const currentUser = { ...data };
         currentUser.isAdmin = currentUser.roles.includes("ROLE_ADMIN");
+        currentUser.isDeliverer = currentUser.roles.includes("ROLE_DELIVERER");
+        currentUser.isClient = currentUser.roles.includes("ROLE_CLIENT");
         resolve(currentUser);
       })
       .catch((error) => {

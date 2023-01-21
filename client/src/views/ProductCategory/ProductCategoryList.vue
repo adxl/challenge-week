@@ -1,8 +1,5 @@
 <script setup>
-import {
-  getAllProductCategory,
-  deleteProductCategory,
-} from "@/api/productCategory";
+import { getAllProductCategory, deleteProductCategory } from "@/api/productCategory";
 import { onMounted, reactive } from "vue";
 
 const productTypes = reactive([]);

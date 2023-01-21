@@ -42,7 +42,7 @@ class OrderProductRepository extends ServiceEntityRepository
     public function findByOrderByStatus(array $status): array
     {
         return $this->createQueryBuilder('op')
-            ->join('op.productOrder', 'po')
+            ->join('op.originOrder', 'po')
             ->andWhere('po.status = (:status)')
             ->setParameter('status', $status)
             ->getQuery()

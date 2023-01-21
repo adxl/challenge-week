@@ -41,7 +41,6 @@ export async function _get(path) {
   const headers = get_headers();
   headers["Content-Type"] = "application/ld-json";
   const response = await axios.get(URL + path, { headers });
-  response.data.items = response.data;
   return response;
 }
 
