@@ -2,6 +2,7 @@
 import { reactive, inject } from "vue";
 import { login } from "@/api/auth";
 import { useRouter } from "vue-router";
+import { initDB } from "../idbHelper";
 
 const route = useRouter();
 
@@ -16,6 +17,7 @@ function handleLogin() {
   login({ ..._inputsLogin })
     .then(async ({ data }) => {
       sessionStorage.setItem("cw-app-token", JSON.stringify(data.token));
+      initDB();
       const user = await refreshUser();
       if (user.isAdmin) {
         route.push({ name: "admin-dashboard" });

@@ -18,6 +18,7 @@ import ProductCategory from "@/views/ProductCategory/ProductCategory.vue";
 import ProductCategoryList from "@/views/ProductCategory/ProductCategoryList.vue";
 import Product from "@/views/Product/Product.vue";
 import ProductList from "@/views/Product/ProductList.vue";
+import Cart from "@/views/Store/Cart.vue";
 import { useGetCurrentUser } from "@/services";
 
 import { REGISTER_CLIENT, REGISTER_DELIVERER, PROFIL_DELIVERER, PROFIL_USER } from "./constants";
@@ -75,6 +76,11 @@ const routes = [
     name: "order-detail",
     path: "/orders/:id",
     component: Order,
+  },
+  {
+    name: "cart",
+    path: "/cart",
+    component: Cart,
   },
   {
     path: "/admin/",
