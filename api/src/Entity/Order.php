@@ -25,11 +25,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
   new Post(security: 'is_granted("ROLE_USER") and !is_granted("ROLE_ADMIN") and !is_granted("ROLE_DELIVERER")',
     denormalizationContext: ["groups" => ['order:write']],
     controller: CreateOrderController::class),
-  new Put(),
   new Patch(security: 'is_granted("ROLE_ADMIN") 
         or (is_granted("ROLE_DELIVERER") and user.getStatus() == "OPERATIVE" and object.getDeliverer() == null) 
         or (is_granted("ROLE_USER") and user.getClient() == user)'),
-  new Delete(),
 ], normalizationContext: ['groups' => ['order:read', 'order:detail']],)]
 class Order
 {

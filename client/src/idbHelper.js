@@ -32,3 +32,14 @@ export function updateCart(cart = {}) {
     return tx.done;
   });
 }
+
+export function clearCart() {
+  return initDB().then(async (db) => {
+    const cart = await db.getFromIndex(CART_STORE_NAME, "id", "cart");
+    cart.products = [];
+    cart.total = 0;
+    const tx = db.transaction(CART_STORE_NAME, "readwrite");
+    tx.store.put(cart);
+    return tx.done;
+  });
+}

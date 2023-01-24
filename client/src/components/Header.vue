@@ -1,9 +1,11 @@
 <script setup>
 import { inject } from "vue";
+import { clearCart } from "@/idbHelper";
 const currentUser = inject("auth_user");
 
 const handleLogout = () => {
   sessionStorage.removeItem("cw-app-token");
+  clearCart();
   window.location.href = "/login";
 };
 </script>
