@@ -1,6 +1,6 @@
 <script setup>
 import { getAllOrders, takeOrder } from "@/api/order";
-import { onMounted, reactive, ref, inject } from "vue";
+import { onMounted, reactive, inject } from "vue";
 
 const orderList = reactive([]);
 const currentUser = inject("auth_user");
@@ -23,7 +23,6 @@ const handleRefreshOrders = () => {
   getAllOrders()
     .then(({ data }) => {
       orderList.value = data.items;
-      console.log(data.items);
     })
     .catch((error) => {
       console.log(error);

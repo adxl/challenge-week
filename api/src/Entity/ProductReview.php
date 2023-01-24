@@ -28,7 +28,7 @@ class ProductReview
   #[Groups(['productReviews', 'order:detail', 'order:read'])]
   private ?int $id = null;
 
-  #[ORM\Column]
+  #[ORM\Column(nullable: true)]
   #[Groups(['productReviews', 'order:detail', 'order:read'])]
   private ?bool $rating = null;
 

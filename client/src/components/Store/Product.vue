@@ -36,8 +36,6 @@ const handleAddToCart = async () => {
   cart.total += quantity.value * props.item.price;
 
   await updateCart(cart);
-
-  console.log(cart);
 };
 </script>
 

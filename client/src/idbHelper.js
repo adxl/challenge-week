@@ -26,9 +26,7 @@ export function getCart() {
 }
 
 export function updateCart(cart = {}) {
-  console.log("updateCart", typeof cart);
   return initDB().then((db) => {
-    console.log(db);
     const tx = db.transaction(CART_STORE_NAME, "readwrite");
     tx.store.put(cart);
     return tx.done;
