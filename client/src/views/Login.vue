@@ -35,11 +35,11 @@ function handleLogin() {
 </script>
 
 <template>
-  <div class="block">
+  <div class="block max-w-sm p-6 border rounded-lg shadow bg-gray-800 border-gray-700">
     <form @submit.prevent="handleLogin">
       <div class="mb-6">
         <div class="mb-6">
-          <label class="block mb-2 text-sm font-medium text-gray-900">Email</label>
+          <label class="block mb-2 text-sm font-medium text-white">Email</label>
           <input
             type="email"
             v-model="_inputsLogin.email"
@@ -48,7 +48,7 @@ function handleLogin() {
           />
         </div>
         <div>
-          <label class="block mb-2 text-sm font-medium text-gray-900">Mot de passe</label>
+          <label class="block mb-2 text-sm font-medium text-white">Mot de passe</label>
           <input
             type="password"
             v-model="_inputsLogin.password"
@@ -58,7 +58,7 @@ function handleLogin() {
         </div>
         <div class="flex justify-end">
           <router-link
-            class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+            class="font-medium text-blue-500 hover:underline"
             :to="{ name: 'Reset Password' }"
           >
             Mot de passe oublié</router-link
@@ -70,13 +70,13 @@ function handleLogin() {
         type="submit"
         class="mb-10 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center"
       >
-        S'inscrire
+        Se connecter
       </button>
 
       <div class="flex justify-center">
-        <p>Vous n'avez pas de compte ?&nbsp;</p>
+        <p class="text-white">Vous n'avez pas de compte ?&nbsp;</p>
         <router-link
-          class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+          class="font-medium text-blue-500 hover:underline"
           :to="{ name: 'registerClient' }"
         >
           S'inscrire ici</router-link

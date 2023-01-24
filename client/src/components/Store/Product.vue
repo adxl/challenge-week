@@ -40,9 +40,7 @@ const handleAddToCart = async () => {
 </script>
 
 <template>
-  <div
-    class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700"
-  >
+  <div class="items-center rounded-lg shadow sm:flex bg-gray-800 border-gray-700">
     <a href="#" class="ml-5">
       <img
         class="product-img"
@@ -51,18 +49,16 @@ const handleAddToCart = async () => {
       />
     </a>
     <div class="p-5">
-      <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+      <h3 class="text-xl font-bold tracking-tight text-white">
         <a href="#">{{ item.name }}</a>
       </h3>
-      <span class="text-gray-500 dark:text-gray-400">{{ item.category.name }}</span>
-      <span class="text-gray-500 dark:text-gray-400">
+      <span class="text-gray-400">{{ item.category.name }}</span>
+      <span class="text-gray-400">
         (
-        <i class="text-gray-500 dark:text-gray-400"
-          >{{ item.type.name }} {{ item.type.unit }} {{ item.type.label }}</i
-        >
+        <i class="text-gray-400">{{ item.type.name }} {{ item.type.unit }} {{ item.type.label }}</i>
         )
       </span>
-      <p class="mt-3 text-gray-500 dark:text-gray-400">{{ item.description }}</p>
+      <p class="mt-3 text-gray-400">{{ item.description }}</p>
       <ul class="flex space-x-4 sm:mt-0">
         <li>
           <div class="grid gap-2 mb-6 md:grid-cols-2">
@@ -71,13 +67,13 @@ const handleAddToCart = async () => {
                 type="number"
                 min="0"
                 v-model="quantity"
-                class="h-full bg-gray-50 border border-gray-300 text-gray-900 text-sm block mb-2 m-2 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                class="h-full border text-sm block mb-2 m-2 rounded-lg w-full bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                 placeholder="quantité"
               />
             </div>
             <button
               type="button"
-              class="text-white h-full bg-blue-700 block mb-2 m-2 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              class="text-white h-full block mb-2 m-2 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
               @click="handleAddToCart(item)"
             >
               <svg

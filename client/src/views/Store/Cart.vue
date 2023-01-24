@@ -43,14 +43,14 @@ const handleOrderConfirm = () => {
 </script>
 
 <template>
-  <div class="container mx-auto px-4 sm:px-8">
+  <div class="container mx-auto px-4 sm:px-8 self-start">
     <div
-      class="flex justify-between items-center px-4 py-3 bg-white dark:bg-gray-800 dark:text-gray-400 mt-5 rounded-lg shadow-md"
+      class="flex justify-between items-center px-4 py-3 bg-gray-800 text-gray-400 mt-5 rounded-lg shadow-md"
     >
-      <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Panier</h3>
+      <h3 class="text-lg leading-6 font-medium text-white">Panier</h3>
       <div class="flex items-center">
-        <span class="text-gray-700 dark:text-gray-400 mr-2">Total:</span>
-        <span class="text-gray-900 dark:text-gray-200 font-bold"> {{ cart.value?.total }} € </span>
+        <span class="text-gray-400 mr-2">Total:</span>
+        <span class="text-gray-200 font-bold"> {{ cart.value?.total }} € </span>
         <button
           v-if="cart.value?.products.length > 0"
           class="ml-4 px-4 py-2 bg-green-900 text-white rounded-md shadow-md hover:bg-green-800"
@@ -99,10 +99,8 @@ const handleOrderConfirm = () => {
       </div>
     </div>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
-      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead
-          class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
-        >
+      <table class="w-full text-sm text-left text-gray-400">
+        <thead class="text-xs uppercase bg-gray-700 text-gray-400">
           <tr>
             <th class="px-6 py-4">Produit</th>
             <th class="px-6 py-4">Prix</th>
@@ -154,15 +152,13 @@ const handleOrderConfirm = () => {
   >
     <div class="relative w-full h-full max-w-2xl md:h-auto">
       <!-- Modal content -->
-      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+      <div class="relative rounded-lg shadow bg-gray-700">
         <!-- Modal header -->
-        <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-          <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-            Confirmation de la commande
-          </h3>
+        <div class="flex items-start justify-between p-4 border-b rounded-t border-gray-600">
+          <h3 class="text-xl font-semibold text-white">Confirmation de la commande</h3>
           <button
             type="button"
-            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            class="bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white"
             data-modal-hide="defaultModal"
           >
             <svg
@@ -183,37 +179,33 @@ const handleOrderConfirm = () => {
         </div>
         <!-- Modal body -->
         <div class="p-6 space-y-6">
-          <h4 class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+          <h4 class="text-base leading-relaxed 0 text-gray-400">
             Récapitulatif de votre commande :
           </h4>
-          <ul class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+          <ul class="text-base leading-relaxed text-gray-400">
             <li>
-              <label
-                for="deliver_address"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              <label for="deliver_address" class="block mb-2 text-sm font-medium text-white"
                 >Adresse de livraison et de facturation :</label
               >
               <input
                 type="text"
                 id="deliver_address"
                 :value="user.value?.address"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                 placeholder="John"
                 disabled
                 readonly
               />
             </li>
             <li class="mt-5">
-              <label
-                for="cart_total"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              <label for="cart_total" class="block mb-2 text-sm font-medium text-white"
                 >Total à payer :</label
               >
               <input
                 type="text"
                 id="cart_total"
                 :value="cart.value?.total + ' €'"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                 placeholder="John"
                 disabled
                 readonly
@@ -221,18 +213,16 @@ const handleOrderConfirm = () => {
             </li>
           </ul>
           <small>
-            <p class="text-sm leading-relaxed text-gray-500 dark:text-gray-400 mt-2">
+            <p class="text-sm leading-relaxed text-gray-400 mt-2">
               En cliquant sur "Commander", vous acceptez les conditions générales de vente.
             </p>
           </small>
         </div>
         <!-- Modal footer -->
-        <div
-          class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
-        >
+        <div class="flex items-center p-6 space-x-2 border-t rounded-b border-gray-600">
           <button
             type="button"
-            class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+            class="focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-green-600 hover:bg-green-700 focus:ring-green-800"
             @click="handleOrderConfirm"
           >
             Commander
@@ -240,7 +230,7 @@ const handleOrderConfirm = () => {
           <button
             data-modal-hide="defaultModal"
             type="button"
-            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+            class="focus:ring-4 focus:outline-none rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 bg-gray-700 text-gray-300 border-gray-500 hover:text-white hover:bg-gray-600 focus:ring-gray-600"
             @click="isModalOpen = false"
           >
             Annuler

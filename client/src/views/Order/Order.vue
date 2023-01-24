@@ -59,38 +59,34 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    class="max-w-5xl pt-5 w-full bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700"
-  >
+  <div class="max-w-5xl pt-5 w-full border rounded-lg shadow-md bg-gray-800 border-gray-700">
     <router-link class="text-white pl-5" :to="{ name: 'orders' }">&lt; Retour</router-link>
-    <h5 class="my-2 text-2xl text-center font-bold tracking-tight text-gray-900 dark:text-white">
+    <h5 class="my-2 text-2xl text-center font-bold tracking-tight text-white">
       Commande N° {{ order.value.id }}
     </h5>
     <div class="flow-root">
-      <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
+      <ul role="list" class="divide-y divide-gray-700">
         <li class="py-3 sm:py-4">
           <div class="flex items-center justify-between px-5">
-            <p class="text-lg font-medium text-gray-900 dark:text-white">Client :</p>
-            <p class="text-lg font-medium text-gray-900 truncate dark:text-white">
+            <p class="text-lg font-medium text-white">Client :</p>
+            <p class="text-lg font-medium truncate text-white">
               {{ order.value.client?.firstname }}
               {{ order.value.client?.lastname }}
             </p>
           </div>
           <div class="flex items-center justify-between px-5">
-            <p class="text-lg font-medium text-gray-900 dark:text-white">Adresse :</p>
-            <p class="text-md font-medium text-gray-500 truncate dark:text-white">
+            <p class="text-lg font-medium text-white">Adresse :</p>
+            <p class="text-md font-medium truncate text-white">
               {{ order.value.client?.address }}
             </p>
           </div>
         </li>
         <li class="py-3 sm:py-4">
           <div class="flex items-center justify-around mb-3">
-            <p class="text-2xl font-medium text-gray-900 dark:text-white">Produits</p>
+            <p class="text-2xl font-medium text-white">Produits</p>
           </div>
-          <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead
-              class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
-            >
+          <table class="w-full text-sm text-left text-gray-400">
+            <thead class="text-xs uppercase bg-gray-700 text-gray-400">
               <tr>
                 <th class="px-4 py-2">Nom</th>
                 <th class="px-4 py-2">Prix</th>
@@ -102,7 +98,7 @@ onMounted(() => {
               <tr
                 v-for="product in order.value.products"
                 :key="product.id"
-                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                class="border-b border-gray-700"
               >
                 <td class="px-6 py-4">{{ product.product.name }}</td>
                 <td class="px-6 py-4">{{ product.product.price }}€</td>
@@ -117,11 +113,10 @@ onMounted(() => {
               </tr>
             </tbody>
             <tfoot>
-              <tr class="font-semibold text-gray-900 dark:text-white">
+              <tr class="font-semibold text-white">
                 <th scope="row" class="px-6 py-3 text-base">Total</th>
-                <th class="px-6 py-3" />
-                <th class="px-6 py-3" />
-                <td class="px-6 py-3">
+                <th class="px-6 py-3" colspan="2"></th>
+                <th class="px-6 py-3">
                   {{
                     order.value?.products?.reduce(
                       (total, p) => total + Number((p.quantity * p.product.price).toFixed(2)),
@@ -129,18 +124,18 @@ onMounted(() => {
                     )
                   }}
                   €
-                </td>
+                </th>
               </tr>
             </tfoot>
           </table>
         </li>
         <li class="py-3 sm:py-4 px-5">
           <div class="flex items-center justify-around mb-3">
-            <p class="text-2xl font-medium text-gray-900 dark:text-white">Avis sur la commande</p>
+            <p class="text-2xl font-medium text-white">Avis sur la commande</p>
           </div>
           <div class="mb-10">
             <div v-if="order.value?.delivererReview?.id">
-              <div class="dark:text-white">
+              <div class="text-white">
                 <h1 class="text-2xl mb-5">Avis sur la livraison:</h1>
                 <div class="flex items-center">
                   <p>Note :</p>
@@ -192,12 +187,8 @@ onMounted(() => {
           </div>
 
           <div>
-            <h1 class="dark:text-white text-2xl mb-5">Avis sur les produits:</h1>
-            <div
-              v-for="review in order.value.productReviews"
-              :key="review.id"
-              class="dark:text-white"
-            >
+            <h1 class="text-white text-2xl mb-5">Avis sur les produits:</h1>
+            <div v-for="review in order.value.productReviews" :key="review.id" class="text-white">
               <div class="flex items-center mb-5">
                 <div class="flex items-center">
                   <p class="whitespace-nowrap mr-3">{{ review.product.name }}:</p>

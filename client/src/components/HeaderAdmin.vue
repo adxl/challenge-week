@@ -2,16 +2,16 @@
 
 <template>
   <aside class="h-full w-64" aria-label="Sidebar">
-    <div class="px-3 py-4 h-full overflow-y-auto bg-gray-50 dark:bg-gray-800">
+    <div class="px-3 py-4 h-full overflow-y-auto bg-gray-800">
       <ul class="space-y-2">
         <li>
           <a
             href="#"
-            class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="flex items-center p-2 text-base font-normal rounded-lg text-white hover:bg-gray-700"
           >
             <svg
               aria-hidden="true"
-              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+              class="w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white"
               fill="currentColor"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
@@ -27,13 +27,13 @@
         <li>
           <button
             type="button"
-            class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+            class="flex items-center w-full p-2 text-base font-normal transition duration-75 rounded-lg group text-white hover:bg-gray-700"
             aria-controls="dropdown-example"
             data-collapse-toggle="dropdown-example"
           >
             <svg
               aria-hidden="true"
-              class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+              class="flex-shrink-0 w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white"
               fill="currentColor"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
@@ -62,7 +62,7 @@
           <ul id="dropdown-example" class="py-2 space-y-2">
             <li>
               <router-link
-                class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                class="flex items-center w-full p-2 text-base font-normal transition duration-75 rounded-lg pl-11 group text-white hover:bg-gray-700"
                 :to="{ name: 'admin-profils-clients' }"
               >
                 • Clients
@@ -70,7 +70,7 @@
             </li>
             <li>
               <router-link
-                class="h-full flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                class="h-full flex items-center w-full p-2 text-base font-normal transition duration-75 rounded-lg pl-11 group text-white hover:bg-gray-700"
                 :to="{ name: 'admin-profils-deliverers' }"
               >
                 • Livreurs
@@ -81,11 +81,11 @@
         <li>
           <a
             href="#"
-            class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="flex items-center p-2 text-base font-normal rounded-lg text-white hover:bg-gray-700"
           >
             <svg
               aria-hidden="true"
-              class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+              class="flex-shrink-0 w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white"
               fill="currentColor"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
@@ -100,11 +100,11 @@
         <li>
           <a
             href="#"
-            class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="flex items-center p-2 text-base font-normal rounded-lg text-white hover:bg-gray-700"
           >
             <svg
               aria-hidden="true"
-              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+              class="w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white"
               fill="currentColor"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
@@ -120,13 +120,13 @@
         <li>
           <button
             type="button"
-            class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+            class="flex items-center w-full p-2 text-base font-normal transition duration-75 rounded-lg group text-white hover:bg-gray-700"
             aria-controls="dropdown-example"
             data-collapse-toggle="dropdown-example"
           >
             <svg
               aria-hidden="true"
-              class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+              class="flex-shrink-0 w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white"
               fill="currentColor"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
@@ -155,7 +155,7 @@
           <ul id="dropdown-example" class="py-2 space-y-2">
             <li>
               <router-link
-                class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                class="flex items-center w-full p-2 text-base font-normal transition duration-75 rounded-lg pl-11 group text-white hover:bg-gray-700"
                 :to="{ name: 'admin-products' }"
               >
                 • Produits
@@ -163,7 +163,7 @@
             </li>
             <li>
               <router-link
-                class="h-full flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                class="h-full flex items-center w-full p-2 text-base font-normal transition duration-75 rounded-lg pl-11 group text-white hover:bg-gray-700"
                 :to="{ name: 'admin-product-types' }"
               >
                 • Types de produits</router-link
@@ -171,7 +171,7 @@
             </li>
             <li>
               <router-link
-                class="h-full flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                class="h-full flex items-center w-full p-2 text-base font-normal transition duration-75 rounded-lg pl-11 group text-white hover:bg-gray-700"
                 :to="{ name: 'admin-product-categorys' }"
               >
                 • Catégories
@@ -179,12 +179,12 @@
             </li>
             <li>
               <router-link
-                class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                class="flex items-center w-full p-2 text-base font-normal transition duration-75 rounded-lg group text-white hover:bg-gray-700"
                 :to="{ name: 'adminReviews' }"
               >
                 <svg
                   aria-hidden="true"
-                  class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                  class="flex-shrink-0 w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"

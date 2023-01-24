@@ -60,19 +60,17 @@ function handleRegister() {
 </script>
 
 <template>
-  <div class="flex-col">
-    <div class="block mb-10">
-      <h1 class="text-4xl" v-if="isClient">Inscription d'un client</h1>
-      <h1 class="text-4xl" v-if="isDeliverer">Inscription d'un livreur</h1>
+  <div class="flex-col p-6 border rounded-lg shadow bg-gray-800 border-gray-700">
+    <div class="block mb-10 text-center">
+      <h1 class="text-4xl text-white" v-if="isClient">Inscription d'un client</h1>
+      <h1 class="text-4xl text-white" v-if="isDeliverer">Inscription d'un livreur</h1>
     </div>
 
     <div class="block">
       <form @submit.prevent="handleRegister">
         <div class="grid md:grid-cols-2 md:gap-6">
           <div class="mb-6">
-            <label class="block mb-2 text-sm font-medium text-gray-900"
-              >Prénom</label
-            >
+            <label class="block mb-2 text-sm font-medium text-white">Prénom</label>
             <input
               type="text"
               v-model="_inputsRegister.firstname"
@@ -82,9 +80,7 @@ function handleRegister() {
           </div>
 
           <div class="mb-6">
-            <label class="block mb-2 text-sm font-medium text-gray-900"
-              >Nom</label
-            >
+            <label class="block mb-2 text-sm font-medium text-white">Nom</label>
             <input
               type="text"
               v-model="_inputsRegister.lastname"
@@ -95,9 +91,7 @@ function handleRegister() {
         </div>
 
         <div class="mb-6">
-          <label class="block mb-2 text-sm font-medium text-gray-900"
-            >Adresse</label
-          >
+          <label class="block mb-2 text-sm font-medium text-white">Adresse</label>
           <input
             type="text"
             v-model="_inputsRegister.address"
@@ -107,9 +101,7 @@ function handleRegister() {
         </div>
 
         <div class="mb-6">
-          <label class="block mb-2 text-sm font-medium text-gray-900"
-            >Date de naissance</label
-          >
+          <label class="block mb-2 text-sm font-medium text-white">Date de naissance</label>
           <input
             type="date"
             v-model="_inputsRegister.birthday_at"
@@ -120,9 +112,7 @@ function handleRegister() {
 
         <div class="grid md:grid-cols-2 md:gap-6">
           <div class="mb-6">
-            <label class="block mb-2 text-sm font-medium text-gray-900"
-              >Email</label
-            >
+            <label class="block mb-2 text-sm font-medium text-white">Email</label>
             <input
               type="email"
               v-model="_inputsRegister.email"
@@ -131,9 +121,7 @@ function handleRegister() {
             />
           </div>
           <div class="mb-6">
-            <label class="block mb-2 text-sm font-medium text-gray-900"
-              >Mot de passe</label
-            >
+            <label class="block mb-2 text-sm font-medium text-white">Mot de passe</label>
             <input
               type="password"
               v-model="_inputsRegister.plainPassword"
@@ -151,9 +139,9 @@ function handleRegister() {
         </button>
 
         <div class="flex justify-center" v-if="isClient">
-          <p>Vous êtes livreur ?&nbsp;</p>
+          <p class="text-white">Vous êtes livreur ?&nbsp;</p>
           <router-link
-            class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+            class="font-medium text-blue-500 hover:underline"
             :to="{ name: 'registerDeliverer' }"
           >
             S'inscrire ici</router-link
@@ -161,9 +149,9 @@ function handleRegister() {
         </div>
 
         <div class="flex justify-center" v-if="isDeliverer">
-          <p>Vous êtes client ?&nbsp;</p>
+          <p class="text-white">Vous êtes client ?&nbsp;</p>
           <router-link
-            class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+            class="font-medium text-blue-500 hover:underline"
             :to="{ name: 'registerClient' }"
           >
             S'inscrire ici</router-link
@@ -187,11 +175,7 @@ function handleRegister() {
   );
 
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  background: linear-gradient(
-    to bottom right,
-    rgba(240, 147, 251, 1),
-    rgba(245, 87, 108, 1)
-  );
+  background: linear-gradient(to bottom right, rgba(240, 147, 251, 1), rgba(245, 87, 108, 1));
 }
 
 .card-registration .select-input.form-control[readonly]:not([disabled]) {

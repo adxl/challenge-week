@@ -1,31 +1,10 @@
 <script setup></script>
 
 <template>
-  <div class="greetings">
-    <h1 class="green">Bonjour</h1>
+  <div class="block p-6 border rounded-lg shadow bg-gray-800 border-gray-700 text-center">
+    <h1 class="text-4xl text-white">Bienvenue sur</h1>
+    <img src="/logo-full.png" class="" alt="Flowbite Logo" />
   </div>
 </template>
 
-<style scoped>
-h1 {
-  font-weight: 500;
-  font-size: 2.6rem;
-  top: -10px;
-}
-
-h3 {
-  font-size: 1.2rem;
-}
-
-.greetings h1,
-.greetings h3 {
-  text-align: center;
-}
-
-@media (min-width: 1024px) {
-  .greetings h1,
-  .greetings h3 {
-    text-align: left;
-  }
-}
-</style>
+<style scoped></style>
