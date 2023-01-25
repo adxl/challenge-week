@@ -23,7 +23,6 @@ const _formValues = reactive({
 onMounted(() => {
   if (!kyc) return;
   getKyc(kyc).then((res) => {
-    console.log(res);
     _formValues.siret = res.data.siret;
     _formValues.reason = res.data.reason;
     _formValues.status = res.data.status;

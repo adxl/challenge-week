@@ -3,7 +3,7 @@ import { getAllOrders, takeOrder, validateOrder } from "@/api/order";
 import { onMounted, reactive, inject } from "vue";
 import KycForm from "../../components/KycForm.vue";
 
-const orderList = reactive([]);
+const orderList = reactive([]) ?? null;
 const currentUser = inject("auth_user");
 
 const kyc = currentUser.value.kyc.status ?? null;
@@ -47,7 +47,7 @@ const handleRefreshOrders = () => {
   <div class="container mx-auto px-4 sm:px-8 my-5">
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table
-        v-if="orderList.length > 0"
+        v-if="orderList != null"
         class="w-full text-sm text-left text-gray-400"
       >
         <thead class="text-xs uppercase bg-gray-700 text-gray-400">
