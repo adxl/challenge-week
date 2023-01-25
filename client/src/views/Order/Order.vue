@@ -1,6 +1,6 @@
 <script setup>
 import { getOrder } from "@/api/order";
-import { reactive, onMounted } from "vue";
+import { reactive, onMounted, inject } from "vue";
 import { useRouter } from "vue-router";
 
 import { sendDelivererReview, sendProductReview } from "@/api/reviews";
@@ -31,6 +31,7 @@ function handleSendDelivererReview() {
 
 const route = useRouter();
 const id = route.currentRoute.value.params.id ?? null;
+const currentUser = inject("auth_user");
 
 function loadOrder() {
   getOrder(id)
@@ -60,7 +61,11 @@ onMounted(() => {
 
 <template>
   <div class="max-w-5xl pt-5 w-full border rounded-lg shadow-md bg-gray-800 border-gray-700">
-    <router-link class="text-white pl-5" :to="{ name: 'orders' }">&lt; Retour</router-link>
+    <router-link
+      class="text-white pl-5"
+      :to="currentUser.value.isAdmin ? { name: 'admin-orders' } : { name: 'orders' }"
+      >&lt; Retour</router-link
+    >
     <h5 class="my-2 text-2xl text-center font-bold tracking-tight text-white">
       Commande N° {{ order.value.id }}
     </h5>

@@ -1,10 +1,9 @@
 <script setup>
 import Header from "./components/Header.vue";
 import { useGetCurrentUser } from "@/services";
-import { onMounted, provide, reactive, ref } from "vue";
+import { onMounted, provide, reactive } from "vue";
 
 const currentUser = reactive({ value: {} });
-const headerHeight = ref(0);
 provide("auth_user", currentUser);
 provide("app_refresh", refreshUser);
 
@@ -14,7 +13,6 @@ async function refreshUser() {
 }
 
 onMounted(async () => {
-  headerHeight.value = document.querySelector("header").clientHeight;
   await refreshUser();
 });
 </script>

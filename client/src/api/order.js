@@ -18,3 +18,9 @@ export function takeOrder(id, deliverer) {
     status: "SHIPPING",
   });
 }
+
+export function validateOrder(id) {
+  return _patch("/orders/" + id, {
+    status: "DONE",
+  });
+}

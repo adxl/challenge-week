@@ -1,5 +1,5 @@
 <script setup>
-import { getAllOrders, takeOrder } from "@/api/order";
+import { getAllOrders, takeOrder, validateOrder } from "@/api/order";
 import { onMounted, reactive, inject } from "vue";
 
 const orderList = reactive([]);
@@ -11,6 +11,16 @@ onMounted(async () => {
 
 const handleTakeOrder = (id) => {
   takeOrder(id, currentUser.value.id)
+    .then(() => {
+      handleRefreshOrders();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+const handleValidateOrderReceipt = (id) => {
+  validateOrder(id)
     .then(() => {
       handleRefreshOrders();
     })
@@ -67,14 +77,26 @@ const handleRefreshOrders = () => {
               <button
                 class="block w-full px-4 py-2 mt-6 font-medium text-white uppercase transition-colors duration-200 transform bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600"
                 v-if="currentUser.value.isDeliverer && item.status === 'SHIPPING'"
-                @click="() => {}"
+                @click="handleValidateOrderReceipt(item.id)"
               >
                 Valider réception
               </button>
-              <router-link :to="{ name: 'order-detail', params: { id: item.id } }">
+              <router-link
+                :to="{ name: 'order-detail', params: { id: item.id } }"
+                v-if="!currentUser.value.isDeliverer && !currentUser.value.isAdmin"
+              >
                 <button
                   class="block w-full px-4 py-2 mt-6 font-medium text-white uppercase transition-colors duration-200 transform bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600"
-                  v-if="!currentUser.value.isDeliverer"
+                >
+                  Détails
+                </button>
+              </router-link>
+              <router-link
+                :to="{ name: 'admin-order', params: { id: item.id } }"
+                v-if="currentUser.value.isAdmin"
+              >
+                <button
+                  class="block w-full px-4 py-2 mt-6 font-medium text-white uppercase transition-colors duration-200 transform bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600"
                 >
                   Détails
                 </button>

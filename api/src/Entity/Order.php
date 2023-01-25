@@ -27,6 +27,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     controller: CreateOrderController::class),
   new Patch(security: 'is_granted("ROLE_ADMIN") 
         or (is_granted("ROLE_DELIVERER") and user.getStatus() == "OPERATIVE" and object.getDeliverer() == null) 
+        or (is_granted("ROLE_DELIVERER") and user.getStatus() == "OPERATIVE" and object.getDeliverer() == user) 
         or (is_granted("ROLE_USER") and user.getClient() == user)'),
 ], normalizationContext: ['groups' => ['order:read', 'order:detail']],)]
 class Order
