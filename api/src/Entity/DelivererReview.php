@@ -14,7 +14,7 @@ use ApiPlatform\Metadata\Post;
 #[ApiResource(
   operations: [
     new GetCollection(security: 'is_granted("ROLE_ADMIN")'),
-    new Post(),
+    new Post(security: 'is_granted("ROLE_USER")'),
   ],
   normalizationContext: ['groups' => ['delivererReviews']]
 )]

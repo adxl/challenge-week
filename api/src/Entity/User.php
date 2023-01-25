@@ -48,21 +48,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
 		requirements: [],
 		controller: DeliverersProfilController::class,
 	),
-	new Get(),
-	new GetCollection(),
+	new Get(security: 'is_granted("ROLE_ADMIN")'),
 	new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'register', processor: UserPasswordHasher::class, controller: RegisterController::class),
 	new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'verify_token', controller: VerifyTokenController::class),
 	new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'reset_password_email', controller: ResetPasswordController::class),
-	new Put(processor: UserPasswordHasher::class),
-	new Patch(processor: UserPasswordHasher::class),
+	new Put(processor: UserPasswordHasher::class, security: 'is_granted("ROLE_USER") and object == user'),
+	new Patch(processor: UserPasswordHasher::class, security: 'is_granted("ROLE_USER") and object == user'),
 	new Patch(
 		security: 'is_granted("PUBLIC_ACCESS")',
 		uriTemplate: '/users/reset-password/{token}',
 		name: 'reset_password',
 		controller: ResetPasswordController::class,
 	),
-	new Delete(),
-	new Post(),
+	new Delete(security: 'is_granted("ROLE_ADMIN")'),
 ], normalizationContext: ["groups" => ["self"]])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
