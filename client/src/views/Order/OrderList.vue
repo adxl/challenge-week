@@ -71,10 +71,22 @@ const handleRefreshOrders = () => {
               >
                 Valider réception
               </button>
-              <router-link :to="{ name: 'order-detail', params: { id: item.id } }">
+              <router-link
+                :to="{ name: 'order-detail', params: { id: item.id } }"
+                v-if="!currentUser.value.isDeliverer && !currentUser.value.isAdmin"
+              >
                 <button
                   class="block w-full px-4 py-2 mt-6 font-medium text-white uppercase transition-colors duration-200 transform bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600"
-                  v-if="!currentUser.value.isDeliverer"
+                >
+                  Détails
+                </button>
+              </router-link>
+              <router-link
+                :to="{ name: 'admin-order', params: { id: item.id } }"
+                v-if="currentUser.value.isAdmin"
+              >
+                <button
+                  class="block w-full px-4 py-2 mt-6 font-medium text-white uppercase transition-colors duration-200 transform bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600"
                 >
                   Détails
                 </button>

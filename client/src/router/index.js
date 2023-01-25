@@ -164,6 +164,16 @@ const routes = [
         name: "admin-kyc",
         component: Kyc,
       },
+      {
+        path: "orders",
+        name: "admin-orders",
+        component: OrderList,
+      },
+      {
+        path: "order/:id",
+        name: "admin-order",
+        component: Order,
+      },
     ],
   },
   {
