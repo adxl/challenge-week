@@ -18,23 +18,23 @@ class Kyc
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-	#[Groups(['kyc:read'])]
+	#[Groups(['kyc:read', 'self'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-	#[Groups(['kyc:read'])]
+	#[Groups(['kyc:read', 'self'])]
     private ?string $siret = null;
 
     #[ORM\Column(length: 255)]
-	#[Groups(['kyc:read'])]
+	#[Groups(['kyc:read', 'self'])]
     private ?string $status = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-	#[Groups(['kyc:read'])]
+	#[Groups(['kyc:read', 'self'])]
     private ?string $reason = null;
 
     #[ORM\OneToOne(mappedBy: 'kyc', cascade: ['persist', 'remove'])]
-	#[Groups(['kyc:read'])]
+	#[Groups(['kyc:read', 'self'])]
     private ?User $deliverer = null;
 
     public function getId(): ?int
