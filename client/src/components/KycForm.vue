@@ -8,7 +8,7 @@ import { inject } from "vue";
 const user = inject("auth_user");
 
 const route = useRouter();
-const kyc = user.value.kyc ?? null;
+const kyc = user.value.kyc["@id"] ?? null;
 
 const _idKyc = reactive({
   id: null,
@@ -23,6 +23,7 @@ const _formValues = reactive({
 onMounted(() => {
   if (!kyc) return;
   getKyc(kyc).then((res) => {
+    console.log(res);
     _formValues.siret = res.data.siret;
     _formValues.reason = res.data.reason;
     _formValues.status = res.data.status;
@@ -87,7 +88,7 @@ function handleRegister(values) {
         @submit="handleRegister"
         :validation-schema="simpleSchema"
       >
-        <div class="mb-6">
+        <div class="mb-6" v-if="_formValues.status == 'REFUSED'">
           <label
             for="reason"
             class="block mb-2 text-sm font-medium text-red-700"
@@ -100,6 +101,8 @@ function handleRegister(values) {
             aria-label="disabled input"
             type="text"
             name="reason"
+            v-model="_formValues.reason"
+            aria-placeholder="{{ _formValues.reason }}"
             class="cursor-not-allowed bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5"
           />
         </div>

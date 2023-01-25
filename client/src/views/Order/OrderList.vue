@@ -5,6 +5,9 @@ import KycForm from "../../components/KycForm.vue";
 
 const orderList = reactive([]);
 const currentUser = inject("auth_user");
+
+const kyc = currentUser.value.kyc.status ?? null;
+
 onMounted(async () => {
   handleRefreshOrders();
 });
@@ -27,13 +30,16 @@ const handleValidateOrderReceipt = (id) => {
     });
 };
 const handleRefreshOrders = () => {
-  getAllOrders()
-    .then(({ data }) => {
-      orderList.value = data.items;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  if (kyc === "VALIDATED") {
+    getAllOrders()
+      .then(({ data }) => {
+        orderList.value = data.items;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    return;
+  }
 };
 </script>
 
@@ -41,7 +47,7 @@ const handleRefreshOrders = () => {
   <div class="container mx-auto px-4 sm:px-8 my-5">
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table
-        v-if="orderList && orderList.length > 0"
+        v-if="orderList.length > 0"
         class="w-full text-sm text-left text-gray-400"
       >
         <thead class="text-xs uppercase bg-gray-700 text-gray-400">
@@ -125,9 +131,9 @@ const handleRefreshOrders = () => {
           </tr>
         </tbody>
       </table>
-      <div v-else>
-        <KycForm />
-      </div>
+    </div>
+    <div v-if="kyc !== 'VALIDATED'">
+      <KycForm />
     </div>
   </div>
 </template>
