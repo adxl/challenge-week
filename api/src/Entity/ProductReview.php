@@ -29,7 +29,7 @@ class ProductReview
   private ?int $id = null;
 
   #[ORM\Column(nullable: true)]
-  #[Groups(['productReviews', 'order:detail', 'order:read'])]
+  #[Groups(['productReviews', 'order:detail', 'order:read', 'product:read'])]
   private ?bool $rating = null;
 
   #[ORM\ManyToOne(inversedBy: 'reviews')]
@@ -73,13 +73,13 @@ class ProductReview
 
   public function getOriginOrder(): ?Order
   {
-      return $this->originOrder;
+    return $this->originOrder;
   }
 
   public function setOriginOrder(?Order $originOrder): self
   {
-      $this->originOrder = $originOrder;
+    $this->originOrder = $originOrder;
 
-      return $this;
+    return $this;
   }
 }
