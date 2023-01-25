@@ -1,6 +1,6 @@
 <script setup>
 import { getAllOrders, takeOrder } from "@/api/order";
-import { onMounted, reactive, ref, inject } from "vue";
+import { onMounted, reactive, inject } from "vue";
 
 const orderList = reactive([]);
 const currentUser = inject("auth_user");
@@ -23,7 +23,6 @@ const handleRefreshOrders = () => {
   getAllOrders()
     .then(({ data }) => {
       orderList.value = data.items;
-      console.log(data.items);
     })
     .catch((error) => {
       console.log(error);
@@ -32,12 +31,10 @@ const handleRefreshOrders = () => {
 </script>
 
 <template>
-  <div class="container mx-auto px-4 sm:px-8">
+  <div class="container mx-auto px-4 sm:px-8 my-5">
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead
-          class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
-        >
+      <table class="w-full text-sm text-left text-gray-400">
+        <thead class="text-xs uppercase bg-gray-700 text-gray-400">
           <tr>
             <th class="px-6 py-4">N° Commande</th>
             <th class="px-6 py-4">Status</th>
@@ -49,12 +46,12 @@ const handleRefreshOrders = () => {
           <tr
             v-for="item in orderList.value"
             :key="item.id"
-            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+            class="border-b bg-gray-800 border-gray-700"
           >
             <td class="px-6 py-4">{{ item.id }}</td>
             <td class="px-6 py-4">{{ item.status }}</td>
             <td class="px-6 py-4">
-              <p class="text-sm font-medium text-gray-900 dark:text-white">
+              <p class="text-sm font-medium text-white">
                 {{ item.client.firstname }} {{ item.client.lastname }}
               </p>
               {{ item.client.address }}

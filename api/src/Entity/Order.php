@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use App\Repository\OrderRepository;
 use App\Controller\Order\GetAllOrderController;
+use App\Controller\Order\CreateOrderController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -21,12 +22,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(operations: [
   new Get(security: 'is_granted("ROLE_ADMIN") or object.getClient() == user', normalizationContext: ["groups" => ['order:detail']]),
   new GetCollection(controller: GetAllOrderController::class, normalizationContext: ["groups" => ['order:read']]),
-  new Post(),
-  new Put(),
+  new Post(security: 'is_granted("ROLE_USER") and !is_granted("ROLE_ADMIN") and !is_granted("ROLE_DELIVERER")',
+    denormalizationContext: ["groups" => ['order:write']],
+    controller: CreateOrderController::class),
   new Patch(security: 'is_granted("ROLE_ADMIN") 
         or (is_granted("ROLE_DELIVERER") and user.getStatus() == "OPERATIVE" and object.getDeliverer() == null) 
         or (is_granted("ROLE_USER") and user.getClient() == user)'),
-  new Delete(),
 ], normalizationContext: ['groups' => ['order:read', 'order:detail']],)]
 class Order
 {
@@ -37,7 +38,7 @@ class Order
   private ?int $id = null;
 
   #[ORM\Column(length: 255)]
-  #[Groups(['order:read', 'order:detail', 'delivererReviews'])]
+  #[Groups(['order:read', 'order:detail', 'order:write', 'delivererReviews'])]
   private ?string $status = null;
 
   #[ORM\ManyToOne(inversedBy: 'delivererOrders')]
@@ -45,7 +46,7 @@ class Order
   private ?User $deliverer = null;
 
   #[ORM\ManyToOne(inversedBy: 'clientOrders')]
-  #[Groups(['order:read', 'delivererReviews', 'order:detail'])]
+  #[Groups(['order:read', 'delivererReviews', 'order:write', 'order:detail'])]
   private ?User $client = null;
 
   #[ORM\OneToOne(inversedBy: 'originOrder', cascade: ['persist', 'remove'])]
@@ -57,7 +58,7 @@ class Order
   private Collection $productReviews;
 
   #[ORM\OneToMany(mappedBy: 'originOrder', targetEntity: OrderProduct::class)]
-  #[Groups(['order:detail'])]
+  #[Groups(['order:detail', 'order:write'])]
   private Collection $products;
 
   public function __construct()

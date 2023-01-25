@@ -15,8 +15,8 @@ watch(delivererReviews, () => console.log(delivererReviews.value));
 
 <template>
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <table class="w-full text-sm text-left text-gray-400">
+      <thead class="text-xs uppercase bg-gray-700 text-gray-400">
         <tr>
           <th scope="col" class="px-6 py-3">Commande</th>
           <th scope="col" class="px-6 py-3">Avis</th>
@@ -27,12 +27,12 @@ watch(delivererReviews, () => console.log(delivererReviews.value));
         <tr
           :key="item.id"
           v-for="item in delivererReviews"
-          class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+          class="border-b bg-gray-800 border-gray-700"
         >
-          <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+          <td class="px-6 py-4 font-medium whitespace-nowrap text-white">
             CM-BBR-{{ item.originOrder["id"] }}
           </td>
-          <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+          <td class="px-6 py-4 font-medium whitespace-nowrap text-white">
             {{ item.comment }}
           </td>
           <td class="px-6 py-4">

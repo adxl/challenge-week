@@ -16,12 +16,12 @@ class OrderProduct
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Groups(['order:detail'])]
+    #[Groups(['order:detail', 'order:write'])]
     private ?int $quantity = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[Groups(['order:detail'])]
+    #[Groups(['order:detail', 'order:write'])]
     private ?Product $product = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]

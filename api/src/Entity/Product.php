@@ -33,7 +33,7 @@ class Product
 	private ?string $description = null;
 
 	#[ORM\Column]
-	#[Groups(['product:read', 'order:detail'])]
+	#[Groups(['product:read', 'order:detail', 'order:write'])]
 	private ?float $price = null;
 
 	#[ORM\ManyToOne(inversedBy: 'products')]

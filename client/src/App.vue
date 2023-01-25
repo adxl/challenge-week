@@ -1,9 +1,10 @@
 <script setup>
 import Header from "./components/Header.vue";
 import { useGetCurrentUser } from "@/services";
-import { onMounted, provide, reactive } from "vue";
+import { onMounted, provide, reactive, ref } from "vue";
 
 const currentUser = reactive({ value: {} });
+const headerHeight = ref(0);
 provide("auth_user", currentUser);
 provide("app_refresh", refreshUser);
 
@@ -13,21 +14,22 @@ async function refreshUser() {
 }
 
 onMounted(async () => {
+  headerHeight.value = document.querySelector("header").clientHeight;
   await refreshUser();
 });
 </script>
 
 <template>
   <div className="h-screen">
-    <Header />
-    <main className="flex items-center justify-center">
+    <Header style="z-index: 1" />
+    <main className="flex items-center justify-center bg-gray-600 min-h-full">
       <router-view />
     </main>
   </div>
 </template>
 
 <style scoped>
-.main {
-  grid-template-columns: min-content auto;
+main {
+  min-height: calc(100% - 72px);
 }
 </style>
