@@ -1,6 +1,8 @@
 <script setup>
 import { getAllOrders, takeOrder, validateOrder } from "@/api/order";
 import { onMounted, reactive, inject } from "vue";
+import KycForm from "../../components/KycForm.vue";
+
 const orderList = reactive([]);
 const currentUser = inject("auth_user");
 onMounted(async () => {
@@ -38,7 +40,10 @@ const handleRefreshOrders = () => {
 <template>
   <div class="container mx-auto px-4 sm:px-8 my-5">
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-      <table class="w-full text-sm text-left text-gray-400">
+      <table
+        v-if="orderList && orderList.length > 0"
+        class="w-full text-sm text-left text-gray-400"
+      >
         <thead class="text-xs uppercase bg-gray-700 text-gray-400">
           <tr>
             <th class="px-6 py-4">N° Commande</th>
@@ -120,6 +125,9 @@ const handleRefreshOrders = () => {
           </tr>
         </tbody>
       </table>
+      <div v-else>
+        <KycForm />
+      </div>
     </div>
   </div>
 </template>
