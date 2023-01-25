@@ -59,13 +59,14 @@ const handleAddToCart = async () => {
       <p class="mt-3 text-gray-400">{{ item.description }}</p>
     </div>
     <div class="mt-auto">
-      <div class="flex items-center justify-end pr-3 mb-2 gap-2">
-        <div class="flex items-center text-white">
-          <span>👍</span>
+      <div class="flex items-end justify-end pr-3 mb-2 gap-2 text-white">
+        <div class="flex items-center">
+          <i class="fa-solid fa-thumbs-up">&nbsp;</i>
           <span>{{ item.reviews.filter((i) => i.rating).length }}</span>
         </div>
-        <div class="flex items-center text-white">
-          <span>👎</span>
+        <span>|</span>
+        <div class="flex items-center">
+          <i class="fa-solid fa-thumbs-down">&nbsp;</i>
           <span>{{ item.reviews.filter((i) => !i.rating).length }}</span>
         </div>
       </div>
