@@ -47,6 +47,7 @@ class Product
 	private ?ProductCategory $category = null;
 
 	#[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductReview::class, orphanRemoval: true)]
+	#[Groups(['product:read'])]
 	private Collection $reviews;
 
 	public function __construct()

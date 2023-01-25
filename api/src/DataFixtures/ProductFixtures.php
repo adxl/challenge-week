@@ -69,7 +69,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 
     for ($i = 1; $i < 20; $i++) {
       $product = new Product();
-      $product->setName($faker->word);
+      $product->setName($faker->sentence(3, false));
       $product->setPrice($faker->randomFloat(2, 10, 100));
       $product->setQuantity($faker->randomNumber(3));
       $product->setCategory($faker->randomElement($categories));
