@@ -1,5 +1,5 @@
 <script setup>
-import { addKyc, updateKyc } from "@/api/kyc";
+import { addKyc, updateKyc, getKyc } from "@/api/kyc";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { useRouter } from "vue-router";
 import { onMounted, reactive } from "vue";
@@ -8,18 +8,25 @@ import { inject } from "vue";
 const user = inject("auth_user");
 
 const route = useRouter();
-const id = route.currentRoute.value.params.id ?? null;
+const kyc = user.value.kyc ?? null;
+
+const _idKyc = reactive({
+  id: null,
+});
 
 const _formValues = reactive({
   siret: "",
-  status: "PENDING",
+  status: "",
+  reason: "",
 });
 
 onMounted(() => {
-  console.log(user);
-  if (!id) return;
-  getProductCategory(id).then((res) => {
-    _formValues.name = res.data.items.name;
+  if (!kyc) return;
+  getKyc(kyc).then((res) => {
+    _formValues.siret = res.data.siret;
+    _formValues.reason = res.data.reason;
+    _formValues.status = res.data.status;
+    _idKyc.id = res.data.id;
   });
 });
 
@@ -39,21 +46,19 @@ function handleRegister(values) {
     reason: "",
     deliverer: "/users/" + user.value.id,
   };
-  console.log(data);
-  if (id) {
-    updateKyc(id, data)
+  if (_idKyc.id) {
+    updateKyc(_idKyc.id, data)
       .then(({ data }) => {
-        route.push({ name: "admin-product-categorys" });
+        location.reload();
       })
       .catch((error) => {
         console.log(error);
       });
     return;
   } else {
-    addKyc(id, data)
+    addKyc(data)
       .then(({ data }) => {
-        console.log(data);
-        // route.push({ name: "orders" });
+        location.reload();
       })
       .catch((error) => {
         console.log(error);
@@ -64,15 +69,38 @@ function handleRegister(values) {
 
 <template>
   <div class="container mx-auto px-4 sm:px-8">
-    <span class="mb-4 text text-gray-900 md:text-5xl lg:text-6xl">
+    <div v-if="_formValues.status == 'PENDING'">
+      <span class="mb-4 text text-gray-900 md:text-5xl lg:text-6xl">
+        Votre KYC est en cours de validation
+      </span>
+    </div>
+    <span
+      v-else="kycId == null"
+      class="mb-4 text text-gray-900 md:text-5xl lg:text-6xl"
+    >
       Avant de commencer, nous avons besoin de quelques informations
     </span>
     <Form
+      v-else
       class="mt-4"
       :initial-values="_formValues"
       @submit="handleRegister"
       :validation-schema="simpleSchema"
     >
+      <div class="mb-6">
+        <label for="reason" class="block mb-2 text-sm font-medium text-red-700"
+          >Raison du refut</label
+        >
+        <Field
+          id="disabled-input"
+          value=""
+          disabled
+          aria-label="disabled input"
+          type="text"
+          name="reason"
+          class="cursor-not-allowed bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5"
+        />
+      </div>
       <div class="mb-6">
         <label for="name" class="block mb-2 text-sm font-medium text-gray-900"
           >Numero de SIRET</label

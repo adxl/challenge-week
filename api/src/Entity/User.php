@@ -121,6 +121,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	private ?string $token = null;
 
 	#[ORM\OneToOne(inversedBy: 'deliverer', cascade: ['persist', 'remove'],)]
+	#[Groups(["self"])]
 	private ?Kyc $kyc = null;
 
 	#[ORM\OneToMany(mappedBy: 'deliverer', targetEntity: Order::class)]

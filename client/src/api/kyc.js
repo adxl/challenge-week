@@ -16,8 +16,8 @@ export function getRefusedKyc() {
   return _getAll("/kycs?status=REFUSED");
 }
 
-export function getKyc(id) {
-  return _get("/kycs/" + id);
+export function getKyc(pathId) {
+  return _get(pathId);
 }
 
 export function addKyc(data) {
