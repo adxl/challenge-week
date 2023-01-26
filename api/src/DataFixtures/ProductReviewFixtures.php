@@ -18,14 +18,14 @@ class ProductReviewFixtures extends Fixture implements DependentFixtureInterface
       [OrderFixtures::DONE]
     );
 
-    foreach($orderProducts as $orderProduct) {
-      
+    foreach ($orderProducts as $orderProduct) {
+
       $productReview = new ProductReview();
       $productReview->setProduct($orderProduct->getProduct());
       $productReview->setOriginOrder($orderProduct->getOriginOrder());
       $productReview->setRating($faker->boolean);
       $manager->persist($productReview);
-    } 
+    }
 
     $manager->flush();
   }
@@ -36,6 +36,4 @@ class ProductReviewFixtures extends Fixture implements DependentFixtureInterface
       OrderProductFixtures::class,
     ];
   }
-
-
 }

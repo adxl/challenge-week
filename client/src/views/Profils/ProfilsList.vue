@@ -1,5 +1,6 @@
 <script setup>
 import { getClients, getDeliverers } from "@/api/account";
+import { banUser } from "@/api/user";
 import { USER_STATUS, PROFIL_DELIVERER, PROFIL_USER } from "@/router/constants";
 import { onMounted, reactive, ref, watch } from "vue";
 
@@ -33,6 +34,41 @@ function refreshUsers() {
     getDeliverers()
       .then((res) => {
         users.value = res.data.items;
+
+        // check if deliverer has a bad rating
+        users.value.forEach((user) => {
+          if (user.status === USER_STATUS.BANNED) {
+            return;
+          }
+          const orders = user.delivererOrders.filter(
+            (order) => order?.delivererReview?.rating >= 0
+          );
+          if (orders.length > 0) {
+            const sum = orders.reduce((acc, order) => {
+              return acc + order.delivererReview.rating;
+            }, 0);
+            const average = sum / orders.length;
+            if (average < 0.5) {
+              banUser(user.id)
+                .then((res) => {
+                  user.status = USER_STATUS.BANNED;
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            }
+          }
+        });
+
+        users.value.sort((a) => {
+          if (USER_STATUS.OPERATIVE === a.status) {
+            return -1;
+          }
+          if (USER_STATUS.OPERATIVE !== a.status) {
+            return 1;
+          }
+          return 0;
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -54,10 +90,6 @@ const dateFormat = (value) => {
 function padTo2Digits(num) {
   return num.toString().padStart(2, "0");
 }
-
-function handleDelete(value) {
-  console.log(value);
-}
 </script>
 
 <template>
@@ -73,7 +105,6 @@ function handleDelete(value) {
             <th scope="col" class="px-6 py-3">année de naissance</th>
             <th scope="col" class="px-6 py-3">Status</th>
             <th scope="col" class="px-6 py-3"></th>
-            <th scope="col" class="px-6 py-3"></th>
           </tr>
         </thead>
         <tbody>
@@ -85,7 +116,7 @@ function handleDelete(value) {
             <td class="px-6 py-4">{{ user.firstname }} {{ user.lastname }}</td>
             <td class="px-6 py-4">{{ user.email }}</td>
             <td class="px-6 py-4">{{ user.address }}</td>
-            <td class="px-6 py-4">{{ dateFormat(user.birthday_at) }}</td>
+            <td class="px-6 py-4">{{ dateFormat(user.birthdayAt) }}</td>
             <td class="px-6 py-4">
               <span
                 v-if="user.status === USER_STATUS.ACTIVE"
@@ -107,13 +138,6 @@ function handleDelete(value) {
               >
                 {{ user.status }}
               </span>
-
-              <span
-                v-if="user.status === USER_STATUS.SUSPENDED"
-                class="px-3 py-2 text-xs font-medium text-center text-white rounded-lg focus:outline-none text-white focus:ring-4 bg-orange-600 hover:bg-orange-700 focus:ring-orange-900"
-              >
-                {{ user.status }}
-              </span>
               <span
                 v-if="user.status === USER_STATUS.BANNED"
                 class="px-3 py-2 text-xs font-medium text-center text-white rounded-lg focus:outline-none text-white focus:ring-4 bg-red-600 hover:bg-red-700 focus:ring-red-900"
@@ -124,20 +148,12 @@ function handleDelete(value) {
             <td class="px-6 py-4">
               <router-link
                 :to="{
+                  name: 'admin-user-detail',
                   params: { id: user.id },
                 }"
                 class="font-medium text-blue-500 hover:underline"
                 >Détail</router-link
               >
-            </td>
-            <td class="px-6 py-4">
-              <button
-                @click.prevent="handleDelete(user)"
-                type="submit"
-                class="font-medium text-red-500 hover:underline"
-              >
-                Supprimer
-              </button>
             </td>
           </tr>
         </tbody>

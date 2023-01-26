@@ -16,15 +16,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Entity\Traits\TimestampableTrait;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
 #[ApiResource(operations: [
   new Get(security: 'is_granted("ROLE_ADMIN") or object.getClient() == user', normalizationContext: ["groups" => ['order:detail']]),
   new GetCollection(controller: GetAllOrderController::class, normalizationContext: ["groups" => ['order:read']]),
-  new Post(security: 'is_granted("ROLE_USER") and !is_granted("ROLE_ADMIN") and !is_granted("ROLE_DELIVERER")',
+  new Post(
+    security: 'is_granted("ROLE_USER") and !is_granted("ROLE_ADMIN") and !is_granted("ROLE_DELIVERER")',
     denormalizationContext: ["groups" => ['order:write']],
-    controller: CreateOrderController::class),
+    controller: CreateOrderController::class
+  ),
   new Patch(security: 'is_granted("ROLE_ADMIN") 
         or (is_granted("ROLE_DELIVERER") and user.getStatus() == "OPERATIVE" and object.getDeliverer() == null) 
         or (is_granted("ROLE_DELIVERER") and user.getStatus() == "OPERATIVE" and object.getDeliverer() == user) 
@@ -32,18 +35,22 @@ use Symfony\Component\Serializer\Annotation\Groups;
 ], normalizationContext: ['groups' => ['order:read', 'order:detail']],)]
 class Order
 {
+
+  use TimestampableTrait;
+
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
-  #[Groups(['order:read', 'order:detail', 'delivererReviews'])]
+  #[Groups(['order:read', 'order:detail', 'delivererReviews', 'user:read'])]
   private ?int $id = null;
 
   #[ORM\Column(length: 255)]
   #[Groups(['order:read', 'order:detail', 'order:write', 'delivererReviews'])]
   private ?string $status = null;
 
+
   #[ORM\ManyToOne(inversedBy: 'delivererOrders')]
-  #[Groups(['delivererReviews'])]
+  #[Groups(['delivererReviews', 'order:read', 'order:detail'])]
   private ?User $deliverer = null;
 
   #[ORM\ManyToOne(inversedBy: 'clientOrders')]

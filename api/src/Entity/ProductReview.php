@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use App\Repository\ProductReviewRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\TimestampableTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProductReviewRepository::class)]
@@ -22,6 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 ]
 class ProductReview
 {
+  use TimestampableTrait;
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]

@@ -26,7 +26,7 @@ const _inputsRegister = reactive({
   roles: "",
   plainPassword: "",
   address: "",
-  birthday_at: new Date().toISOString().slice(0, 10),
+  birthdayAt: new Date().toISOString().slice(0, 10),
 });
 
 function refreshRoles() {
@@ -47,7 +47,7 @@ onUpdated(() => refreshRoles());
 function handleRegister() {
   register({
     ..._inputsRegister,
-    birthday_at: new Date(_inputsRegister.birthday_at).toISOString(),
+    birthdayAt: new Date(_inputsRegister.birthdayAt).toISOString(),
   })
     .then(({ data }) => {
       console.log(data);
@@ -104,7 +104,7 @@ function handleRegister() {
           <label class="block mb-2 text-sm font-medium text-white">Date de naissance</label>
           <input
             type="date"
-            v-model="_inputsRegister.birthday_at"
+            v-model="_inputsRegister.birthdayAt"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             required
           />

@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use App\Entity\Traits\TimestampableTrait;
 
 #[ORM\Entity(repositoryClass: DelivererReviewRepository::class)]
 #[ApiResource(
@@ -20,6 +21,7 @@ use ApiPlatform\Metadata\Post;
 )]
 class DelivererReview
 {
+  use TimestampableTrait;
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
@@ -29,6 +31,7 @@ class DelivererReview
   #[ORM\Column(nullable: true)]
   #[Groups(['delivererReviews', 'order:detail', 'order:read'])]
   private ?int $rating = null;
+  use TimestampableTrait;
 
   #[ORM\Column(type: Types::TEXT, nullable: true)]
   #[Groups(['delivererReviews', 'order:detail', 'order:read'])]
@@ -63,29 +66,29 @@ class DelivererReview
   public function setComment(?string $comment): self
   {
     $this->comment = $comment;
-
     return $this;
   }
 
+
   public function getOriginOrder(): ?Order
   {
-      return $this->originOrder;
+    return $this->originOrder;
   }
 
   public function setOriginOrder(?Order $originOrder): self
   {
-      // unset the owning side of the relation if necessary
-      if ($originOrder === null && $this->originOrder !== null) {
-          $this->originOrder->setDelivererReview(null);
-      }
+    // unset the owning side of the relation if necessary
+    if ($originOrder === null && $this->originOrder !== null) {
+      $this->originOrder->setDelivererReview(null);
+    }
 
-      // set the owning side of the relation if necessary
-      if ($originOrder !== null && $originOrder->getDelivererReview() !== $this) {
-          $originOrder->setDelivererReview($this);
-      }
+    // set the owning side of the relation if necessary
+    if ($originOrder !== null && $originOrder->getDelivererReview() !== $this) {
+      $originOrder->setDelivererReview($this);
+    }
 
-      $this->originOrder = $originOrder;
+    $this->originOrder = $originOrder;
 
-      return $this;
+    return $this;
   }
 }

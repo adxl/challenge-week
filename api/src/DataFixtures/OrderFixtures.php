@@ -6,6 +6,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Order;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+
 class OrderFixtures extends Fixture implements DependentFixtureInterface
 {
 
@@ -74,6 +75,28 @@ class OrderFixtures extends Fixture implements DependentFixtureInterface
     $manager->persist($order);
     $this->addReference('order_8', $order);
 
+    // C4
+    $order = new Order();
+    $order->setStatus(self::DONE);
+    $order->setClient($this->getReference('client_4'));
+    $order->setDeliverer($this->getReference('deliverer_7'));
+    $manager->persist($order);
+    $this->addReference('order_9', $order);
+
+    $order = new Order();
+    $order->setStatus(self::DONE);
+    $order->setClient($this->getReference('client_3'));
+    $order->setDeliverer($this->getReference('deliverer_7'));
+    $manager->persist($order);
+    $this->addReference('order_10', $order);
+
+    $order = new Order();
+    $order->setStatus(self::DONE);
+    $order->setClient($this->getReference('client_2'));
+    $order->setDeliverer($this->getReference('deliverer_7'));
+    $manager->persist($order);
+    $this->addReference('order_11', $order);
+
     $manager->flush();
   }
   public function getDependencies()
@@ -82,5 +105,4 @@ class OrderFixtures extends Fixture implements DependentFixtureInterface
       UserFixtures::class,
     ];
   }
-  
 }
