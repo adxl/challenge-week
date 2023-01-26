@@ -151,15 +151,14 @@ const handleOrderConfirm = () => {
     class="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full justify-center items-center flex bg-black bg-opacity-50"
   >
     <div class="relative w-full h-full max-w-2xl md:h-auto">
-      <!-- Modal content -->
       <div class="relative rounded-lg shadow bg-gray-700">
-        <!-- Modal header -->
         <div class="flex items-start justify-between p-4 border-b rounded-t border-gray-600">
           <h3 class="text-xl font-semibold text-white">Confirmation de la commande</h3>
           <button
             type="button"
-            class="bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white"
+            class="bg-transparent text-white rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white"
             data-modal-hide="defaultModal"
+            @click="isModalOpen = false"
           >
             <svg
               aria-hidden="true"
@@ -177,7 +176,6 @@ const handleOrderConfirm = () => {
             <span class="sr-only">Fermer la boîte de dialogue</span>
           </button>
         </div>
-        <!-- Modal body -->
         <div class="p-6 space-y-6">
           <h4 class="text-base leading-relaxed 0 text-gray-400">
             Récapitulatif de votre commande :
@@ -218,11 +216,10 @@ const handleOrderConfirm = () => {
             </p>
           </small>
         </div>
-        <!-- Modal footer -->
         <div class="flex items-center p-6 space-x-2 border-t rounded-b border-gray-600">
           <button
             type="button"
-            class="focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-green-600 hover:bg-green-700 focus:ring-green-800"
+            class="focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center text-white bg-green-600 hover:bg-green-700 focus:ring-green-800"
             @click="handleOrderConfirm"
           >
             Commander
@@ -230,7 +227,7 @@ const handleOrderConfirm = () => {
           <button
             data-modal-hide="defaultModal"
             type="button"
-            class="focus:ring-4 focus:outline-none rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 bg-gray-700 text-gray-300 border-gray-500 hover:text-white hover:bg-gray-600 focus:ring-gray-600"
+            class="focus:ring-4 focus:outline-none rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 focus:z-10 bg-gray-700 text-gray-300 border-gray-500 hover:text-white hover:bg-gray-600 focus:ring-gray-600"
             @click="isModalOpen = false"
           >
             Annuler
