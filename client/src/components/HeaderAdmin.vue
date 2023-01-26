@@ -1,8 +1,8 @@
 <script setup></script>
 
 <template>
-  <aside class="h-full w-64" aria-label="Sidebar">
-    <div class="px-3 py-4 h-full overflow-y-auto bg-gray-800">
+  <aside class="h-full w-64 fixed" aria-label="Sidebar">
+    <div class="px-3 py-4 h-full w-64 overflow-y-auto bg-gray-800">
       <ul class="space-y-2">
         <li>
           <a
