@@ -18,16 +18,16 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div className="h-screen">
+  <div className="min-height h-full">
     <Header style="z-index: 1" />
-    <main className="flex items-center justify-center bg-gray-600 min-h-full">
-      <router-view />
+    <main className="flex min-height items-center justify-center bg-gray-600 min-h-full h-full">
+      <router-view class="min-h-full h-full" />
     </main>
   </div>
 </template>
 
 <style scoped>
-main {
-  min-height: calc(100% - 72px);
+.min-height {
+  min-height: calc(100vh - 72px);
 }
 </style>

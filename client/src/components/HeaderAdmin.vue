@@ -1,8 +1,17 @@
-<script setup></script>
+<script setup>
+const handleDropdown = (id) => {
+  const dropdown = document.getElementById(id);
+  if (dropdown.classList.contains("hidden")) {
+    dropdown.classList.remove("hidden");
+  } else {
+    dropdown.classList.add("hidden");
+  }
+};
+</script>
 
 <template>
-  <aside class="h-full w-64" aria-label="Sidebar">
-    <div class="px-3 py-4 h-full overflow-y-auto bg-gray-800">
+  <aside class="h-full w-64 fixed" aria-label="Sidebar">
+    <div class="px-3 py-4 h-full w-64 overflow-y-auto bg-gray-800">
       <ul class="space-y-2">
         <li>
           <a
@@ -28,8 +37,9 @@
           <button
             type="button"
             class="flex items-center w-full p-2 text-base font-normal transition duration-75 rounded-lg group text-white hover:bg-gray-700"
-            aria-controls="dropdown-example"
-            data-collapse-toggle="dropdown-example"
+            aria-controls="dropdown-profil"
+            data-collapse-toggle="dropdown-profil"
+            @click="handleDropdown('dropdown-profil')"
           >
             <svg
               aria-hidden="true"
@@ -59,7 +69,7 @@
               ></path>
             </svg>
           </button>
-          <ul id="dropdown-example" class="py-2 space-y-2">
+          <ul id="dropdown-profil" class="py-2 space-y-2">
             <li>
               <router-link
                 class="flex items-center w-full p-2 text-base font-normal transition duration-75 rounded-lg pl-11 group text-white hover:bg-gray-700"
@@ -123,8 +133,9 @@
           <button
             type="button"
             class="flex items-center w-full p-2 text-base font-normal transition duration-75 rounded-lg group text-white hover:bg-gray-700"
-            aria-controls="dropdown-example"
-            data-collapse-toggle="dropdown-example"
+            aria-controls="dropdown-boutique"
+            data-collapse-toggle="dropdown-boutique"
+            @click="handleDropdown('dropdown-boutique')"
           >
             <svg
               aria-hidden="true"
@@ -154,7 +165,7 @@
               ></path>
             </svg>
           </button>
-          <ul id="dropdown-example" class="py-2 space-y-2">
+          <ul id="dropdown-boutique" class="py-2 space-y-2">
             <li>
               <router-link
                 class="flex items-center w-full p-2 text-base font-normal transition duration-75 rounded-lg pl-11 group text-white hover:bg-gray-700"
@@ -179,28 +190,31 @@
                 • Catégories
               </router-link>
             </li>
-            <li>
-              <router-link
-                class="flex items-center w-full p-2 text-base font-normal transition duration-75 rounded-lg group text-white hover:bg-gray-700"
-                :to="{ name: 'adminReviews' }"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="flex-shrink-0 w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span class="flex-1 ml-3 whitespace-nowrap">Avis</span>
-              </router-link>
-            </li>
           </ul>
+        </li>
+        <li>
+          <router-link
+            class="flex items-center w-full p-2 text-base font-normal transition duration-75 rounded-lg group text-white hover:bg-gray-700"
+            :to="{ name: 'adminReviews' }"
+          >
+            <svg
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              class="flex-shrink-0 w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                clip-rule="evenodd"
+                fill-rule="evenodd"
+                d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5zm6.61 10.936a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 14.47a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+              ></path>
+              <path
+                d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z"
+              ></path>
+            </svg>
+            <span class="flex-1 ml-3 whitespace-nowrap">Avis</span>
+          </router-link>
         </li>
       </ul>
     </div>
