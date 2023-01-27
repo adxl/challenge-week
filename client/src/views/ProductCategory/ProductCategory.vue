@@ -18,7 +18,7 @@ const _formValues = reactive({
 onMounted(() => {
   if (!id) return;
   getProductCategory(id).then((res) => {
-    _formValues.name = res.data.items.name;
+    _formValues.name = res.data.name;
   });
 });
 
@@ -60,11 +60,7 @@ function handleRegister(values) {
     >
       {{ id ? "Modification " + _formValues.name : "Création d'un catégorie" }}
     </h3>
-    <Form
-      :initial-values="_formValues"
-      @submit="handleRegister"
-      :validation-schema="simpleSchema"
-    >
+    <Form :initial-values="_formValues" @submit="handleRegister" :validation-schema="simpleSchema">
       <div class="mb-6">
         <label for="name" class="block mb-2 text-sm font-medium text-gray-900"
           >Nom de la catégorie</label
@@ -73,10 +69,7 @@ function handleRegister(values) {
           name="name"
           class="shadow-sm mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         />
-        <ErrorMessage
-          class="p-1 mb-1 text-sm text-red-700 borderrounded-lg"
-          name="name"
-        />
+        <ErrorMessage class="p-1 mb-1 text-sm text-red-700 borderrounded-lg" name="name" />
       </div>
       <button
         type="submit"

@@ -83,6 +83,12 @@ const routes = [
     component: Cart,
   },
   {
+    name: "profil",
+    path: "/profil/:id",
+    component: () => import("@/views/Profils/Profil.vue"),
+    meta: { authorizeUpdateProfil: true },
+  },
+  {
     path: "/admin/",
     meta: { authorize: ["ROLE_ADMIN"] },
     component: AdminDashboard,
@@ -91,6 +97,11 @@ const routes = [
         name: "admin-dashboard",
         path: "",
         component: () => import("@/views/DashboardAdmin.vue"),
+      },
+      {
+        name: "admin-user-detail",
+        path: "user/:id",
+        component: () => import("@/views/Profils/UserProfil.vue"),
       },
       {
         name: "admin-profils-clients",
@@ -195,6 +206,14 @@ router.beforeEach(async (to) => {
       path: "/login",
       query: { redirect: to.fullPath },
     };
+  }
+
+  if (to.meta.authorizeUpdateProfil) {
+    if (Number(to.params.id) !== currentUser?.id) {
+      return {
+        name: "catchAll",
+      };
+    }
   }
 
   if (to.meta.alreadyLoggedIn && currentUser) {

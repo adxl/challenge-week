@@ -30,7 +30,10 @@ class DelivererReviewFixtures extends Fixture implements DependentFixtureInterfa
       $delivererReview = new DelivererReview();
       $delivererReview->setOriginOrder($order);
       $delivererReview->setComment($faker->sentence(10));
-      $delivererReview->setRating($faker->randomNumber(1, 5));
+      if (in_array($order->getId(), [9, 10, 11]))
+        $delivererReview->setRating(0);
+      else
+        $delivererReview->setRating($faker->numberBetween(1, 5));
       $manager->persist($delivererReview);
     }
 

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use App\Entity\Traits\TimestampableTrait;
 use App\Repository\KycRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,11 +16,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiFilter(SearchFilter::class, properties: ['status' => 'exact'])]
 class Kyc
 {
+    
+    use TimestampableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
 	#[Groups(['kyc:read', 'self'])]
     private ?int $id = null;
+	
 
     #[ORM\Column(length: 255)]
 	#[Groups(['kyc:read', 'self'])]
@@ -37,66 +42,66 @@ class Kyc
 	#[Groups(['kyc:read', 'self'])]
     private ?User $deliverer = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+	public function getId(): ?int
+	{
+		return $this->id;
+	}
 
-    public function getSiret(): ?string
-    {
-        return $this->siret;
-    }
+	public function getSiret(): ?string
+	{
+		return $this->siret;
+	}
 
-    public function setSiret(string $siret): self
-    {
-        $this->siret = $siret;
+	public function setSiret(string $siret): self
+	{
+		$this->siret = $siret;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
+	public function getStatus(): ?string
+	{
+		return $this->status;
+	}
 
-    public function setStatus(string $status): self
-    {
-        $this->status = $status;
+	public function setStatus(string $status): self
+	{
+		$this->status = $status;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getReason(): ?string
-    {
-        return $this->reason;
-    }
+	public function getReason(): ?string
+	{
+		return $this->reason;
+	}
 
-    public function setReason(?string $reason): self
-    {
-        $this->reason = $reason;
+	public function setReason(?string $reason): self
+	{
+		$this->reason = $reason;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getDeliverer(): ?User
-    {
-        return $this->deliverer;
-    }
+	public function getDeliverer(): ?User
+	{
+		return $this->deliverer;
+	}
 
-    public function setDeliverer(?User $deliverer): self
-    {
-        // unset the owning side of the relation if necessary
-        if ($deliverer === null && $this->deliverer !== null) {
-            $this->deliverer->setKyc(null);
-        }
+	public function setDeliverer(?User $deliverer): self
+	{
+		// unset the owning side of the relation if necessary
+		if ($deliverer === null && $this->deliverer !== null) {
+			$this->deliverer->setKyc(null);
+		}
 
-        // set the owning side of the relation if necessary
-        if ($deliverer !== null && $deliverer->getKyc() !== $this) {
-            $deliverer->setKyc($this);
-        }
+		// set the owning side of the relation if necessary
+		if ($deliverer !== null && $deliverer->getKyc() !== $this) {
+			$deliverer->setKyc($this);
+		}
 
-        $this->deliverer = $deliverer;
+		$this->deliverer = $deliverer;
 
-        return $this;
-    }
+		return $this;
+	}
 }
