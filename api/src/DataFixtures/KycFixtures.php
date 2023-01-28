@@ -25,7 +25,7 @@ class KycFixtures extends Fixture
     $this->addReference(self::KYC_PENDING, $kyc);
 
     $kyc = new Kyc();
-    $kyc->setReason("La photo de l'identité n'est pas lisible");
+    $kyc->setReason("Le siret n'est pas valide");
     $kyc->setStatus('REFUSED');
     $kyc->setSiret('4298739283923892382');
     $manager->persist($kyc);

@@ -1,7 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Register from "@/views/Register.vue";
 import Login from "@/views/Login.vue";
-import HelloWorld from "@/components/HelloWorld.vue";
+import HomePage from "@/components/HomePage.vue";
 import NotFound from "@/views/NotFound.vue";
 import AdminDashboard from "@/views/AdminDashboard.vue";
 import VerifyToken from "@/views/VerifyToken.vue";
@@ -27,7 +27,7 @@ const routes = [
   {
     name: "home",
     path: "/",
-    component: HelloWorld,
+    component: HomePage,
   },
   {
     name: "registerClient",

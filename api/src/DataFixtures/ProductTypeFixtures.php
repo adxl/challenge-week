@@ -9,7 +9,7 @@ class ProductTypeFixtures extends Fixture
 {
 
   public const LIQUIDE = 'LIQUIDE';
-  public const BRUT = 'BRUT';
+  public const COMPRIME = 'COMPRIMÉ';
   public const GELLULE = 'GELLULE';
 
   public function load(ObjectManager $manager): void
@@ -20,8 +20,8 @@ class ProductTypeFixtures extends Fixture
     $type = new ProductType();
 
     $type->setName('Liquide');
-    $type->setLabel('L');
-    $type->setUnit(1);
+    $type->setLabel('ml');
+    $type->setUnit(10);
     $manager->persist($type);
     $this->addReference(self::LIQUIDE, $type);
 
@@ -29,16 +29,16 @@ class ProductTypeFixtures extends Fixture
     $type = new ProductType();
 
     $type->setName('Brut');
-    $type->setLabel('MG');
-    $type->setUnit(10);
+    $type->setLabel('mg');
+    $type->setUnit(4);
     $manager->persist($type);
-    $this->addReference(self::BRUT, $type);
+    $this->addReference(self::COMPRIME, $type);
 
     $type = new ProductType();
 
     $type->setName('Gellule');
     $type->setLabel('unité');
-    $type->setUnit(5);
+    $type->setUnit(1);
     $manager->persist($type);
     $this->addReference(self::GELLULE, $type);
 
