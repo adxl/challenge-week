@@ -1,97 +1,92 @@
 import { createWebHistory, createRouter } from "vue-router";
-import Register from "@/views/Register.vue";
-import Login from "@/views/Login.vue";
-import HomePage from "@/components/HomePage.vue";
-import NotFound from "@/views/NotFound.vue";
-import AdminDashboard from "@/views/AdminDashboard.vue";
-import VerifyToken from "@/views/VerifyToken.vue";
-import KycList from "@/views/Kyc/KycList.vue";
-import Kyc from "@/views/Kyc/Kyc.vue";
-import Store from "@/views/Store/Store.vue";
-import NewPasswordForm from "@/views/ResetPassword/NewPwdForm.vue";
-import EmailForm from "@/views/ResetPassword/EmailForm.vue";
-import ProductType from "@/views/ProductType/ProductType.vue";
-import ProductTypeList from "@/views/ProductType/ProductTypeList.vue";
-import OrderList from "@/views/Order/OrderList.vue";
-import Order from "@/views/Order/Order.vue";
-import ProductCategory from "@/views/ProductCategory/ProductCategory.vue";
-import ProductCategoryList from "@/views/ProductCategory/ProductCategoryList.vue";
-import Product from "@/views/Product/Product.vue";
-import ProductList from "@/views/Product/ProductList.vue";
-import Cart from "@/views/Store/Cart.vue";
 import { useGetCurrentUser } from "@/services";
 
-import { REGISTER_CLIENT, REGISTER_DELIVERER, PROFIL_DELIVERER, PROFIL_USER } from "./constants";
+import {
+  REGISTER_CLIENT,
+  REGISTER_DELIVERER,
+  PROFIL_DELIVERER,
+  PROFIL_USER,
+  USER_ROLES,
+} from "./constants";
 
 const routes = [
   {
     name: "home",
     path: "/",
-    component: HomePage,
+    component: () => import("@/components/HomePage.vue"),
   },
   {
     name: "registerClient",
     path: "/register/client",
-    component: Register,
+    component: () => import("@/views/Register.vue"),
     props: { source: REGISTER_CLIENT },
+    meta: { loggedIn: false },
   },
   {
     name: "registerDeliverer",
     path: "/register/deliverer",
-    component: Register,
+    component: () => import("@/views/Register.vue"),
     props: { source: REGISTER_DELIVERER },
+    meta: { loggedIn: false },
   },
   {
     name: "login",
     path: "/login",
-    component: Login,
-    meta: { alreadyLoggedIn: true },
+    component: () => import("@/views/Login.vue"),
+    meta: { loggedIn: false },
   },
   {
+    //TODO: quel meta pour cette route ?
     path: "/users/verify/:token",
     name: "Verify Token",
-    component: VerifyToken,
+    component: () => import("@/views/VerifyToken.vue"),
   },
   {
     path: "/reset-password/:token",
     name: "New Password Form",
-    component: NewPasswordForm,
+    component: () => import("@/views/ResetPassword/NewPwdForm.vue"),
+    meta: { loggedIn: false },
   },
   {
     path: "/reset-password",
     name: "Reset Password",
-    component: EmailForm,
+    component: () => import("@/views/ResetPassword/EmailForm.vue"),
+    meta: { loggedIn: false },
   },
   {
     name: "store",
     path: "/store",
-    component: Store,
+    component: () => import("@/views/Store/Store.vue"),
+    meta: { loggedIn: true },
   },
   {
     name: "orders",
     path: "/orders",
-    component: OrderList,
+    component: () => import("@/views/Order/OrderList.vue"),
+    meta: { authorize: [USER_ROLES.ROLE_CLIENT, USER_ROLES.ROLE_DELIVERER] },
   },
   {
     name: "order-detail",
     path: "/orders/:id",
-    component: Order,
+    component: () => import("@/views/Order/Order.vue"),
+    meta: { authorize: [USER_ROLES.ROLE_CLIENT, USER_ROLES.ROLE_DELIVERER] },
   },
   {
     name: "cart",
     path: "/cart",
-    component: Cart,
+    component: () => import("@/views/Store/Cart.vue"),
+    meta: { authorize: [USER_ROLES.ROLE_CLIENT, USER_ROLES.ROLE_DELIVERER] },
   },
   {
     name: "profil",
     path: "/profil/:id",
     component: () => import("@/views/Profils/Profil.vue"),
-    meta: { authorizeUpdateProfil: true },
+    meta: { authorizeUpdateOwnProfil: true },
   },
   {
     path: "/admin/",
     meta: { authorize: ["ROLE_ADMIN"] },
-    component: AdminDashboard,
+    component: () => import("@/views/AdminDashboard.vue"),
     children: [
       {
         name: "admin-dashboard",
@@ -123,74 +118,74 @@ const routes = [
       {
         path: "products",
         name: "admin-products",
-        component: ProductList,
+        component: () => import("@/views/Product/ProductList.vue"),
       },
       {
         path: "product/create",
         name: "admin-product-create",
-        component: Product,
+        component: () => import("@/views/Product/Product.vue"),
       },
       {
         path: "product/:id",
         name: "admin-product",
-        component: Product,
+        component: () => import("@/views/Product/Product.vue"),
       },
       {
         path: "product-categorys",
         name: "admin-product-categorys",
-        component: ProductCategoryList,
+        component: () => import("@/views/ProductCategory/ProductCategoryList.vue"),
       },
       {
         path: "product-category/create",
         name: "admin-product-category-create",
-        component: ProductCategory,
+        component: () => import("@/views/ProductCategory/ProductCategory.vue"),
       },
       {
         path: "product-category/:id",
         name: "admin-product-category",
-        component: ProductCategory,
+        component: () => import("@/views/ProductCategory/ProductCategory.vue"),
       },
       {
         path: "product-types",
         name: "admin-product-types",
-        component: ProductTypeList,
+        component: () => import("@/views/ProductType/ProductTypeList.vue"),
       },
       {
         path: "product-type/create",
         name: "admin-product-type-create",
-        component: ProductType,
+        component: () => import("@/views/ProductType/ProductType.vue"),
       },
       {
         path: "product-type/:id",
         name: "admin-product-type",
-        component: ProductType,
+        component: () => import("@/views/ProductType/ProductType.vue"),
       },
       {
         path: "verify/kyc",
         name: "admin-kyc-list",
-        component: KycList,
+        component: () => import("@/views/Kyc/KycList.vue"),
       },
       {
         path: "verify/kyc/:id",
         name: "admin-kyc",
-        component: Kyc,
+        component: () => import("@/views/Kyc/Kyc.vue"),
       },
       {
         path: "orders",
         name: "admin-orders",
-        component: OrderList,
+        component: () => import("@/views/Order/OrderList.vue"),
       },
       {
         path: "order/:id",
         name: "admin-order",
-        component: Order,
+        component: () => import("@/views/Order/Order.vue"),
       },
     ],
   },
   {
     name: "catchAll",
     path: "/:pathMatch(.*)*",
-    component: NotFound,
+    component: () => import("@/views/NotFound.vue"),
   },
 ];
 const router = createRouter({
@@ -201,25 +196,30 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const currentUser = await useGetCurrentUser().catch(() => null);
 
-  if (to.meta.authorize && !currentUser?.roles.some((r) => to.meta.authorize?.includes(r))) {
+  if (to.meta.loggedIn && !currentUser) {
     return {
-      path: "/login",
-      query: { redirect: to.fullPath },
+      name: "login",
     };
   }
 
-  if (to.meta.authorizeUpdateProfil) {
+  if (to.meta.loggedIn === false && currentUser) {
+    return {
+      name: "home",
+    };
+  }
+
+  if (to.meta.authorize && !currentUser?.roles.some((r) => to.meta.authorize?.includes(r))) {
+    return {
+      name: "catchAll",
+    };
+  }
+
+  if (to.meta.authorizeUpdateOwnProfil) {
     if (Number(to.params.id) !== currentUser?.id) {
       return {
         name: "catchAll",
       };
     }
-  }
-
-  if (to.meta.alreadyLoggedIn && currentUser) {
-    return {
-      path: "/",
-    };
   }
 });
 export default router;

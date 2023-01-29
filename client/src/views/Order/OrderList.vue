@@ -1,12 +1,13 @@
 <script setup>
 import { getAllOrders, takeOrder, validateOrder } from "@/api/order";
 import { onMounted, reactive, inject } from "vue";
+import OrderStatus from "../../components/OrderStatus.vue";
 import KycForm from "../../components/KycForm.vue";
 
 const orderList = reactive([]) ?? null;
 const currentUser = inject("auth_user");
 
-const kyc = currentUser.value.kyc.status ?? null;
+const kyc = currentUser.value.kyc?.status ?? null;
 
 onMounted(async () => {
   handleRefreshOrders();
@@ -30,26 +31,21 @@ const handleValidateOrderReceipt = (id) => {
     });
 };
 const handleRefreshOrders = () => {
-  if (kyc === "VALIDATED") {
-    getAllOrders()
-      .then(({ data }) => {
-        orderList.value = data.items;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    return;
-  }
+  getAllOrders()
+    .then(({ data }) => {
+      orderList.value = data.items;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  return;
 };
 </script>
 
 <template>
   <div class="container mx-auto px-4 sm:px-8 my-5">
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-      <table
-        v-if="orderList != null"
-        class="w-full text-sm text-left text-gray-400"
-      >
+      <table v-if="orderList != null" class="w-full text-sm text-left text-gray-400">
         <thead class="text-xs uppercase bg-gray-700 text-gray-400">
           <tr>
             <th class="px-6 py-4">N° Commande</th>
@@ -65,7 +61,9 @@ const handleRefreshOrders = () => {
             class="border-b bg-gray-800 border-gray-700"
           >
             <td class="px-6 py-4">{{ item.id }}</td>
-            <td class="px-6 py-4">{{ item.status }}</td>
+            <td class="px-6 py-4">
+              <OrderStatus :status="item.status" />
+            </td>
             <td class="px-6 py-4">
               <p class="text-sm font-medium text-white">
                 {{ item.client.firstname }} {{ item.client.lastname }}
@@ -75,27 +73,21 @@ const handleRefreshOrders = () => {
             <td class="px-6 py-4">
               <button
                 class="block w-full px-4 py-2 mt-6 font-medium text-white uppercase transition-colors duration-200 transform bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600"
-                v-if="
-                  currentUser.value.isDeliverer && item.status === 'PENDING'
-                "
+                v-if="currentUser.value.isDeliverer && item.status === 'PENDING'"
                 @click="handleTakeOrder(item.id)"
               >
                 Prendre en charge
               </button>
               <button
                 class="block w-full px-4 py-2 mt-6 font-medium text-white uppercase transition-colors duration-200 transform bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600"
-                v-if="
-                  currentUser.value.isDeliverer && item.status === 'SHIPPING'
-                "
+                v-if="currentUser.value.isDeliverer && item.status === 'SHIPPING'"
                 @click="handleValidateOrderReceipt(item.id)"
               >
                 Valider réception
               </button>
               <router-link
                 :to="{ name: 'order-detail', params: { id: item.id } }"
-                v-if="
-                  !currentUser.value.isDeliverer && !currentUser.value.isAdmin
-                "
+                v-if="!currentUser.value.isDeliverer && !currentUser.value.isAdmin"
               >
                 <button
                   class="block w-full px-4 py-2 mt-6 font-medium text-white uppercase transition-colors duration-200 transform bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600"
@@ -113,15 +105,11 @@ const handleRefreshOrders = () => {
                   Détails
                 </button>
               </router-link>
-              <router-link
-                :to="{ name: 'order-detail', params: { id: item.id } }"
-              >
+              <router-link :to="{ name: 'order-detail', params: { id: item.id } }">
                 <button
                   class="block w-full px-4 py-2 mt-6 font-medium text-white uppercase transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
                   v-if="
-                    currentUser.value.isClient &&
-                    !item.delivererReview &&
-                    item.status == 'DONE'
+                    currentUser.value.isClient && !item.delivererReview && item.status == 'DONE'
                   "
                 >
                   Laisser un avis
@@ -132,7 +120,7 @@ const handleRefreshOrders = () => {
         </tbody>
       </table>
     </div>
-    <div v-if="kyc !== 'VALIDATED'">
+    <div v-if="currentUser.value.isDeliverer && kyc !== 'VALIDATED'">
       <KycForm />
     </div>
   </div>
