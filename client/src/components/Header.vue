@@ -14,58 +14,16 @@ const handleLogout = () => {
   <header class="sticky top-0">
     <nav class="bg-gray-900 border-gray-200 px-2 sm:px-4 py-2.5">
       <div class="container flex flex-wrap items-center justify-between mx-auto">
+        <!-- LOGO -->
         <router-link to="/" class="flex items-center">
           <img src="/logo.png" class="h-10" alt="Flowbite Logo" />
         </router-link>
-        <button
-          data-collapse-toggle="navbar-default"
-          type="button"
-          class="inline-flex items-center p-2 ml-3 text-sm rounded-lg md:hidden focus:outline-none focus:ring-2 text-gray-400 hover:bg-gray-700 focus:ring-gray-600"
-          aria-controls="navbar-default"
-          aria-expanded="false"
-        >
-          <span class="sr-only">Open main menu</span>
-          <svg
-            class="w-6 h-6"
-            aria-hidden="true"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-        </button>
+        <!-- LINK -->
         <div class="hidden w-full md:block md:w-auto" id="navbar-default">
           <ul
             class="flex flex-col p-4 mt-4 border rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white bg-gray-800 md:bg-gray-900 border-gray-700"
           >
-            <li v-if="currentUser?.value?.id">
-              <router-link
-                :to="{ name: 'store' }"
-                class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 text-gray-400 md:hover:text-white hover:bg-gray-700 hover:text-white"
-              >
-                <svg
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  class="w-5 h-5 -ml-1 mr-1 float-left"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-                  ></path>
-                </svg>
-                La boutique
-              </router-link>
-            </li>
+            <!-- IS CLIENT OR DELIVERERS -->
             <li v-if="currentUser?.value && !currentUser.value.isAdmin">
               <router-link
                 :to="{ name: 'orders' }"
@@ -89,7 +47,9 @@ const handleLogout = () => {
                 Mes Commandes
               </router-link>
             </li>
-            <li v-if="currentUser?.value && !currentUser.value.isAdmin">
+
+            <!-- IS CLIENT -->
+            <li v-if="currentUser?.value && currentUser.value.isClient">
               <router-link
                 :to="{ name: 'cart' }"
                 class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 text-gray-400 md:hover:text-white hover:bg-gray-700 hover:text-white"
@@ -109,9 +69,57 @@ const handleLogout = () => {
               </router-link>
             </li>
 
-            <li v-if="!currentUser.value?.['@id']">
+            <!-- IS ADMIN -->
+            <li v-if="currentUser?.value?.id && currentUser.value.isAdmin">
               <router-link
-                :to="{ name: 'login' }"
+                :to="{ name: 'admin-dashboard' }"
+                class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 text-gray-400 md:hover:text-white hover:bg-gray-700 hover:text-white"
+              >
+                <svg
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  class="w-5 h-5 -ml-1 mr-1 float-left"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z"
+                  ></path>
+                </svg>
+                Gestion de la boutique
+              </router-link>
+            </li>
+            <!-- IS CONNECTED -->
+            <li v-if="currentUser?.value?.id">
+              <router-link
+                :to="{ name: 'store' }"
+                class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 text-gray-400 md:hover:text-white hover:bg-gray-700 hover:text-white"
+              >
+                <svg
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  class="w-5 h-5 -ml-1 mr-1 float-left"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+                  ></path>
+                </svg>
+                La boutique
+              </router-link>
+            </li>
+            <li v-if="currentUser.value?.['@id']">
+              <router-link
+                :to="{ name: 'profil', params: { id: currentUser.value.id } }"
                 class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 text-gray-400 md:hover:text-white hover:bg-gray-700 hover:text-white"
               >
                 <svg
@@ -129,10 +137,10 @@ const handleLogout = () => {
                     d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
                   ></path>
                 </svg>
-                Se connecter
+                {{ currentUser.value.firstname }} {{ currentUser.value.lastname }}
               </router-link>
             </li>
-            <li v-else>
+            <li v-if="currentUser.value?.['@id']">
               <a
                 href="#"
                 class="block py-2 pl-3 pr-4 text-red-500 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 text-gray-400 md:hover:text-white hover:bg-gray-700 hover:text-white"
@@ -155,6 +163,31 @@ const handleLogout = () => {
                 </svg>
                 <span class="flex-1 whitespace-nowrap">Déconnexion</span>
               </a>
+            </li>
+
+            <!-- IS NOT CONNECTED -->
+            <li v-if="!currentUser.value?.['@id']">
+              <router-link
+                :to="{ name: 'login' }"
+                class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 text-gray-400 md:hover:text-white hover:bg-gray-700 hover:text-white"
+              >
+                <svg
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  class="w-5 h-5 -ml-1 mr-1 float-left"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
+                  ></path>
+                </svg>
+                Se connecter
+              </router-link>
             </li>
           </ul>
         </div>

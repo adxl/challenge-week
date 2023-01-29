@@ -3,6 +3,7 @@ import { getClients, getDeliverers } from "@/api/account";
 import { banUser } from "@/api/user";
 import { USER_STATUS, PROFIL_DELIVERER, PROFIL_USER } from "@/router/constants";
 import { onMounted, reactive, ref, watch } from "vue";
+import UserStatus from "@/components/UserStatus.vue";
 
 const users = reactive({ value: [] });
 
@@ -104,6 +105,7 @@ function padTo2Digits(num) {
             <th scope="col" class="px-6 py-3">adresse</th>
             <th scope="col" class="px-6 py-3">année de naissance</th>
             <th scope="col" class="px-6 py-3">Status</th>
+            <th scope="col" class="px-6 py-3">Nb de commandes</th>
             <th scope="col" class="px-6 py-3"></th>
           </tr>
         </thead>
@@ -118,31 +120,14 @@ function padTo2Digits(num) {
             <td class="px-6 py-4">{{ user.address }}</td>
             <td class="px-6 py-4">{{ dateFormat(user.birthdayAt) }}</td>
             <td class="px-6 py-4">
-              <span
-                v-if="user.status === USER_STATUS.ACTIVE"
-                class="px-3 py-2 text-xs font-medium text-center text-white rounded-lg focus:outline-none text-white focus:ring-4 bg-green-600 hover:bg-green-700 focus:ring-green-800"
-              >
-                {{ user.status }}
+              <UserStatus :status="user.status" />
+            </td>
+            <td class="px-6 py-4 text-center">
+              <span v-if="isClientProfil">
+                {{ user.clientOrders.length }}
               </span>
-
-              <span
-                v-if="user.status === USER_STATUS.INACTIVE"
-                class="px-3 py-2 text-xs font-medium text-center text-white rounded-lg focus:outline-none text-white focus:ring-4 bg-red-600 hover:bg-red-700 focus:ring-red-900"
-              >
-                {{ user.status }}
-              </span>
-
-              <span
-                v-if="user.status === USER_STATUS.OPERATIVE"
-                class="px-3 py-2 text-xs font-medium text-center text-white rounded-lg focus:outline-none text-white focus:ring-4 bg-green-600 hover:bg-green-700 focus:ring-green-900"
-              >
-                {{ user.status }}
-              </span>
-              <span
-                v-if="user.status === USER_STATUS.BANNED"
-                class="px-3 py-2 text-xs font-medium text-center text-white rounded-lg focus:outline-none text-white focus:ring-4 bg-red-600 hover:bg-red-700 focus:ring-red-900"
-              >
-                {{ user.status }}
+              <span v-if="isDelivererProfil">
+                {{ user.delivererOrders.length }}
               </span>
             </td>
             <td class="px-6 py-4">

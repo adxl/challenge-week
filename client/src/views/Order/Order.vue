@@ -2,16 +2,19 @@
 import { getOrder } from "@/api/order";
 import { reactive, onMounted, inject } from "vue";
 import { useRouter } from "vue-router";
-
 import { sendDelivererReview, sendProductReview } from "@/api/reviews";
-
 import StarIcon from "@/components/icons/StarIcon.vue";
+import OrderStatus from "../../components/OrderStatus.vue";
+import ButtonReturnPage from "../../components/ButtonReturnPage.vue";
+
+const route = useRouter();
+const id = route.currentRoute.value.params.id ?? null;
+const currentUser = inject("auth_user");
+const order = reactive({ value: {} });
 
 const notationRange = Array(5)
   .fill(null)
   .map((_, i) => i);
-
-const order = reactive({ value: {} });
 
 const delivererReviewInputs = reactive({
   originOrder: null,
@@ -29,15 +32,12 @@ function handleSendDelivererReview() {
     });
 }
 
-const route = useRouter();
-const id = route.currentRoute.value.params.id ?? null;
-const currentUser = inject("auth_user");
-
 function loadOrder() {
   getOrder(id)
     .then(({ data }) => {
       order.value = data;
       delivererReviewInputs.originOrder = data["@id"];
+      console.log(order.value);
     })
     .catch(() => {
       route.push({ name: "orders" });
@@ -61,13 +61,13 @@ onMounted(() => {
 
 <template>
   <div class="max-w-5xl pt-5 w-full border rounded-lg shadow-md bg-gray-800 border-gray-700">
-    <router-link
-      class="text-white pl-5"
-      :to="currentUser.value.isAdmin ? { name: 'admin-orders' } : { name: 'orders' }"
-      >&lt; Retour</router-link
-    >
+    <ButtonReturnPage
+      class="px-5"
+      :path="currentUser.value.isAdmin ? { name: 'admin-orders' } : { name: 'orders' }"
+    />
     <h5 class="my-2 text-2xl text-center font-bold tracking-tight text-white">
       Commande N° {{ order.value.id }}
+      <OrderStatus :status="order.value.status" />
     </h5>
     <div class="flow-root">
       <ul role="list" class="divide-y divide-gray-700">
@@ -83,6 +83,13 @@ onMounted(() => {
             <p class="text-lg font-medium text-white">Adresse :</p>
             <p class="text-md font-medium truncate text-white">
               {{ order.value.client?.address }}
+            </p>
+          </div>
+          <div class="flex items-center justify-between px-5">
+            <p class="text-lg font-medium text-white">Livreur :</p>
+            <p class="text-lg font-medium truncate text-white">
+              {{ order.value.deliverer?.firstname }}
+              {{ order.value.deliverer?.lastname }}
             </p>
           </div>
         </li>
@@ -123,10 +130,9 @@ onMounted(() => {
                 <th class="px-6 py-3" colspan="2"></th>
                 <th class="px-6 py-3">
                   {{
-                    order.value?.products?.reduce(
-                      (total, p) => total + Number((p.quantity * p.product.price).toFixed(2)),
-                      0
-                    )
+                    order.value?.products
+                      ?.reduce((total, p) => total + Number(p.quantity * p.product.price), 0)
+                      .toFixed(2)
                   }}
                   €
                 </th>
@@ -157,7 +163,7 @@ onMounted(() => {
                   </div>
                 </div>
               </div>
-              <div v-else>
+              <div v-else-if="currentUser.isClient">
                 <form @submit.prevent="handleSendDelivererReview">
                   <div class="mb-6">
                     <div>
@@ -189,6 +195,10 @@ onMounted(() => {
                     Laisser un avis
                   </button>
                 </form>
+              </div>
+
+              <div v-else class="flex items-center justify-around mb-3">
+                <p class="text-l font-medium text-white">Pas encore d'avis sur la livraison</p>
               </div>
             </div>
 

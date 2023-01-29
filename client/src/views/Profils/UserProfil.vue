@@ -5,7 +5,14 @@ import { getOrder } from "@/api/order";
 import { useRouter } from "vue-router";
 import { onMounted, reactive, ref } from "vue";
 import { USER_ROLES } from "@/router/constants";
-import { USER_STATUS, ORDER_STATUS } from "../../router/constants";
+import { USER_STATUS } from "../../router/constants";
+import OrderStatus from "@/components/OrderStatus.vue";
+import StarIcon from "@/components/icons/StarIcon.vue";
+import ButtonReturnPage from "@/components/ButtonReturnPage.vue";
+
+const notationRange = Array(5)
+  .fill(null)
+  .map((_, i) => i);
 
 const route = useRouter();
 const id = route.currentRoute.value.params.id ?? null;
@@ -68,10 +75,10 @@ const dateFormat = function (d) {
   return `${Day}-${Month}-${Year} ${Hour}:${Minute}`;
 };
 
-onMounted(() => {
+onMounted(async () => {
   // setup profil based on client or deliverer
   getUser(id)
-    .then((res) => {
+    .then(async (res) => {
       user.value = res.data;
       if (user.value.roles.includes(USER_ROLES.ROLE_DELIVERER)) isDelivererProfil.value = true;
       if (user.value.roles.includes(USER_ROLES.ROLE_CLIENT)) isClientProfil.value = true;
@@ -96,8 +103,9 @@ onMounted(() => {
 
 <template>
   <div v-if="loading" class="container mx-auto px-4 sm:px-8 mb-6">
+    <ButtonReturnPage v-if="isClientProfil" :path="{ name: 'admin-profils-clients' }" />
+    <ButtonReturnPage v-if="isDelivererProfil" :path="{ name: 'admin-profils-deliverers' }" />
     <!-- INFO USER -->
-
     <div
       class="block max-w-md p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
     >
@@ -184,8 +192,8 @@ onMounted(() => {
           >
             <tr>
               <th scope="col" class="px-6 py-3">#</th>
-              <th v-if="isClientProfil" scope="col" class="px-6 py-3">Client</th>
-              <th v-if="isDelivererProfil" scope="col" class="px-6 py-3">Livreur</th>
+              <th v-if="isClientProfil" scope="col" class="px-6 py-3">Livreur</th>
+              <th v-if="isDelivererProfil" scope="col" class="px-6 py-3">Client</th>
               <th v-if="isDelivererProfil" scope="col" class="px-6 py-3">Adresse</th>
               <th scope="col" class="px-6 py-3">Date</th>
               <th scope="col" class="px-6 py-3">Produits</th>
@@ -206,14 +214,20 @@ onMounted(() => {
               >
                 {{ order.id }}
               </th>
-              <td class="px-6 py-4" v-if="isClientProfil">
-                {{ order.client.firstname }}<br />
-                {{ order.client.lastname }}
+              <td class="px-6 py-4">
+                <span v-if="isDelivererProfil">
+                  {{ order.client.firstname }}<br />
+                  {{ order.client.lastname }}
+                </span>
+
+                <span v-if="isClientProfil && order.deliverer">
+                  {{ order.client.firstname }}<br />
+                  {{ order.client.lastname }}
+                </span>
+
+                <span v-if="isClientProfil && !order.deliverer"> - </span>
               </td>
-              <td class="px-6 py-4" v-if="isDelivererProfil">
-                {{ order.deliverer.firstname }}<br />
-                {{ order.deliverer.lastname }}
-              </td>
+
               <td class="px-6 py-4" v-if="isDelivererProfil">{{ order.client.address }}</td>
               <td class="px-6 py-4">
                 {{ dateFormat(order.createdAt) }}
@@ -225,49 +239,31 @@ onMounted(() => {
                   :set="(product = orderProduct.product)"
                 >
                   {{ orderProduct.quantity }} {{ product.type.label }} - {{ product.name }} ({{
-                    orderProduct.quantity * product.price
+                    (orderProduct.quantity * product.price).toFixed(2)
                   }}
                   €)
                 </p>
               </td>
               <td>{{ totalPriceOrder(order.products) }} €</td>
               <td class="px-6 py-4">
-                <span
-                  v-if="order.status === ORDER_STATUS.PENDING"
-                  class="px-3 py-2 text-xs font-medium text-center text-white rounded-lg focus:outline-none text-white bg-grey-700 hover:bg-grey-800 focus:ring-4 focus:ring-grey-300 dark:bg-grey-600 dark:hover:bg-grey-700 dark:focus:ring-grey-800"
-                >
-                  En attente d'un chauffeur
-                </span>
-
-                <span
-                  v-if="order.status === ORDER_STATUS.SHIPPING"
-                  class="px-3 py-2 text-xs font-medium text-center text-white rounded-lg focus:outline-none text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-900"
-                >
-                  En cours de livraison
-                </span>
-
-                <span
-                  v-if="order.status === ORDER_STATUS.DONE"
-                  class="px-3 py-2 text-xs font-medium text-center text-white rounded-lg focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-900"
-                >
-                  Livré
-                </span>
+                <OrderStatus :status="order.status" />
               </td>
               <td>
                 <div v-if="order.delivererReview?.rating === 0">
                   <div
-                    class="text-white bg-red-700 hover:bg-red-800 my-1 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-1 py-1 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                    style="width: min-content"
+                    class="text-white text-xs bg-red-700 hover:bg-red-800 my-1 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-1 py-1 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                    style="width: min-content; padding: 0.7em 0.6em"
                   >
                     BAN
                   </div>
                   {{ order.delivererReview.comment }}
                 </div>
                 <div v-else-if="order.delivererReview?.rating > 0">
-                  <span
-                    class="text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-1 py-1 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
-                    >{{ order.delivererReview?.rating }}/5</span
-                  ><br />
+                  <div class="flex items-center">
+                    <div v-for="item in notationRange" :key="item">
+                      <StarIcon :selected="item < order?.delivererReview?.rating" />
+                    </div>
+                  </div>
                   {{ order.delivererReview.comment }}
                 </div>
                 <div
