@@ -30,23 +30,23 @@ function getTabClass(value) {
 function handleChangeStatus(value) {
   statusActive.value = value;
   switch (value) {
-  case "PENDING":
-    getPendingKyc().then((res) => {
-      kyc.value = res.data.items;
-    });
-    break;
-  case "VALIDATED":
-    getValidatedKyc().then((res) => {
-      kyc.value = res.data.items;
-    });
-    break;
-  case "REFUSED":
-    getRefusedKyc().then((res) => {
-      kyc.value = res.data.items;
-    });
-    break;
-  default:
-    break;
+    case "PENDING":
+      getPendingKyc().then((res) => {
+        kyc.value = res.data.items;
+      });
+      break;
+    case "VALIDATED":
+      getValidatedKyc().then((res) => {
+        kyc.value = res.data.items;
+      });
+      break;
+    case "REFUSED":
+      getRefusedKyc().then((res) => {
+        kyc.value = res.data.items;
+      });
+      break;
+    default:
+      break;
   }
 }
 </script>
@@ -65,12 +65,16 @@ function handleChangeStatus(value) {
         >
       </li>
       <li class="mr-2">
-        <a @click.prevent="handleChangeStatus('REFUSED')" :class="getTabClass('REFUSED')"
+        <a
+          @click.prevent="handleChangeStatus('REFUSED')"
+          :class="getTabClass('REFUSED')"
           >Refuser</a
         >
       </li>
       <li class="mr-2">
-        <a @click.prevent="handleChangeStatus('VALIDATED')" :class="getTabClass('VALIDATED')"
+        <a
+          @click.prevent="handleChangeStatus('VALIDATED')"
+          :class="getTabClass('VALIDATED')"
           >Valider</a
         >
       </li>
@@ -84,7 +88,11 @@ function handleChangeStatus(value) {
           </tr>
         </thead>
         <tbody>
-          <tr :key="item.id" v-for="item in kyc.value" class="border-b bg-gray-800 border-gray-700">
+          <tr
+            :key="item.id"
+            v-for="item in kyc.value"
+            class="border-b bg-gray-800 border-gray-700"
+          >
             <td class="px-6 py-4">{{ item.siret }}</td>
             <td class="px-6 py-4">{{ STATUS[item.status] }}</td>
             <td class="px-6 py-4">
@@ -94,17 +102,8 @@ function handleChangeStatus(value) {
                   params: { id: item.id },
                 }"
                 class="font-medium text-blue-500 hover:underline"
-                >Edit</router-link
+                >Modifier</router-link
               >
-            </td>
-            <td class="px-6 py-4">
-              <button
-                @click.prevent="handleDelete(item)"
-                type="submit"
-                class="font-medium text-blue-500 hover:underline"
-              >
-                Delete
-              </button>
             </td>
           </tr>
         </tbody>
