@@ -6,9 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Delete;
 use App\Repository\OrderRepository;
 use App\Controller\Order\GetAllOrderController;
 use App\Controller\Order\CreateOrderController;
@@ -20,19 +18,25 @@ use App\Entity\Traits\TimestampableTrait;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
-#[ApiResource(operations: [
-  new Get(security: 'is_granted("ROLE_ADMIN") or object.getClient() == user', normalizationContext: ["groups" => ['order:detail']]),
-  new GetCollection(controller: GetAllOrderController::class, normalizationContext: ["groups" => ['order:read']]),
-  new Post(
-    security: 'is_granted("ROLE_USER") and !is_granted("ROLE_ADMIN") and !is_granted("ROLE_DELIVERER")',
-    denormalizationContext: ["groups" => ['order:write']],
-    controller: CreateOrderController::class
-  ),
-  new Patch(security: 'is_granted("ROLE_ADMIN") 
+#[ApiResource(
+  operations: [
+    new Get(security: 'is_granted("ROLE_ADMIN") or object.getClient() == user', normalizationContext: ["groups" => ['order:detail']]),
+    new GetCollection(
+      controller: GetAllOrderController::class,
+      normalizationContext: ["groups" => ['order:read']]
+    ),
+    new Post(
+      security: 'is_granted("ROLE_USER") and !is_granted("ROLE_ADMIN") and !is_granted("ROLE_DELIVERER")',
+      denormalizationContext: ["groups" => ['order:write']],
+      controller: CreateOrderController::class
+    ),
+    new Patch(security: 'is_granted("ROLE_ADMIN") 
         or (is_granted("ROLE_DELIVERER") and user.getStatus() == "OPERATIVE" and object.getDeliverer() == null) 
         or (is_granted("ROLE_DELIVERER") and user.getStatus() == "OPERATIVE" and object.getDeliverer() == user) 
         or (is_granted("ROLE_USER") and user.getClient() == user)'),
-], normalizationContext: ['groups' => ['order:read', 'order:detail']],)]
+  ],
+  normalizationContext: ['groups' => ['order:read', 'order:detail']],
+)]
 class Order
 {
 
@@ -185,3 +189,4 @@ class Order
     return $this;
   }
 }
+

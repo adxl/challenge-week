@@ -34,16 +34,16 @@ class GetAllOrderController extends AbstractController
       return $orders;
     } elseif (in_array('ROLE_DELIVERER', $user->getRoles()) && $user->getStatus() === User::STATUS["OPERATIVE"]) {
 
-      $orders = $em->getRepository(Order::class)->findBy(['deliverer' => $user, 'status' => 'SHIPPING']);
+      $orders = $em->getRepository(Order::class)->findBy(['deliverer' => $user, 'status' => 'SHIPPING'], ["createdAt" => 'DESC']);
 
       if (empty($orders)) {
-        $orders = $em->getRepository(Order::class)->findBy(['status' => 'PENDING']);
+        $orders = $em->getRepository(Order::class)->findBy(['status' => 'PENDING'], ["createdAt" => 'DESC']);
       }
 
       return $orders;
     } else {
 
-      $orders = $em->getRepository(Order::class)->findBy(['client' => $user]);
+      $orders = $em->getRepository(Order::class)->findBy(['client' => $user], ["createdAt" => 'DESC']);
 
       return $orders;
     }

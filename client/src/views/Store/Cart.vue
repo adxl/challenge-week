@@ -56,6 +56,7 @@ const handleOrderConfirm = () => {
           class="ml-4 px-4 py-2 bg-green-900 text-white rounded-md shadow-md hover:bg-green-800"
           type="button"
           @click="isModalOpen = true"
+          data-cy="cart-submit-button"
         >
           <svg
             fill="none"
@@ -221,6 +222,7 @@ const handleOrderConfirm = () => {
             type="button"
             class="focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center text-white bg-green-600 hover:bg-green-700 focus:ring-green-800"
             @click="handleOrderConfirm"
+            data-cy="cart-final-submit-button"
           >
             Commander
           </button>
