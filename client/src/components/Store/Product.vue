@@ -11,7 +11,7 @@ const props = defineProps({
 const currentUser = inject("auth_user");
 console.log(currentUser);
 
-const quantity = ref(0);
+const quantity = ref(1);
 
 const handleAddToCart = async () => {
   const cart = await getCart();
@@ -83,7 +83,7 @@ const handleAddToCart = async () => {
         <div v-if="currentUser.value.isClient">
           <input
             type="number"
-            min="0"
+            min="1"
             v-model="quantity"
             class="w-full input-quantity border text-sm block rounded-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
             placeholder="quantité"
@@ -95,6 +95,7 @@ const handleAddToCart = async () => {
           type="button"
           class="btn-add-to-cart text-white block focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 text-center inline-flex items-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
           @click="handleAddToCart(item)"
+          data-cy="store-add-to-cart-button"
         >
           <i class="fa-solid fa-cart-shopping"></i>
           <strong class="text-md whitespace-nowrap pl-1"> Ajouter au panier</strong>

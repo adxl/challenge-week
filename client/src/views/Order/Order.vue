@@ -163,7 +163,7 @@ onMounted(() => {
                   </div>
                 </div>
               </div>
-              <div v-else-if="currentUser.isClient">
+              <div v-else-if="currentUser.value.isClient">
                 <form @submit.prevent="handleSendDelivererReview">
                   <div class="mb-6">
                     <div>
@@ -173,6 +173,7 @@ onMounted(() => {
                           v-for="item in notationRange"
                           :key="item"
                           @click="delivererReviewInputs.rating = item + 1"
+                          :data-cy="'orders-review-notation-' + (item + 1)"
                         >
                           <StarIcon :selected="item < delivererReviewInputs.rating" />
                         </div>
@@ -185,12 +186,14 @@ onMounted(() => {
                         v-model="delivererReviewInputs.comment"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         required
+                        data-cy="orders-review-comment-input"
                       />
                     </div>
                   </div>
                   <button
                     type="submit"
                     class="mb-10 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center"
+                    data-cy="orders-review-submit-button"
                   >
                     Laisser un avis
                   </button>

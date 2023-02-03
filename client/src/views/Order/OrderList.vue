@@ -4,7 +4,7 @@ import { onMounted, reactive, inject } from "vue";
 import OrderStatus from "../../components/OrderStatus.vue";
 import KycForm from "../../components/KycForm.vue";
 
-const orderList = reactive([]) ?? null;
+const orderList = reactive({ value: [] });
 const currentUser = inject("auth_user");
 
 const kyc = currentUser.value.kyc?.status ?? null;
@@ -33,6 +33,7 @@ const handleValidateOrderReceipt = (id) => {
 const handleRefreshOrders = () => {
   getAllOrders()
     .then(({ data }) => {
+      console.log(data);
       orderList.value = data.items;
     })
     .catch((error) => {
@@ -45,7 +46,7 @@ const handleRefreshOrders = () => {
 <template>
   <div class="container mx-auto px-4 sm:px-8 my-5">
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-      <table v-if="orderList != null" class="w-full text-sm text-left text-gray-400">
+      <table v-if="orderList.value.length > 0" class="w-full text-sm text-left text-gray-400">
         <thead class="text-xs uppercase bg-gray-700 text-gray-400">
           <tr>
             <th class="px-6 py-4">N° Commande</th>
@@ -75,6 +76,7 @@ const handleRefreshOrders = () => {
                 class="block w-full px-4 py-2 mt-6 font-medium text-white uppercase transition-colors duration-200 transform bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600"
                 v-if="currentUser.value.isDeliverer && item.status === 'PENDING'"
                 @click="handleTakeOrder(item.id)"
+                data-cy="orders-take-button"
               >
                 Prendre en charge
               </button>
@@ -82,6 +84,7 @@ const handleRefreshOrders = () => {
                 class="block w-full px-4 py-2 mt-6 font-medium text-white uppercase transition-colors duration-200 transform bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600"
                 v-if="currentUser.value.isDeliverer && item.status === 'SHIPPING'"
                 @click="handleValidateOrderReceipt(item.id)"
+                data-cy="orders-confirm-button"
               >
                 Valider réception
               </button>
@@ -111,6 +114,7 @@ const handleRefreshOrders = () => {
                   v-if="
                     currentUser.value.isClient && !item.delivererReview && item.status == 'DONE'
                   "
+                  data-cy="orders-leave-review-button"
                 >
                   Laisser un avis
                 </button>

@@ -28,6 +28,7 @@ const handleLogout = () => {
               <router-link
                 :to="{ name: 'orders' }"
                 class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 text-gray-400 md:hover:text-white hover:bg-gray-700 hover:text-white"
+                data-cy="orders-link"
               >
                 <svg
                   fill="none"
@@ -145,6 +146,7 @@ const handleLogout = () => {
                 href="#"
                 class="block py-2 pl-3 pr-4 text-red-500 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 text-gray-400 md:hover:text-white hover:bg-gray-700 hover:text-white"
                 @click.prevent="handleLogout"
+                data-cy="logout-button"
               >
                 <svg
                   fill="none"
