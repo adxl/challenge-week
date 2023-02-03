@@ -16,16 +16,26 @@ class DelivererReviewFixtures extends Fixture implements DependentFixtureInterfa
     $faker = \Faker\Factory::create('fr_FR');
     $orders = $manager->getRepository(Order::class)->findByStatus(
       [OrderFixtures::DONE]
-    );    
+    );
 
-    foreach($orders as $order) {
-      
+    foreach ($orders as $order) {
+
+      if (
+        $order->getClient() === $this->getReference("client_3")
+        && $order->getDeliverer() === $this->getReference('deliverer_1')
+      ) {
+        continue;
+      }
+
       $delivererReview = new DelivererReview();
-      $delivererReview->setOrder($order);
+      $delivererReview->setOriginOrder($order);
       $delivererReview->setComment($faker->sentence(10));
-      $delivererReview->setRating($faker->randomNumber(1, 5));
+      if (in_array($order->getId(), [9, 10, 11]))
+        $delivererReview->setRating(0);
+      else
+        $delivererReview->setRating($faker->numberBetween(1, 5));
       $manager->persist($delivererReview);
-    } 
+    }
 
     $manager->flush();
   }

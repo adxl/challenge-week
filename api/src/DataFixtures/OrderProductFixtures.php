@@ -19,7 +19,7 @@ class OrderProductFixtures extends Fixture implements DependentFixtureInterface
     foreach ($orders as $order) {
       for ($i = 1; $i <= $faker->numberBetween(1, 6); $i++) {
         $orderProduct = new OrderProduct();
-        $orderProduct->setOrder($order);
+        $orderProduct->setOriginOrder($order);
         $orderProduct->setProduct($this->getReference('product_' . $faker->numberBetween(1, 5)));
         $orderProduct->setQuantity($faker->numberBetween(1, 10));
         $manager->persist($orderProduct);

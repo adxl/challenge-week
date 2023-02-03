@@ -1,7 +1,7 @@
 import { _get, _post } from "./gateway";
 
 export function getCurrentUser() {
-  return _get("/me");
+  return _get("/users/me");
 }
 
 export function register(data) {

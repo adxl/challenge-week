@@ -1,5 +1,5 @@
 api_platform:
-    title: Hello API Platform
+    title: CHALLENGE WEEK API
     version: 1.0.0
     # Mercure integration, remove if unwanted
     mercure: ~

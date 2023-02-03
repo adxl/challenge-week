@@ -16,3 +16,4 @@ package-lock.json
 .idea/jsLinters/eslint.xml
 .DS_Store
 /vendor
+.vscode

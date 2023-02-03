@@ -8,13 +8,11 @@ export function getProductCategory(id) {
   return _get("/product_categories/" + id);
 }
 
-export function addProductCategory({ name, unit, label }) {
-  const data = { name, unit, label };
+export function addProductCategory(data) {
   return _post("/product_categories", data);
 }
 
-export function updateProductCategory(id, { name, unit, label }) {
-  const data = { name, unit, label };
+export function updateProductCategory(id, data) {
   return _patch("/product_categories/" + id, data);
 }
 

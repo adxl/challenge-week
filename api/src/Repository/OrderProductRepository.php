@@ -16,61 +16,61 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class OrderProductRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, OrderProduct::class);
+  public function __construct(ManagerRegistry $registry)
+  {
+    parent::__construct($registry, OrderProduct::class);
+  }
+
+  public function save(OrderProduct $entity, bool $flush = false): void
+  {
+    $this->getEntityManager()->persist($entity);
+
+    if ($flush) {
+      $this->getEntityManager()->flush();
     }
+  }
 
-    public function save(OrderProduct $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->persist($entity);
+  public function remove(OrderProduct $entity, bool $flush = false): void
+  {
+    $this->getEntityManager()->remove($entity);
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+    if ($flush) {
+      $this->getEntityManager()->flush();
     }
+  }
 
-    public function remove(OrderProduct $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
+  public function findByOrderByStatus(array $status): array
+  {
+    return $this->createQueryBuilder('op')
+      ->join('op.originOrder', 'po')
+      ->andWhere('po.status = (:status)')
+      ->setParameter('status', $status)
+      ->getQuery()
+      ->getResult();
+  }
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
+  //    /**
+  //     * @return OrderProduct[] Returns an array of OrderProduct objects
+  //     */
+  //    public function findByExampleField($value): array
+  //    {
+  //        return $this->createQueryBuilder('o')
+  //            ->andWhere('o.exampleField = :val')
+  //            ->setParameter('val', $value)
+  //            ->orderBy('o.id', 'ASC')
+  //            ->setMaxResults(10)
+  //            ->getQuery()
+  //            ->getResult()
+  //        ;
+  //    }
 
-    public function findByOrderByStatus(array $status): array
-    {
-        return $this->createQueryBuilder('op')
-            ->join('op.productOrder', 'po')
-            ->andWhere('po.status = (:status)')
-            ->setParameter('status', $status)
-            ->getQuery()
-            ->getResult();
-    }
-
-//    /**
-//     * @return OrderProduct[] Returns an array of OrderProduct objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('o.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?OrderProduct
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+  //    public function findOneBySomeField($value): ?OrderProduct
+  //    {
+  //        return $this->createQueryBuilder('o')
+  //            ->andWhere('o.exampleField = :val')
+  //            ->setParameter('val', $value)
+  //            ->getQuery()
+  //            ->getOneOrNullResult()
+  //        ;
+  //    }
 }

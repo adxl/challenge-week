@@ -6,64 +6,89 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\DelivererReviewRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use App\Entity\Traits\TimestampableTrait;
 
 #[ORM\Entity(repositoryClass: DelivererReviewRepository::class)]
-#[ApiResource]
+#[ApiResource(
+  operations: [
+    new GetCollection(security: 'is_granted("ROLE_ADMIN")'),
+    new Post(),
+  ],
+  normalizationContext: ['groups' => ['delivererReviews']]
+)]
 class DelivererReview
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+  use TimestampableTrait;
+  #[ORM\Id]
+  #[ORM\GeneratedValue]
+  #[ORM\Column]
+  #[Groups(['delivererReviews', 'order:detail', 'order:read'])]
+  private ?int $id = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $rating = null;
+  #[ORM\Column(nullable: true)]
+  #[Groups(['delivererReviews', 'order:detail', 'order:read'])]
+  private ?int $rating = null;
+  use TimestampableTrait;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $comment = null;
+  #[ORM\Column(type: Types::TEXT, nullable: true)]
+  #[Groups(['delivererReviews', 'order:detail', 'order:read'])]
+  private ?string $comment = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Order $ProductOrder = null;
+  #[ORM\OneToOne(mappedBy: 'delivererReview', cascade: ['persist', 'remove'])]
+  #[Groups(['delivererReviews'])]
+  private ?Order $originOrder = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
+  public function getId(): ?int
+  {
+    return $this->id;
+  }
+
+  public function getRating(): ?int
+  {
+    return $this->rating;
+  }
+
+  public function setRating(?int $rating): self
+  {
+    $this->rating = $rating;
+
+    return $this;
+  }
+
+  public function getComment(): ?string
+  {
+    return $this->comment;
+  }
+
+  public function setComment(?string $comment): self
+  {
+    $this->comment = $comment;
+    return $this;
+  }
+
+
+  public function getOriginOrder(): ?Order
+  {
+    return $this->originOrder;
+  }
+
+  public function setOriginOrder(?Order $originOrder): self
+  {
+    // unset the owning side of the relation if necessary
+    if ($originOrder === null && $this->originOrder !== null) {
+      $this->originOrder->setDelivererReview(null);
     }
 
-    public function getRating(): ?int
-    {
-        return $this->rating;
+    // set the owning side of the relation if necessary
+    if ($originOrder !== null && $originOrder->getDelivererReview() !== $this) {
+      $originOrder->setDelivererReview($this);
     }
 
-    public function setRating(?int $rating): self
-    {
-        $this->rating = $rating;
+    $this->originOrder = $originOrder;
 
-        return $this;
-    }
-
-    public function getComment(): ?string
-    {
-        return $this->comment;
-    }
-
-    public function setComment(?string $comment): self
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    public function getOrder(): ?Order
-    {
-        return $this->ProductOrder;
-    }
-
-    public function setOrder(?Order $ProductOrder): self
-    {
-        $this->ProductOrder = $ProductOrder;
-
-        return $this;
-    }
+    return $this;
+  }
 }

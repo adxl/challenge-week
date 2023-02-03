@@ -9,6 +9,7 @@ use \DateTimeImmutable;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Faker;
 use App\Entity\User;
+
 class UserFixtures extends Fixture implements DependentFixtureInterface
 {
   private UserPasswordHasherInterface $hasher;
@@ -19,6 +20,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
   public const INACTIVE = "INACTIVE";
   public const ACTIVE = "ACTIVE";
   public const OPERATIVE = "OPERATIVE";
+  public const SUSPENDED = "SUSPENDED";
 
   public function __construct(UserPasswordHasherInterface $hasher)
   {
@@ -46,7 +48,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     $admin = new User();
     $password = $this->hasher->hashPassword($admin, 'esgi');
     $admin->setFirstname('Thomas');
-    $admin->setLastname('Geofrron');
+    $admin->setLastname('Geoffron');
     $admin->setEmail('thomas@esgi.fr');
     $admin->setPassword($password);
     $admin->setRoles(self::ROLE_ADMIN);
@@ -71,7 +73,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     $password = $this->hasher->hashPassword($admin, 'esgi');
     $admin->setFirstname('Coraline');
     $admin->setLastname('Esedji');
-    $admin->setEmail('Coraline@esgi.fr');
+    $admin->setEmail('coraline@esgi.fr');
     $admin->setPassword($password);
     $admin->setRoles(self::ROLE_ADMIN);
     $admin->setStatus(self::ACTIVE);
@@ -95,7 +97,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
       $manager->persist($user);
       $this->addReference('client_' . $i, $user);
-
     }
 
     // DELIVERER
@@ -116,35 +117,52 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
       $manager->persist($user);
 
       $this->addReference('deliverer_' . $i, $user);
-
     }
 
     $user = new User();
     $user
-    ->setFirstname($faker->firstName())
-    ->setLastname($faker->lastName())
-    ->setEmail("deliverer_" . $i . "@esgi.fr")
-    ->setPassword($this->hasher->hashPassword($user, 'esgi'))
-    ->setRoles(self::ROLE_DELIVERER)
-    ->setStatus(self::ACTIVE)
-    ->setAddress($faker->address())
-    ->setKyc($this->getReference(KycFixtures::KYC_REFUSED))
-    ->setBirthdayAt(DateTimeImmutable::createFromMutable($birthdateInterval));
+      ->setFirstname($faker->firstName())
+      ->setLastname($faker->lastName())
+      ->setEmail("deliverer_" . $i . "@esgi.fr")
+      ->setPassword($this->hasher->hashPassword($user, 'esgi'))
+      ->setRoles(self::ROLE_DELIVERER)
+      ->setStatus(self::ACTIVE)
+      ->setAddress($faker->address())
+      ->setKyc($this->getReference(KycFixtures::KYC_REFUSED))
+      ->setBirthdayAt(DateTimeImmutable::createFromMutable($birthdateInterval));
 
+    $manager->persist($user);
 
     $i = $i + 1;
 
     $user = new User();
     $user
-    ->setFirstname($faker->firstName())
-    ->setLastname($faker->lastName())
-    ->setEmail("deliverer_" . $i . "@esgi.fr")
-    ->setPassword($this->hasher->hashPassword($user, 'esgi'))
-    ->setRoles(self::ROLE_DELIVERER)
-    ->setStatus(self::ACTIVE)
-    ->setAddress($faker->address())
-    ->setKyc($this->getReference(KycFixtures::KYC_PENDING))
-    ->setBirthdayAt(DateTimeImmutable::createFromMutable($birthdateInterval));
+      ->setFirstname($faker->firstName())
+      ->setLastname($faker->lastName())
+      ->setEmail("deliverer_" . $i . "@esgi.fr")
+      ->setPassword($this->hasher->hashPassword($user, 'esgi'))
+      ->setRoles(self::ROLE_DELIVERER)
+      ->setStatus(self::ACTIVE)
+      ->setAddress($faker->address())
+      ->setKyc($this->getReference(KycFixtures::KYC_PENDING))
+      ->setBirthdayAt(DateTimeImmutable::createFromMutable($birthdateInterval));
+    $manager->persist($user);
+
+    $i = $i + 1; // 7
+
+    $user = new User();
+    $user
+      ->setFirstname($faker->firstName())
+      ->setLastname($faker->lastName())
+      ->setEmail("deliverer_" . $i . "@esgi.fr")
+      ->setPassword($this->hasher->hashPassword($user, 'esgi'))
+      ->setRoles(self::ROLE_DELIVERER)
+      ->setStatus(self::SUSPENDED)
+      ->setAddress($faker->address())
+      ->setKyc($this->getReference(KycFixtures::KYC_VALIDATED . '_' . $i))
+      ->setBirthdayAt(DateTimeImmutable::createFromMutable($birthdateInterval));
+    $this->addReference('deliverer_' . $i, $user);
+    $manager->persist($user);
 
     $manager->flush();
   }

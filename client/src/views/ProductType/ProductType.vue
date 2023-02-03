@@ -12,7 +12,7 @@ import { onMounted, reactive } from "vue";
 const route = useRouter();
 const id = route.currentRoute.value.params.id ?? null;
 
-const formValues = reactive({
+const _formValues = reactive({
   name: "",
   unit: "",
   label: "",
@@ -21,9 +21,9 @@ const formValues = reactive({
 onMounted(() => {
   if (!id) return;
   getProductType(id).then((res) => {
-    formValues.name = res.data.items.name;
-    formValues.unit = res.data.items.unit;
-    formValues.label = res.data.items.label;
+    _formValues.name = res.data.name;
+    _formValues.unit = Number(res.data.unit);
+    _formValues.label = res.data.label;
   });
 });
 
@@ -38,7 +38,7 @@ const simpleSchema = {
     if (!value) {
       return "L'unité est requis";
     }
-    if (!isIntegerKey(value)) {
+    if (!Number(value)) {
       return "L'unité doit être un nombre";
     }
     return true;
@@ -56,7 +56,7 @@ function handleRegister(values) {
   if (id) {
     updateProductType(id, { ...values })
       .then(({ data }) => {
-        route.push({ name: "product-types" });
+        route.push({ name: "admin-product-types" });
       })
       .catch((error) => {
         console.log(error);
@@ -65,7 +65,7 @@ function handleRegister(values) {
   } else {
     addProductType({ id, ...values })
       .then(({ data }) => {
-        route.push({ name: "product-types" });
+        route.push({ name: "admin-product-types" });
       })
       .catch((error) => {
         console.log(error);
@@ -79,10 +79,10 @@ function handleRegister(values) {
     <h3
       class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl"
     >
-      {{ id ? "Modification" : "Création" }} d'un type de produit
+      {{ id ? "Modification " + _formValues.name : "Création d'un type" }}
     </h3>
     <Form
-      :initial-values="formValues"
+      :initial-values="_formValues"
       @submit="handleRegister"
       :validation-schema="simpleSchema"
     >
@@ -134,7 +134,7 @@ function handleRegister(values) {
         type="submit"
         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
       >
-        Ajouter un type de produit
+        {{ id ? "Modifier" : "Ajouter" }}
       </button>
     </Form>
   </div>

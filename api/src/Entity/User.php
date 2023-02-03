@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\TimestampableTrait;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -15,10 +16,16 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
+use App\Controller\BanUserController;
+use App\Controller\GiveRoleAdminController;
+use App\Controller\CheckPasswordController;
+use App\Controller\ClientsProfilController;
+use App\Controller\DeliverersProfilController;
 use App\Controller\RegisterController;
 use App\Controller\VerifyTokenController;
 use App\Controller\ResetPasswordController;
 use App\Controller\SelfAuthController;
+use App\Controller\UpdateUserController;
 use App\State\UserPasswordHasher;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -32,13 +39,49 @@ use Symfony\Component\Serializer\Annotation\Groups;
     requirements: [],
     controller: SelfAuthController::class,
   ),
+  new GetCollection(
+    security: 'is_granted("ROLE_ADMIN")',
+    name: "clients_profil",
+    uriTemplate: '/users/clients',
+    requirements: [],
+    controller: ClientsProfilController::class,
+  ),
+  new GetCollection(
+    security: 'is_granted("ROLE_ADMIN")',
+    name: "deliverers_profil",
+    uriTemplate: '/users/deliverers',
+    requirements: [],
+    controller: DeliverersProfilController::class,
+  ),
   new Get(),
   new GetCollection(),
-  new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'register', processor: UserPasswordHasher::class, controller: RegisterController::class),
+  new Post(
+    security: 'is_granted("PUBLIC_ACCESS")',
+    name: 'register',
+    processor: UserPasswordHasher::class,
+    controller: RegisterController::class,
+    denormalizationContext: ["groups" => ["self_register"]]
+  ),
   new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'verify_token', controller: VerifyTokenController::class),
   new Post(security: 'is_granted("PUBLIC_ACCESS")', name: 'reset_password_email', controller: ResetPasswordController::class),
+  new Post(
+    security: 'user == object',
+    uriTemplate: 'users/{id}/password/check',
+    controller: CheckPasswordController::class,
+    denormalizationContext: ["groups" => ["self_check_password"]]
+  ),
+  new Post(
+    security: 'is_granted("ROLE_ADMIN")',
+    uriTemplate: '/users/{id}/ban',
+    controller: BanUserController::class,
+  ),
+  new Post(
+    security: 'is_granted("ROLE_ADMIN")',
+    uriTemplate: '/users/{id}/role/admin',
+    controller: GiveRoleAdminController::class,
+  ),
   new Put(processor: UserPasswordHasher::class),
-  new Patch(processor: UserPasswordHasher::class),
+  new Patch(processor: UserPasswordHasher::class, denormalizationContext: ["groups" => ["self_update"]]),
   new Patch(
     security: 'is_granted("PUBLIC_ACCESS")',
     uriTemplate: '/users/reset-password/{token}',
@@ -46,10 +89,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
     controller: ResetPasswordController::class,
   ),
   new Delete(),
-  new Post(),
-], normalizationContext: ["groups" => ["self"]])]
+], normalizationContext: ["groups" => ["self", "user:read"]])]
+
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
+  use TimestampableTrait;
+
   public const STATUS = [
     "INACTIVE" => "INACTIVE",
     "ACTIVE" => "ACTIVE",
@@ -61,14 +107,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
+  #[Groups(["self", 'kyc:read'])]
   private ?int $id = null;
 
   #[ORM\Column(length: 180, unique: true)]
-  #[Groups(["self"])]
+  #[Groups(["self", 'delivererReviews', 'self_register'])]
   private ?string $email = null;
 
   #[ORM\Column]
-  #[Groups(["self"])]
+  #[Groups(["self", 'delivererReviews', 'self_register'])]
   private array $roles = [];
 
   /**
@@ -77,34 +124,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[ORM\Column]
   private ?string $password = null;
 
-  #[Assert\NotBlank(groups: ['user:create'])]
+  #[Assert\NotBlank(groups: ['self_register', 'self_check_password'])]
+  #[Groups(['self_register', 'self_update', 'self_check_password'])]
   private ?string $plainPassword = null;
 
   #[ORM\Column(length: 255)]
-  #[Groups(["self"])]
+  #[Groups(['order:read', 'self', 'delivererReviews', 'order:detail', 'kyc:read', 'self_register', 'self_update'])]
   private ?string $firstname = null;
 
   #[ORM\Column(length: 255)]
-  #[Groups(["self"])]
+  #[Groups(['order:read', 'self', 'delivererReviews', 'order:detail', 'kyc:read', 'self_register', 'self_update'])]
   private ?string $lastname = null;
 
   #[ORM\Column(nullable: true)]
-  #[Groups(["self"])]
-  private ?\DateTimeImmutable $birthday_at = null;
+  #[Groups(["self", 'self_register', 'self_update'])]
+  private ?\DateTimeImmutable $birthdayAt = null;
 
   #[ORM\Column(length: 255)]
   #[Groups(["self"])]
   private ?string $status = null;
 
   #[ORM\Column(length: 255)]
-  #[Groups(["self"])]
+  #[Groups(["self", "order:read", "order:detail", 'self_register', 'self_update'])]
   private ?string $address = null;
 
   #[ORM\Column(length: 255, nullable: true)]
   private ?string $token = null;
 
-  #[ORM\OneToOne(inversedBy: 'deliverer', cascade: ['persist', 'remove'],)]
-  private ?Kyc $kyc = null;
+	#[ORM\OneToOne(inversedBy: 'deliverer', cascade: ['persist', 'remove'],)]
+	#[Groups(["self"])]
+	private ?Kyc $kyc = null;
 
   #[ORM\OneToMany(mappedBy: 'deliverer', targetEntity: Order::class)]
   #[Groups(["self"])]
@@ -228,12 +277,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
   public function getBirthdayAt(): ?\DateTimeImmutable
   {
-    return $this->birthday_at;
+    return $this->birthdayAt;
   }
 
-  public function setBirthdayAt(?\DateTimeImmutable $birthday_at): self
+  public function setBirthdayAt(?\DateTimeImmutable $birthdayAt): self
   {
-    $this->birthday_at = $birthday_at;
+    $this->birthdayAt = $birthdayAt;
 
     return $this;
   }

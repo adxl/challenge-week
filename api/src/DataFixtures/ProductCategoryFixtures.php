@@ -13,19 +13,19 @@ class ProductCategoryFixtures extends Fixture
     // ADMIN
 
     $cat = new ProductCategory();
-    $cat->setName('Euphorisants');
+    $cat->setName('Énergisant');
     $manager->persist($cat);
 
     $cat = new ProductCategory();
-    $cat->setName('Hallucinogéne');
+    $cat->setName('Vitamine');
     $manager->persist($cat);
 
     $cat = new ProductCategory();
-    $cat->setName('Enivrant');
+    $cat->setName('Complément');
     $manager->persist($cat);
 
     $cat = new ProductCategory();
-    $cat->setName('Hypnotique');
+    $cat->setName('Calmant');
     $manager->persist($cat);
 
     $cat = new ProductCategory();
@@ -33,6 +33,5 @@ class ProductCategoryFixtures extends Fixture
     $manager->persist($cat);
 
     $manager->flush();
-
   }
 }
