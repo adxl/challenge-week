@@ -1,5 +1,8 @@
 <script setup>
-import { getAllProductCategory, deleteProductCategory } from "@/api/productCategory";
+import {
+  getAllProductCategory,
+  deleteProductCategory,
+} from "@/api/productCategory";
 import { onMounted, reactive } from "vue";
 
 const productTypes = reactive([]);
@@ -48,7 +51,10 @@ function handleDelete(value) {
             v-for="item in productTypes.value"
             class="border-b bg-gray-800 border-gray-700"
           >
-            <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white">
+            <th
+              scope="row"
+              class="px-6 py-4 font-medium whitespace-nowrap text-white"
+            >
               {{ item.name }}
             </th>
             <td class="px-6 py-4">
@@ -58,7 +64,7 @@ function handleDelete(value) {
                   params: { id: item.id },
                 }"
                 class="font-medium text-blue-500 hover:underline"
-                >Edit</router-link
+                >Modifier</router-link
               >
             </td>
             <td class="px-6 py-4">
@@ -67,7 +73,7 @@ function handleDelete(value) {
                 type="submit"
                 class="font-medium text-blue-500 hover:underline"
               >
-                Delete
+                Supprimer
               </button>
             </td>
           </tr>
