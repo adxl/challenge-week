@@ -1,5 +1,10 @@
 name: Challenge Week CI
 
+env:
+  JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+  JWT_PUBLIC_KEY: ${{ secrets.JWT_PUBLIC_KEY }}
+  JWT_PASSPHRASE: ${{ secrets.JWT_PASSPHRASE }}
+
 on:
   push:
     branches:
@@ -17,7 +22,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-    
+
       - name: Start services
         run: |
           cp ./api/.env.ci ./api/.env
@@ -49,6 +54,10 @@ jobs:
 
       - name: Run tests
         run: docker compose exec -T php bin/phpunit
+        env:
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          JWT_PUBLIC_KEY: ${{ secrets.JWT_PUBLIC_KEY }}
+          JWT_PASSPHRASE: ${{ secrets.JWT_PASSPHRASE }}
 
       # - name: Doctrine Schema Validator
       #   run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
