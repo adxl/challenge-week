@@ -3,11 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Service\BlueMailer;
 use App\Service\TokenGeneration;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 #[AsController]
 class RegisterController extends AbstractController
@@ -16,7 +17,7 @@ class RegisterController extends AbstractController
     {
     }
 
-    public function __invoke(User $user, ManagerRegistry $doctrine): User
+    public function __invoke(User $user, ManagerRegistry $doctrine, MailerInterface $mailer): User
     {
         if ($_ENV["APP_STAGE"] === "local") {
           return $user;
@@ -29,11 +30,13 @@ class RegisterController extends AbstractController
 
         $url = $_ENV["APP_URL"] . '/users/verify/' . $token;
 
-        $mailer = new BlueMailer();
-        $mailer->sendEmail($user, 6, [
-            'URL' => $url,
-            "firstname" => $user->getFirstname(),
-        ]);
+        $email = (new Email())
+            ->from('supp.myschool@outlook.fr')
+            ->to($user->getEmail())
+            ->subject('Confirmation de votre compte')
+            ->html('Pour confirmer votre compte, veuillez cliquer sur le lien suivant : <a href="' . $url . '">Confirmer mon compte</a>');
+
+        $mailer->send($email);
 
         return $user;
     }
