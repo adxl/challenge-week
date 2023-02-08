@@ -7,6 +7,7 @@ on:
       - develop
       - feature/*
       - ci/setup
+      - tmp/back-tests
 
 jobs:
   api:
@@ -16,12 +17,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-    
+
       - name: Start services
         run: |
           cp ./api/.env.ci ./api/.env
           touch ./client/.env
-          docker compose up php --build -d
+
+          sed -i 's|@JWT_SECRET_KEY@|${{ secrets.JWT_SECRET_KEY }}|g' ./api/.env
+          sed -i 's|@JWT_PUBLIC_KEY@|${{ secrets.JWT_PUBLIC_KEY }}|g' ./api/.env
+          sed -i 's|@JWT_PASSPHRASE@|${{ secrets.JWT_PASSPHRASE }}|g' ./api/.env
+
+          docker compose up php caddy --build -d
 
       - name: Check reachability
         run: |
@@ -40,10 +46,17 @@ jobs:
 
           curl -v -o /dev/null http://localhost
 
+      - name: Generate jwt token
+        run : docker compose exec -T php bin/console lexik:jwt:generate-keypair
+
       - name: Create test database
         run: |
           docker compose exec -T php bin/console -e test doctrine:database:create
           docker compose exec -T php bin/console -e test doctrine:schema:create
+          docker compose exec -T php bin/console -e test doctrine:fixtures:load -n
+
+      - name: Run tests
+        run: docker compose exec -T php bin/phpunit
 
       - name: Doctrine Schema Validator
         run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
