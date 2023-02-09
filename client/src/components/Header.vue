@@ -95,7 +95,7 @@ const handleLogout = () => {
               </router-link>
             </li>
             <!-- IS CONNECTED -->
-            <li v-if="currentUser?.value?.id">
+            <li v-if="currentUser?.value?.isClient">
               <router-link
                 :to="{ name: 'store' }"
                 class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 text-gray-400 md:hover:text-white hover:bg-gray-700 hover:text-white"
@@ -138,7 +138,14 @@ const handleLogout = () => {
                     d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
                   ></path>
                 </svg>
-                {{ currentUser.value.firstname }} {{ currentUser.value.lastname }}
+                <div class="flex items-center">
+                  <span> {{ currentUser.value.firstname }} {{ currentUser.value.lastname }} </span>
+                  <span
+                    v-if="currentUser.value?.status == 'INACTIVE'"
+                    class="ml-2 p-1 whitespace-nowrap text-xs font-medium text-center text-white rounded-lg focus:outline-none text-white focus:ring-4 bg-red-600 hover:bg-red-700 focus:ring-red-900"
+                    >Activez votre compte</span
+                  >
+                </div>
               </router-link>
             </li>
             <li v-if="currentUser.value?.['@id']">
