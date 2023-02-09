@@ -14,7 +14,7 @@ const regex = {
   ),
   birthday: new RegExp("^(19|20)[0-9]{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$"),
   address: new RegExp("^[a-zA-Z0-9 ,'-]{5,255}$"),
-  password: new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$"),
+  password: new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-.]).{8,}$"),
 };
 
 const _formValues = reactive({
@@ -28,12 +28,12 @@ const _formValues = reactive({
 const validationForms = {
   firstname(value) {
     if (!value) return "Le prénom est requis";
-    if (!regex.name.test(value)) "Le prénom n'est pas valide";
+    if (!regex.name.test(value)) return "Le prénom n'est pas valide";
     return true;
   },
   lastname(value) {
     if (!value) return "Le nom de famille est requis";
-    if (!regex.name.test(value)) "Le nom de famille n'est pas valide";
+    if (!regex.name.test(value)) return "Le nom de famille n'est pas valide";
     return true;
   },
   birthdayAt(value) {
@@ -58,7 +58,7 @@ const validationForms = {
       if (form.oldPassword === undefined || form.oldPassword.length <= 0)
         return "L'ancien mot de passe est requis";
       if (!regex.password.test(value))
-        return "Le mot de passe doit contenir au moins 8 caractères, une lettre et un chiffre";
+        return "Le mot de passe doit contenir au moins 8 caractères, une lettre, chiffre et un caractère spécial";
     }
     return true;
   },
@@ -82,7 +82,6 @@ onMounted(() => {
 });
 
 function handleSave(values) {
-  console.log(values);
   if (values.oldPassword && values.newPassword) {
     checkPassword(id, values.oldPassword)
       .then((res) => {
@@ -123,7 +122,6 @@ function handleSave(values) {
       Modification du profil
     </h3>
     <Form :initial-values="_formValues" @submit="handleSave" :validation-schema="validationForms">
-      <!-- <Form :initial-values="_formValues" @submit="handleSave"> -->
       <div class="grid md:grid-cols-3 md:gap-6 mb-4">
         <div>
           <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Prénom</label>
