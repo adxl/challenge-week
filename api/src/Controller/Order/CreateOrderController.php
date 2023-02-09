@@ -39,7 +39,7 @@ class CreateOrderController extends AbstractController
     $order->setStatus("PENDING");
     $em->persist($order);
     $em->flush();
-    
+
     foreach ($productsOrdered as $oneProduct) {
       $product = $em->getRepository(Product::class)->findOneBy(['id' => $oneProduct->id]);
 
@@ -60,7 +60,8 @@ class CreateOrderController extends AbstractController
 
     return $this->json([
       "code" => 200,
-      "message" => "Order created"
+      "message" => "Order created",
+      "orderId" => $order->getId()
     ]);
   }
 }

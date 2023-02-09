@@ -10,8 +10,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Service\BlueMailer;
 use App\Service\TokenGeneration;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 #[AsController]
 class ResetPasswordController extends AbstractController
@@ -62,7 +63,7 @@ class ResetPasswordController extends AbstractController
             '_api_operation_name' => '_api_/users/reset-password',
         ],
     )]
-    public function sendRstPwdMail(ManagerRegistry $doctrine): JsonResponse
+    public function sendRstPwdMail(ManagerRegistry $doctrine, MailerInterface $mailer): JsonResponse
     {
         // TODO : Secure if not email in body
         $email = json_decode($this->requestStack->getCurrentRequest()->getContent())->email;
@@ -78,11 +79,13 @@ class ResetPasswordController extends AbstractController
 
         $url = $_ENV["APP_URL"] . '/reset-password/' . $token;
 
-        $mailer = new BlueMailer();
-        $mailer->sendEmail($user, 7, [
-            'URL' => $url,
-            "firstname" => $user->getFirstname(),
-        ]);
+        $email = (new Email())
+            ->from('supp.myschool@outlook.fr')
+            ->to($user->getEmail())
+            ->subject('Réinitialisation de votre mot de passe')
+            ->html('Pour changer votre mot de passe, veuillez cliquer sur le lien suivant : <a href="' . $url . '">Réinitiliser mon mot de passe</a>');
+
+        $mailer->send($email);
 
         return $this->json([
           "code" => 200,

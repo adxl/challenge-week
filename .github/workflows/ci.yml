@@ -1,4 +1,4 @@
-name: Challenge Week CI
+name: BBR CI Workflow
 
 on:
   push:
@@ -9,19 +9,25 @@ on:
       - ci/setup
 
 jobs:
-  api:
-    name: API
+  install:
+    name: Install and test the application
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-    
-      - name: Start services
+
+      - name: Setup
         run: |
           cp ./api/.env.ci ./api/.env
-          touch ./client/.env
-          docker compose up php --build -d
+          echo "VITE_API_URL=localhost" > ./client/.env
+
+          sed -i 's|@JWT_SECRET_KEY@|${{ secrets.JWT_SECRET_KEY }}|g' ./api/.env
+          sed -i 's|@JWT_PUBLIC_KEY@|${{ secrets.JWT_PUBLIC_KEY }}|g' ./api/.env
+          sed -i 's|@JWT_PASSPHRASE@|${{ secrets.JWT_PASSPHRASE }}|g' ./api/.env
+
+      - name: Start services
+        run: docker compose up --build -d
 
       - name: Check reachability
         run: |
@@ -40,18 +46,34 @@ jobs:
 
           curl -v -o /dev/null http://localhost
 
-      - name: Create test database
+      - name: Generate JWT RSA Keys
+        run : docker compose exec -T php bin/console lexik:jwt:generate-keypair
+
+      - name: Setup database
         run: |
           docker compose exec -T php bin/console -e test doctrine:database:create
           docker compose exec -T php bin/console -e test doctrine:schema:create
+          docker compose exec -T php bin/console -e test doctrine:fixtures:load -n
+          docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
 
-      - name: Doctrine Schema Validator
-        run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
-      
-      - name: Set up QEMU
+      - name: Run tests
+        run: docker compose exec -T php bin/phpunit
+
+        
+  publish:
+    needs: install
+
+    name: Build and publish the image
+    runs-on: ubuntu-latest
+    
+    if: github.ref_name == 'main'
+  
+    steps:
+      - name: Setup QEMU
         uses: docker/setup-qemu-action@v2
+        if: github
 
-      - name: Set up Docker Buildx
+      - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v2
 
       - name: Login to DockerHub
@@ -60,40 +82,9 @@ jobs:
           username: ${{ secrets.HUB_USERNAME }}
           password: ${{ secrets.HUB_TOKEN }}
 
-      - name: Build and push
+      - name: Publish
         uses: docker/build-push-action@v3
         with:
           context: ./api
           push: true
-          tags: ${{ secrets.HUB_USERNAME }}/challenge-week:latest 
-        
-
-  client:
-    name: Client
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Start services
-        run: |
-          touch ./client/.env
-          docker compose up client --build -d
-      
-      - name: Check reachability
-        run: |
-          while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Status}}{{end}}" "$(docker compose ps -q client)")"; do
-            case $status in
-              starting) sleep 1;;
-              running) exit 0;;
-              *)
-                docker compose ps
-                docker compose logs
-                exit 1
-              ;;
-            esac
-          done
-          exit 1
-
-          curl -v -o /dev/null http://localhost:3000
+          tags: ${{ secrets.HUB_USERNAME }}/challenge-week:latest
