@@ -73,7 +73,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup
-        run: touch .env
+        run: cp ./api/.env.ci ./api/.env
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v2
