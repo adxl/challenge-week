@@ -19,21 +19,35 @@ class RegisterController extends AbstractController
     $this->mailerInterface = $mailerInterface;
   }
 
+  private function checkUserRole(User $user): User
+  {
+    $userRoles = $user->getRoles();
+
+    if (count($userRoles) !== 1) {
+      return  $user->setRoles(["ROLE_CLIENT"]);
+    }
+
+    if (!in_array($userRoles[0], ["ROLE_CLIENT", "ROLE_DELIVERER"])) {
+      return  $user->setRoles(["ROLE_CLIENT"]);
+    }
+    
+    return $user;
+
+  }
+
   public function __invoke(User $user, ManagerRegistry $doctrine): User
   {
-    if ($_ENV["APP_STAGE"] === "local") {
-      return $user;
-    }
 
     $em = $doctrine->getManager();
     $token = TokenGeneration::generateToken();
     $user->setToken($token);
-    for ($i = 0; $i < sizeof($user->getRoles()); $i++) {
-        if (!in_array($user->getRoles()[$i], ["ROLE_CLIENT", "ROLE_DELIVERER"])) {
-            $user->setRoles(["ROLE_CLIENT"]);
-        }
-    }
+    $user = $this->checkUserRole($user);
+
     $em->flush();
+
+    if ($_ENV["APP_STAGE"] === "local") {
+      return $user;
+    }
 
     $url = $_ENV["APP_URL"] . '/users/verify/' . $token;
 
