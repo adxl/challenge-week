@@ -13,8 +13,10 @@ use Symfony\Component\Mime\Email;
 #[AsController]
 class RegisterController extends AbstractController
 {
-  public function __construct(private MailerInterface $mailerInterface)
+  private $mailerInterface;
+  public function __construct(MailerInterface $mailerInterface)
   {
+    $this->mailerInterface = $mailerInterface;
   }
 
   public function __invoke(User $user, ManagerRegistry $doctrine): User
