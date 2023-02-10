@@ -224,7 +224,7 @@ onMounted(() => {
                         },
                       ]"
                       @click="handleReviewProduct(review.id, review.product['@id'], false)"
-                      :disabled="!review.rating"
+                      :disabled="review.rating === false"
                     >
                       c'est SOFT 👎
                     </button>
