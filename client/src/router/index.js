@@ -57,7 +57,7 @@ const routes = [
     name: "store",
     path: "/store",
     component: () => import("@/views/Store/Store.vue"),
-    meta: { loggedIn: true },
+    meta: { authorize: [USER_ROLES.ROLE_CLIENT] },
   },
   {
     name: "orders",
@@ -75,7 +75,7 @@ const routes = [
     name: "cart",
     path: "/cart",
     component: () => import("@/views/Store/Cart.vue"),
-    meta: { authorize: [USER_ROLES.ROLE_CLIENT, USER_ROLES.ROLE_DELIVERER] },
+    meta: { authorize: [USER_ROLES.ROLE_CLIENT] },
   },
   {
     name: "profil",

@@ -27,12 +27,13 @@ const STATUS = [
 
 onMounted(() => {
   if (!id) return;
-  getKyc(id).then((res) => {
-    _formValues.siret = res.data.items.siret;
-    _formValues.status = res.data.items.status;
-    _formValues.reason = res.data.items.reason;
-    _user.firstname = res.data.items.deliverer["firstname"];
-    _user.lastname = res.data.items.deliverer["lastname"];
+  getKyc("/kycs/" + id).then(({ data }) => {
+    _formValues.siret = data.siret;
+    _formValues.status = data.status;
+    _formValues.reason = data.reason;
+
+    _user.firstname = data.deliverer["firstname"];
+    _user.lastname = data.deliverer["lastname"];
   });
 });
 
@@ -62,9 +63,7 @@ function handleUpdate(values) {
     </h3>
     <Form :initial-values="_formValues" @submit="handleUpdate">
       <div class="mb-6">
-        <label for="siret" class="block mb-2 text-sm font-medium text-gray-900"
-          >Siret
-        </label>
+        <label for="siret" class="block mb-2 text-sm font-medium text-gray-900">Siret </label>
         <Field
           name="siret"
           id="disabled-input"
@@ -73,10 +72,7 @@ function handleUpdate(values) {
           value="Disabled input"
           disabled
         />
-        <ErrorMessage
-          class="p-1 mb-1 text-sm text-red-700 borderrounded-lg"
-          name="siret"
-        />
+        <ErrorMessage class="p-1 mb-1 text-sm text-red-700 borderrounded-lg" name="siret" />
       </div>
       <div class="mb-6">
         <label for="reason" class="block mb-2 text-sm font-medium text-gray-900"
@@ -86,10 +82,7 @@ function handleUpdate(values) {
           name="reason"
           class="shadow-sm mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         />
-        <ErrorMessage
-          class="p-1 mb-1 text-sm text-red-700 borderrounded-lg"
-          name="reason"
-        />
+        <ErrorMessage class="p-1 mb-1 text-sm text-red-700 borderrounded-lg" name="reason" />
       </div>
       <div class="mb-6">
         <label for="status" class="block mb-2 text-sm font-medium text-gray-900"
@@ -105,10 +98,7 @@ function handleUpdate(values) {
             {{ item.label }}
           </option>
         </Field>
-        <ErrorMessage
-          class="p-1 mb-1 text-sm text-red-700 borderrounded-lg"
-          name="status"
-        />
+        <ErrorMessage class="p-1 mb-1 text-sm text-red-700 borderrounded-lg" name="status" />
       </div>
       <button
         type="submit"
