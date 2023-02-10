@@ -100,7 +100,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     }
 
     // DELIVERER
-    for ($i = 1; $i <= 4; $i++) {
+    for ($i = 1; $i <= 5; $i++) {
       $birthdateInterval = $faker->dateTimeBetween("-50 years", '-18 years');
       $user = new User();
       $user

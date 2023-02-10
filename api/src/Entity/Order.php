@@ -26,14 +26,14 @@ use App\Entity\Traits\TimestampableTrait;
       normalizationContext: ["groups" => ['order:read']]
     ),
     new Post(
-      security: 'is_granted("ROLE_USER") and !is_granted("ROLE_ADMIN") and !is_granted("ROLE_DELIVERER")',
+      security: 'is_granted("ROLE_CLIENT")',
       denormalizationContext: ["groups" => ['order:write']],
       controller: CreateOrderController::class
     ),
     new Patch(security: 'is_granted("ROLE_ADMIN") 
         or (is_granted("ROLE_DELIVERER") and user.getStatus() == "OPERATIVE" and object.getDeliverer() == null) 
         or (is_granted("ROLE_DELIVERER") and user.getStatus() == "OPERATIVE" and object.getDeliverer() == user) 
-        or (is_granted("ROLE_USER") and user.getClient() == user)'),
+        or (is_granted("ROLE_CLIENT") and user.getClient() == user)'),
   ],
   normalizationContext: ['groups' => ['order:read', 'order:detail']],
 )]

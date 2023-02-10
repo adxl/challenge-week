@@ -1,14 +1,12 @@
 <script setup>
 import { addKyc, updateKyc, getKyc } from "@/api/kyc";
 import { Form, Field, ErrorMessage } from "vee-validate";
-import { useRouter } from "vue-router";
 import { onMounted, reactive } from "vue";
 import { inject } from "vue";
 
 const user = inject("auth_user");
 
-const route = useRouter();
-const kyc = user.value.kyc["@id"] ?? null;
+const kyc = user.value.kyc?.["@id"] ?? null;
 
 const _idKyc = reactive({
   id: null,
@@ -22,11 +20,11 @@ const _formValues = reactive({
 
 onMounted(() => {
   if (!kyc) return;
-  getKyc(kyc).then((res) => {
-    _formValues.siret = res.data.siret;
-    _formValues.reason = res.data.reason;
-    _formValues.status = res.data.status;
-    _idKyc.id = res.data.id;
+  getKyc(kyc).then(({ data }) => {
+    _formValues.siret = data.siret;
+    _formValues.reason = data.reason;
+    _formValues.status = data.status;
+    _idKyc.id = data.id;
   });
 });
 
@@ -75,10 +73,7 @@ function handleRegister(values) {
       </span>
     </div>
     <div v-else>
-      <span
-        v-if="_idKyc.id == null"
-        class="mb-4 text text-gray-900 md:text-5xl lg:text-6xl"
-      >
+      <span v-if="_idKyc.id == null" class="mb-4 text text-gray-900 md:text-5xl lg:text-6xl">
         Avant de commencer, nous avons besoin de quelques informations
       </span>
       <Form
@@ -88,9 +83,7 @@ function handleRegister(values) {
         :validation-schema="simpleSchema"
       >
         <div class="mb-6" v-if="_formValues.status == 'REFUSED'">
-          <label
-            for="reason"
-            class="block mb-2 text-sm font-medium text-red-700"
+          <label for="reason" class="block mb-2 text-sm font-medium text-red-700"
             >Raison du refut</label
           >
           <Field
@@ -113,10 +106,7 @@ function handleRegister(values) {
             name="siret"
             class="shadow-sm mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           />
-          <ErrorMessage
-            class="p-1 mb-1 text-sm text-red-700 borderrounded-lg"
-            name="siret"
-          />
+          <ErrorMessage class="p-1 mb-1 text-sm text-red-700 borderrounded-lg" name="siret" />
         </div>
         <div class="mb-6 hidden">
           <Field
@@ -124,10 +114,7 @@ function handleRegister(values) {
             value="PENDING"
             class="shadow-sm mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           />
-          <ErrorMessage
-            class="p-1 mb-1 text-sm text-red-700 borderrounded-lg"
-            name="status"
-          />
+          <ErrorMessage class="p-1 mb-1 text-sm text-red-700 borderrounded-lg" name="status" />
         </div>
         <button
           type="submit"
