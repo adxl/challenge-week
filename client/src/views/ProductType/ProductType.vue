@@ -1,9 +1,5 @@
 <script setup>
-import {
-  getProductType,
-  addProductType,
-  updateProductType,
-} from "@/api/productType";
+import { getProductType, addProductType, updateProductType } from "@/api/productType";
 import { isIntegerKey } from "@vue/shared";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { useRouter } from "vue-router";
@@ -30,13 +26,13 @@ onMounted(() => {
 const simpleSchema = {
   name(value) {
     if (!value) {
-      return "Name est requis";
+      return "Nom du produit est requis";
     }
     return true;
   },
   unit(value) {
     if (!value) {
-      return "L'unité est requis";
+      return "L'unité est requise";
     }
     if (!Number(value)) {
       return "L'unité doit être un nombre";
@@ -81,53 +77,34 @@ function handleRegister(values) {
     >
       {{ id ? "Modification " + _formValues.name : "Création d'un type" }}
     </h3>
-    <Form
-      :initial-values="_formValues"
-      @submit="handleRegister"
-      :validation-schema="simpleSchema"
-    >
+    <Form :initial-values="_formValues" @submit="handleRegister" :validation-schema="simpleSchema">
       <div class="mb-6">
-        <label for="name" class="block mb-2 text-sm font-medium text-gray-900"
-          >Nom du type</label
-        >
+        <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Nom du type</label>
         <Field
           name="name"
           class="shadow-sm mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         />
-        <ErrorMessage
-          class="p-1 mb-1 text-sm text-red-700 borderrounded-lg"
-          name="name"
-        >
+        <ErrorMessage class="p-1 mb-1 text-sm text-red-700 borderrounded-lg" name="name">
         </ErrorMessage>
       </div>
       <div class="mb-6">
-        <label for="unit" class="block mb-2 text-sm font-medium text-gray-900"
-          >unité</label
-        >
+        <label for="unit" class="block mb-2 text-sm font-medium text-gray-900">unité</label>
         <Field
           type="number"
           name="unit"
           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         />
-        <ErrorMessage
-          class="p-1 mb-1 text-sm text-red-700 borderrounded-lg"
-          name="unit"
-        >
+        <ErrorMessage class="p-1 mb-1 text-sm text-red-700 borderrounded-lg" name="unit">
         </ErrorMessage>
       </div>
       <div class="mb-6">
-        <label for="label" class="block mb-2 text-sm font-medium text-gray-900"
-          >Label</label
-        >
+        <label for="label" class="block mb-2 text-sm font-medium text-gray-900">Label</label>
         <Field
           name="label"
           placeholder="ex: ml, cl, g, mg, kg"
           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         />
-        <ErrorMessage
-          class="p-1 mb-1 text-sm text-red-700 borderrounded-lg"
-          name="label"
-        >
+        <ErrorMessage class="p-1 mb-1 text-sm text-red-700 borderrounded-lg" name="label">
         </ErrorMessage>
       </div>
       <button
