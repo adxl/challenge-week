@@ -17,10 +17,15 @@ class OrderProductFixtures extends Fixture implements DependentFixtureInterface
     $orders = $manager->getRepository(Order::class)->findAll();
 
     foreach ($orders as $order) {
-      for ($i = 1; $i <= $faker->numberBetween(1, 6); $i++) {
+      $productIds = [1, 2, 3, 4, 5];
+
+      for ($i = 1; $i <= $faker->numberBetween(1, 5); $i++) {
+        $productNumber = $faker->randomElement($productIds);
+        $productIds = array_diff($productIds, [$productNumber]);
+
         $orderProduct = new OrderProduct();
         $orderProduct->setOriginOrder($order);
-        $orderProduct->setProduct($this->getReference('product_' . $faker->numberBetween(1, 5)));
+        $orderProduct->setProduct($this->getReference('product_' . $productNumber));
         $orderProduct->setQuantity($faker->numberBetween(1, 10));
         $manager->persist($orderProduct);
       }
