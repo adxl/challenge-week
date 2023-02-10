@@ -221,8 +221,8 @@ onMounted(async () => {
                 </span>
 
                 <span v-if="isClientProfil && order.deliverer">
-                  {{ order.client.firstname }}<br />
-                  {{ order.client.lastname }}
+                  {{ order.deliverer.firstname }}<br />
+                  {{ order.deliverer.lastname }}
                 </span>
 
                 <span v-if="isClientProfil && !order.deliverer"> - </span>
@@ -249,13 +249,8 @@ onMounted(async () => {
                 <OrderStatus :status="order.status" />
               </td>
               <td>
-                <div v-if="order.delivererReview?.rating === 0">
-                  <div
-                    class="text-white text-xs bg-red-700 hover:bg-red-800 my-1 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-1 py-1 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                    style="width: min-content; padding: 0.7em 0.6em"
-                  >
-                    BAN
-                  </div>
+                <div v-if="order.delivererReview?.rating === 0" class="flex flex-col">
+                  <i class="text-white text-xl fa-solid fa-circle-exclamation"></i>
                   {{ order.delivererReview.comment }}
                 </div>
                 <div v-else-if="order.delivererReview?.rating > 0">

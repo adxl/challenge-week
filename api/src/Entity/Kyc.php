@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Controller\CreateKycController;
 
 #[ORM\Entity(repositoryClass: KycRepository::class)]
 #[ApiResource(
@@ -21,7 +22,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     new GetCollection(security: 'is_granted("ROLE_ADMIN")'),
     new Get(security: 'is_granted("ROLE_ADMIN") or user == object.getDeliverer()'),
     new Patch(security: 'is_granted("ROLE_ADMIN") or user == object.getDeliverer()'),
-    new Post()
+    new Post(controller: CreateKycController::class)
   ],
   normalizationContext: ['groups' => ['kyc:read']]
 )]

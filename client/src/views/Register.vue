@@ -49,12 +49,20 @@ function handleRegister() {
     ..._inputsRegister,
     birthdayAt: new Date(_inputsRegister.birthdayAt).toISOString(),
   })
-    .then(({ data }) => {
-      console.log(data);
+    .then(() => {
       route.push({ name: "login" });
     })
     .catch((error) => {
       console.error(error);
+    })
+    .finally(() => {
+      _inputsRegister.firstname = "";
+      _inputsRegister.lastname = "";
+      _inputsRegister.email = "";
+      _inputsRegister.roles = "";
+      _inputsRegister.plainPassword = "";
+      _inputsRegister.address = "";
+      _inputsRegister.birthdayAt = new Date().toISOString().slice(0, 10);
     });
 }
 </script>

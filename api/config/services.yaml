@@ -18,6 +18,7 @@ services:
     
     App\Controller\RegisterController\:
         resource: '../src/Controller/RegisterController.php'
+        autowire: true
         tags: ['controller.service_arguments']
 
     App\State\UserPasswordHasher:

@@ -69,6 +69,12 @@ jobs:
     if: github.ref_name == 'main'
   
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup
+        run: touch .env
+
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v2
         if: github

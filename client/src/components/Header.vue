@@ -21,7 +21,7 @@ const handleLogout = () => {
         <!-- LINK -->
         <div class="hidden w-full md:block md:w-auto" id="navbar-default">
           <ul
-            class="flex flex-col p-4 mt-4 border rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white bg-gray-800 md:bg-gray-900 border-gray-700"
+            class="flex flex-col p-4 mt-4 border rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 bg-gray-800 border-gray-700"
           >
             <!-- IS CLIENT OR DELIVERERS -->
             <li v-if="currentUser?.value && !currentUser.value.isAdmin">
