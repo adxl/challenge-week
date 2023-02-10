@@ -49,8 +49,7 @@ function handleRegister() {
     ..._inputsRegister,
     birthdayAt: new Date(_inputsRegister.birthdayAt).toISOString(),
   })
-    .then(({ data }) => {
-      console.log(data);
+    .then(() => {
       route.push({ name: "login" });
     })
     .catch((error) => {

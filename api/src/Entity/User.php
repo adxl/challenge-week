@@ -32,7 +32,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[ApiResource(mercure: true, operations: [
+#[ApiResource(operations: [
   new GetCollection(
     name: "self_auth",
     uriTemplate: '/users/me',
