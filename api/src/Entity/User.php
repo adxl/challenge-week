@@ -80,7 +80,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
     uriTemplate: '/users/{id}/role/admin',
     controller: GiveRoleAdminController::class,
   ),
-  new Put(processor: UserPasswordHasher::class),
   new Patch( uriTemplate: '/users/{id}/status', security: 'is_granted("ROLE_ADMIN")', denormalizationContext: ["groups" => ["admin_update"]]),
   new Patch(processor: UserPasswordHasher::class, denormalizationContext: ["groups" => ["self_update"]]),
   new Patch(
@@ -89,7 +88,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
     name: 'reset_password',
     controller: ResetPasswordController::class,
   ),
-  new Delete(),
 ], normalizationContext: ["groups" => ["self", "user:read"]])]
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface

@@ -28,6 +28,11 @@ class RegisterController extends AbstractController
     $em = $doctrine->getManager();
     $token = TokenGeneration::generateToken();
     $user->setToken($token);
+    for ($i = 0; $i < sizeof($user->getRoles()); $i++) {
+        if (!in_array($user->getRoles()[$i], ["ROLE_CLIENT", "ROLE_DELIVERER"])) {
+            $user->setRoles(["ROLE_CLIENT"]);
+        }
+    }
     $em->flush();
 
     $url = $_ENV["APP_URL"] . '/users/verify/' . $token;
