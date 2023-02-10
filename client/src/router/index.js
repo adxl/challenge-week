@@ -7,6 +7,7 @@ import {
   PROFIL_DELIVERER,
   PROFIL_USER,
   USER_ROLES,
+  USER_STATUS,
 } from "./constants";
 
 const routes = [
@@ -196,7 +197,7 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const currentUser = await useGetCurrentUser().catch(() => null);
 
-  if (to.meta.loggedIn && !currentUser) {
+  if (to.meta.loggedIn && !currentUser && currentUser.status === USER_STATUS.BANNED) {
     return {
       name: "login",
     };

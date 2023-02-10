@@ -226,7 +226,7 @@ onMounted(() => {
                         },
                       ]"
                       @click="handleReviewProduct(review.id, review.product['@id'], false)"
-                      :disabled="!review.rating || !currentUser.isClient"
+                      :disabled="!review.rating || currentUser.isAdmin || currentUser.isDeliverer"
                     >
                       c'est SOFT 👎
                     </button>
@@ -243,7 +243,7 @@ onMounted(() => {
                         },
                       ]"
                       @click="handleReviewProduct(review.id, review.product['@id'], true)"
-                      :disabled="review.rating || !currentUser.isClient"
+                      :disabled="review.rating || currentUser.isAdmin || currentUser.isDeliverer"
                     >
                       c'est HIGH 💯
                     </button>
