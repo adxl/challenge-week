@@ -39,7 +39,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
     $product = new Product();
     $product->setName('Acide chlorhydrique');
     $product->setPrice(129.99);
-    $product->setQuantity(50);
+    $product->setQuantity(500);
     $product->setCategory($faker->randomElement($categories));
     $product->setType($this->getReference(ProductTypeFixtures::COMPRIME));
     $product->setDescription($faker->sentence);
@@ -70,7 +70,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
       $product = new Product();
       $product->setName($faker->sentence(3, false));
       $product->setPrice($faker->randomFloat(2, 10, 100));
-      $product->setQuantity($faker->randomNumber(3));
+      $product->setQuantity($faker->randomNumber(3, true));
       $product->setCategory($faker->randomElement($categories));
       $product->setType($this->getReference($faker->randomElement([ProductTypeFixtures::COMPRIME, ProductTypeFixtures::LIQUIDE, ProductTypeFixtures::GELLULE])));
       $product->setDescription($faker->sentence);

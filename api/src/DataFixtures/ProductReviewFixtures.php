@@ -14,16 +14,14 @@ class ProductReviewFixtures extends Fixture implements DependentFixtureInterface
   public function load(ObjectManager $manager): void
   {
     $faker = \Faker\Factory::create('fr_FR');
-    $orderProducts = $manager->getRepository(OrderProduct::class)->findByOrderByStatus(
-      [OrderFixtures::DONE]
-    );
+    $orderProducts = $manager->getRepository(OrderProduct::class)->findAll();
 
     foreach ($orderProducts as $orderProduct) {
 
       $productReview = new ProductReview();
       $productReview->setProduct($orderProduct->getProduct());
       $productReview->setOriginOrder($orderProduct->getOriginOrder());
-      $productReview->setRating($faker->boolean);
+      $productReview->setRating($faker->randomElement([$faker->boolean, NULL]));
       $manager->persist($productReview);
     }
 

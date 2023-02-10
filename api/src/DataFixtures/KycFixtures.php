@@ -20,7 +20,7 @@ class KycFixtures extends Fixture
     $kyc = new Kyc();
     $kyc->setReason(NULL);
     $kyc->setStatus('PENDING');
-    $kyc->setSiret('8492389238293212');
+    $kyc->setSiret('8492389238293212111');
     $manager->persist($kyc);
     $this->addReference(self::KYC_PENDING, $kyc);
 
@@ -35,7 +35,7 @@ class KycFixtures extends Fixture
       $kyc = new Kyc();
       $kyc->setReason(NULL);
       $kyc->setStatus('VALIDATED');
-      $kyc->setSiret('4982938293892389293');
+      $kyc->setSiret('4982938293892389293-' . $i);
       $manager->persist($kyc);
       $this->addReference(self::KYC_VALIDATED . '_' . $i, $kyc);
     }
@@ -45,7 +45,7 @@ class KycFixtures extends Fixture
     $kyc->setStatus('VALIDATED');
     $kyc->setSiret('4982938293892389293');
     $manager->persist($kyc);
-    $this->addReference(self::KYC_VALIDATED . '_7', $kyc);
+    $this->addReference(self::KYC_VALIDATED . '_6', $kyc);
 
     $manager->flush();
   }
