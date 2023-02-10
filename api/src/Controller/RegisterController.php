@@ -13,31 +13,31 @@ use Symfony\Component\Mime\Email;
 #[AsController]
 class RegisterController extends AbstractController
 {
-    public function __construct()
-    {
+  public function __construct(private MailerInterface $mailerInterface)
+  {
+  }
+
+  public function __invoke(User $user, ManagerRegistry $doctrine): User
+  {
+    if ($_ENV["APP_STAGE"] === "local") {
+      return $user;
     }
 
-    public function __invoke(User $user, ManagerRegistry $doctrine, MailerInterface $mailer): User
-    {
-        if ($_ENV["APP_STAGE"] === "local") {
-          return $user;
-        }
+    $em = $doctrine->getManager();
+    $token = TokenGeneration::generateToken();
+    $user->setToken($token);
+    $em->flush();
 
-        $em = $doctrine->getManager();
-        $token = TokenGeneration::generateToken();
-        $user->setToken($token);
-        $em->flush();
+    $url = $_ENV["APP_URL"] . '/users/verify/' . $token;
 
-        $url = $_ENV["APP_URL"] . '/users/verify/' . $token;
+    $email = (new Email())
+      ->from('supp.myschool@outlook.fr')
+      ->to($user->getEmail())
+      ->subject('Confirmation de votre compte')
+      ->html('Pour confirmer votre compte, veuillez cliquer sur le lien suivant : <a href="' . $url . '">Confirmer mon compte</a>');
 
-        $email = (new Email())
-            ->from('supp.myschool@outlook.fr')
-            ->to($user->getEmail())
-            ->subject('Confirmation de votre compte')
-            ->html('Pour confirmer votre compte, veuillez cliquer sur le lien suivant : <a href="' . $url . '">Confirmer mon compte</a>');
+    $this->mailerInterface->send($email);
 
-        $mailer->send($email);
-
-        return $user;
-    }
+    return $user;
+  }
 }
