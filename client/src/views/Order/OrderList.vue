@@ -1,5 +1,6 @@
 <script setup>
 import { getAllOrders, takeOrder, validateOrder } from "@/api/order";
+import { USER_STATUS } from "@/router/constants";
 import { onMounted, reactive, inject } from "vue";
 import OrderStatus from "../../components/OrderStatus.vue";
 import KycForm from "../../components/KycForm.vue";
@@ -122,6 +123,12 @@ const handleRefreshOrders = () => {
           </tr>
         </tbody>
       </table>
+      <div
+        v-else-if="currentUser.value.status === USER_STATUS.OPERATIVE || USER_STATUS.isClient"
+        class="text-center py-4"
+      >
+        <p class="text-gray-400">Aucune commande en cours</p>
+      </div>
     </div>
     <div v-if="currentUser.value.isDeliverer && kyc !== 'VALIDATED'">
       <KycForm />
