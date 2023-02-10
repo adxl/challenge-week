@@ -81,6 +81,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     controller: GiveRoleAdminController::class,
   ),
   new Put(processor: UserPasswordHasher::class),
+  new Patch( uriTemplate: '/users/{id}/status', security: 'is_granted("ROLE_ADMIN")', denormalizationContext: ["groups" => ["admin_update"]]),
   new Patch(processor: UserPasswordHasher::class, denormalizationContext: ["groups" => ["self_update"]]),
   new Patch(
     security: 'is_granted("PUBLIC_ACCESS")',
@@ -141,7 +142,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   private ?\DateTimeImmutable $birthdayAt = null;
 
   #[ORM\Column(length: 255)]
-  #[Groups(["self"])]
+  #[Groups(["self", "admin_update"])]
   private ?string $status = null;
 
   #[ORM\Column(length: 255)]
