@@ -9,99 +9,112 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: KycRepository::class)]
-#[ApiResource(normalizationContext: ['groups' => ['kyc:read']])]
+#[ApiResource(
+  operations: [
+    new GetCollection(security: 'is_granted("ROLE_ADMIN")'),
+    new Get(security: 'is_granted("ROLE_ADMIN") or user == object.getDeliverer()'),
+    new Patch(security: 'is_granted("ROLE_ADMIN") or user == object.getDeliverer()'),
+    new Post()
+  ],
+  normalizationContext: ['groups' => ['kyc:read']]
+)]
 #[ApiFilter(SearchFilter::class, properties: ['status' => 'exact'])]
 class Kyc
 {
-    
-    use TimestampableTrait;
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-	#[Groups(['kyc:read', 'self'])]
-    private ?int $id = null;
-	
+  use TimestampableTrait;
 
-    #[ORM\Column(length: 255)]
-	#[Groups(['kyc:read', 'self'])]
-    private ?string $siret = null;
+  #[ORM\Id]
+  #[ORM\GeneratedValue]
+  #[ORM\Column]
+  #[Groups(['kyc:read', 'self'])]
+  private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-	#[Groups(['kyc:read', 'self'])]
-    private ?string $status = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-	#[Groups(['kyc:read', 'self'])]
-    private ?string $reason = null;
+  #[ORM\Column(length: 255)]
+  #[Groups(['kyc:read', 'self'])]
+  private ?string $siret = null;
 
-    #[ORM\OneToOne(mappedBy: 'kyc', cascade: ['persist', 'remove'])]
-	#[Groups(['kyc:read', 'self'])]
-    private ?User $deliverer = null;
+  #[ORM\Column(length: 255)]
+  #[Groups(['kyc:read', 'self'])]
+  private ?string $status = null;
 
-	public function getId(): ?int
-	{
-		return $this->id;
-	}
+  #[ORM\Column(type: Types::TEXT, nullable: true)]
+  #[Groups(['kyc:read', 'self'])]
+  private ?string $reason = null;
 
-	public function getSiret(): ?string
-	{
-		return $this->siret;
-	}
+  #[ORM\OneToOne(mappedBy: 'kyc', cascade: ['persist', 'remove'])]
+  #[Groups(['kyc:read', 'self'])]
+  private ?User $deliverer = null;
 
-	public function setSiret(string $siret): self
-	{
-		$this->siret = $siret;
+  public function getId(): ?int
+  {
+    return $this->id;
+  }
 
-		return $this;
-	}
+  public function getSiret(): ?string
+  {
+    return $this->siret;
+  }
 
-	public function getStatus(): ?string
-	{
-		return $this->status;
-	}
+  public function setSiret(string $siret): self
+  {
+    $this->siret = $siret;
 
-	public function setStatus(string $status): self
-	{
-		$this->status = $status;
+    return $this;
+  }
 
-		return $this;
-	}
+  public function getStatus(): ?string
+  {
+    return $this->status;
+  }
 
-	public function getReason(): ?string
-	{
-		return $this->reason;
-	}
+  public function setStatus(string $status): self
+  {
+    $this->status = $status;
 
-	public function setReason(?string $reason): self
-	{
-		$this->reason = $reason;
+    return $this;
+  }
 
-		return $this;
-	}
+  public function getReason(): ?string
+  {
+    return $this->reason;
+  }
 
-	public function getDeliverer(): ?User
-	{
-		return $this->deliverer;
-	}
+  public function setReason(?string $reason): self
+  {
+    $this->reason = $reason;
 
-	public function setDeliverer(?User $deliverer): self
-	{
-		// unset the owning side of the relation if necessary
-		if ($deliverer === null && $this->deliverer !== null) {
-			$this->deliverer->setKyc(null);
-		}
+    return $this;
+  }
 
-		// set the owning side of the relation if necessary
-		if ($deliverer !== null && $deliverer->getKyc() !== $this) {
-			$deliverer->setKyc($this);
-		}
+  public function getDeliverer(): ?User
+  {
+    return $this->deliverer;
+  }
 
-		$this->deliverer = $deliverer;
+  public function setDeliverer(?User $deliverer): self
+  {
+    // unset the owning side of the relation if necessary
+    if ($deliverer === null && $this->deliverer !== null) {
+      $this->deliverer->setKyc(null);
+    }
 
-		return $this;
-	}
+    // set the owning side of the relation if necessary
+    if ($deliverer !== null && $deliverer->getKyc() !== $this) {
+      $deliverer->setKyc($this);
+    }
+
+    $this->deliverer = $deliverer;
+
+    return $this;
+  }
 }
+

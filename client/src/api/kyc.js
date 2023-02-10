@@ -1,4 +1,4 @@
-import { _get, _getAll, _post, _patch, _delete } from "./gateway";
+import { _get, _getAll, _post, _patch } from "./gateway";
 
 export function getAllKyc() {
   return _getAll("/kycs");
@@ -26,8 +26,4 @@ export function addKyc(data) {
 
 export function updateKyc(id, data) {
   return _patch("/kycs/" + id, data);
-}
-
-export function deleteKyc(id) {
-  return _delete("/kycs/" + id);
 }

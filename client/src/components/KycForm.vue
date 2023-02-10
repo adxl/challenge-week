@@ -46,7 +46,7 @@ function handleRegister(values) {
   };
   if (_idKyc.id) {
     updateKyc(_idKyc.id, data)
-      .then(({ data }) => {
+      .then(() => {
         location.reload();
       })
       .catch((error) => {
@@ -55,7 +55,7 @@ function handleRegister(values) {
     return;
   } else {
     addKyc(data)
-      .then(({ data }) => {
+      .then(() => {
         location.reload();
       })
       .catch((error) => {

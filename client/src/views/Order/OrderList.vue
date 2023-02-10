@@ -33,7 +33,6 @@ const handleValidateOrderReceipt = (id) => {
 const handleRefreshOrders = () => {
   getAllOrders()
     .then(({ data }) => {
-      console.log(data);
       orderList.value = data.items;
     })
     .catch((error) => {
