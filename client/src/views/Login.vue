@@ -23,7 +23,7 @@ function handleLogin() {
       if (user.isAdmin) {
         route.push({ name: "admin-dashboard" });
       } else if (user.isDeliverer) {
-        if ((user.status = USER_STATUS.BANNED)) {
+        if (user.status === USER_STATUS.BANNED) {
           sessionStorage.removeItem("cw-app-token");
           window.location.href = "/login";
         } else route.push({ name: "orders" });
