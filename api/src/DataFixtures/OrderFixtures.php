@@ -79,21 +79,21 @@ class OrderFixtures extends Fixture implements DependentFixtureInterface
     $order = new Order();
     $order->setStatus(self::DONE);
     $order->setClient($this->getReference('client_4'));
-    $order->setDeliverer($this->getReference('deliverer_7'));
+    $order->setDeliverer($this->getReference('deliverer_8'));
     $manager->persist($order);
     $this->addReference('order_9', $order);
 
     $order = new Order();
     $order->setStatus(self::DONE);
     $order->setClient($this->getReference('client_3'));
-    $order->setDeliverer($this->getReference('deliverer_7'));
+    $order->setDeliverer($this->getReference('deliverer_8'));
     $manager->persist($order);
     $this->addReference('order_10', $order);
 
     $order = new Order();
     $order->setStatus(self::DONE);
     $order->setClient($this->getReference('client_2'));
-    $order->setDeliverer($this->getReference('deliverer_7'));
+    $order->setDeliverer($this->getReference('deliverer_8'));
     $manager->persist($order);
     $this->addReference('order_11', $order);
 

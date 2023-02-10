@@ -5,7 +5,6 @@ import { getAllProductCategory } from "@/api/productCategory";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { useRouter } from "vue-router";
 import { onMounted, reactive } from "vue";
-import { isIntegerKey } from "@vue/shared";
 
 const route = useRouter();
 const id = route.currentRoute.value.params.id ?? null;
@@ -51,20 +50,29 @@ const simpleSchema = {
     return true;
   },
   price(value) {
+    if (isNaN(Number(value)) || value <= 0) {
+      return "le prix doit être un nombre positif";
+    }
     if (!value) {
       return "le prix est requis";
     }
     return true;
   },
   quantity(value) {
+    if (isNaN(Number(value)) || value <= 0) {
+      return "la quantité doit être un nombre positive";
+    }
     if (!value) {
-      return "la quantitée est requis";
+      return "la quantité est requise";
     }
     return true;
   },
   description(value) {
+    if (value.length > 3000) {
+      return "la description ne doit pas dépasser 3000 caractères";
+    }
     if (!value) {
-      return "la description est requis";
+      return "la description est requise";
     }
     return true;
   },
@@ -76,7 +84,7 @@ const simpleSchema = {
   },
   category(value) {
     if (!value) {
-      return "la catégorie est requis";
+      return "la catégorie est requise";
     }
     return true;
   },
@@ -113,62 +121,41 @@ function handleRegister(values) {
     >
       {{ id ? "Modification " + _formValues.name : "Création d'un produit" }}
     </h3>
-    <Form
-      :initial-values="_formValues"
-      @submit="handleRegister"
-      :validation-schema="simpleSchema"
-    >
+    <Form :initial-values="_formValues" @submit="handleRegister" :validation-schema="simpleSchema">
       <div class="mb-6">
-        <label
-          for="website"
-          class="block mb-2 text-sm font-medium text-gray-900"
+        <label for="website" class="block mb-2 text-sm font-medium text-gray-900"
           >Nom du produit</label
         >
         <Field
           name="name"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         />
-        <ErrorMessage
-          class="p-1 mb-1 text-sm text-red-700 borderrounded-lg"
-          name="name"
-        />
+        <ErrorMessage class="p-1 mb-1 text-sm text-red-700 borderrounded-lg" name="name" />
       </div>
       <div class="grid gap-6 mb-6 md:grid-cols-2">
         <div>
-          <label
-            for="price"
-            class="block mb-2 text-sm font-medium text-gray-900"
-            >Prix</label
-          >
+          <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Prix</label>
           <Field
+            type="number"
             name="price"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           />
-          <ErrorMessage
-            class="p-1 mb-1 text-sm text-red-700 borderrounded-lg"
-            name="price"
-          />
+          <ErrorMessage class="p-1 mb-1 text-sm text-red-700 borderrounded-lg" name="price" />
         </div>
         <div>
-          <label
-            for="quantity"
-            class="block mb-2 text-sm font-medium text-gray-900"
-            >Quantitée</label
+          <label for="quantity" class="block mb-2 text-sm font-medium text-gray-900"
+            >Quantité</label
           >
           <Field
+            type="number"
             name="quantity"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           />
-          <ErrorMessage
-            class="p-1 mb-1 text-sm text-red-700 borderrounded-lg"
-            name="quantity"
-          />
+          <ErrorMessage class="p-1 mb-1 text-sm text-red-700 borderrounded-lg" name="quantity" />
         </div>
       </div>
       <div class="mb-6">
-        <label
-          for="description"
-          class="block mb-2 text-sm font-medium text-gray-900"
+        <label for="description" class="block mb-2 text-sm font-medium text-gray-900"
           >Description</label
         >
         <Field
@@ -176,10 +163,7 @@ function handleRegister(values) {
           type="textarea"
           class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
         />
-        <ErrorMessage
-          class="p-1 mb-1 text-sm text-red-700 borderrounded-lg"
-          name="description"
-        />
+        <ErrorMessage class="p-1 mb-1 text-sm text-red-700 borderrounded-lg" name="description" />
       </div>
       <div class="grid gap-6 mb-6 md:grid-cols-2">
         <div>
@@ -196,15 +180,10 @@ function handleRegister(values) {
               {{ item.name }}
             </option>
           </Field>
-          <ErrorMessage
-            class="p-1 mb-1 text-sm text-red-700 borderrounded-lg"
-            name="type"
-          />
+          <ErrorMessage class="p-1 mb-1 text-sm text-red-700 borderrounded-lg" name="type" />
         </div>
         <div>
-          <label
-            for="category"
-            class="block mb-2 text-sm font-medium text-gray-900"
+          <label for="category" class="block mb-2 text-sm font-medium text-gray-900"
             >Sélectionner une catégorie</label
           >
           <Field
@@ -217,10 +196,7 @@ function handleRegister(values) {
               {{ item.name }}
             </option>
           </Field>
-          <ErrorMessage
-            class="p-1 mb-1 text-sm text-red-700 borderrounded-lg"
-            name="category"
-          />
+          <ErrorMessage class="p-1 mb-1 text-sm text-red-700 borderrounded-lg" name="category" />
         </div>
       </div>
       <button

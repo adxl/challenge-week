@@ -1,6 +1,6 @@
 <script setup>
 import { getKyc, updateKyc } from "@/api/kyc";
-import { updateUser } from "@/api/user";
+import { updateUserStatus } from "@/api/user";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { useRouter } from "vue-router";
 import { onMounted, reactive } from "vue";
@@ -40,11 +40,15 @@ onMounted(() => {
 function handleUpdate(values) {
   updateKyc(id, { ...values })
     .then(({ data }) => {
-      console.log(data.siret);
-      updateUser(data.deliverer["id"], {
-        status: "OPERATIVE",
+      const statuses = {
+        VALIDATED: "OPERATIVE",
+        PENDING: "ACTIVE",
+        REFUSED: "ACTIVE",
+      };
+      updateUserStatus(data.deliverer["id"], {
+        status: statuses[values.status],
       }).then(() => {
-        route.push({ name: "admin-kyc" });
+        route.push({ name: "admin-kyc-list" });
       });
     })
     .catch((error) => {

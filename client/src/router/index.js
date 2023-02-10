@@ -7,6 +7,7 @@ import {
   PROFIL_DELIVERER,
   PROFIL_USER,
   USER_ROLES,
+  USER_STATUS,
 } from "./constants";
 
 const routes = [
@@ -57,7 +58,7 @@ const routes = [
     name: "store",
     path: "/store",
     component: () => import("@/views/Store/Store.vue"),
-    meta: { authorize: [USER_ROLES.ROLE_CLIENT] },
+    meta: { authorize: [USER_ROLES.ROLE_CLIENT, USER_ROLES.ROLE_ADMIN] },
   },
   {
     name: "orders",
@@ -196,7 +197,8 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const currentUser = await useGetCurrentUser().catch(() => null);
 
-  if (to.meta.loggedIn && !currentUser) {
+  if (currentUser?.status === USER_STATUS.BANNED) {
+    sessionStorage.removeItem("cw-app-token");
     return {
       name: "login",
     };

@@ -148,7 +148,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
       ->setBirthdayAt(DateTimeImmutable::createFromMutable($birthdateInterval));
     $manager->persist($user);
 
-    $i = $i + 1; // 7
+    $i = $i + 1; // 8
 
     $user = new User();
     $user
@@ -159,7 +159,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
       ->setRoles(self::ROLE_DELIVERER)
       ->setStatus(self::SUSPENDED)
       ->setAddress($faker->address())
-      ->setKyc($this->getReference(KycFixtures::KYC_VALIDATED . '_' . $i))
+      ->setKyc($this->getReference(KycFixtures::KYC_VALIDATED . '_6'))
       ->setBirthdayAt(DateTimeImmutable::createFromMutable($birthdateInterval));
     $this->addReference('deliverer_' . $i, $user);
     $manager->persist($user);

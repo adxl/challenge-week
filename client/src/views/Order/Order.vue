@@ -23,6 +23,7 @@ const delivererReviewInputs = reactive({
 });
 
 function handleSendDelivererReview() {
+  if (!currentUser.value.isClient) return;
   sendDelivererReview({ ...delivererReviewInputs })
     .then(() => {
       loadOrder();
@@ -45,6 +46,7 @@ function loadOrder() {
 }
 
 function handleReviewProduct(review, product, rating) {
+  if (!currentUser.value.isClient) return;
   sendProductReview(review, { product, rating, originOrder: order["@id"] })
     .then(() => {
       loadOrder();
@@ -224,7 +226,7 @@ onMounted(() => {
                         },
                       ]"
                       @click="handleReviewProduct(review.id, review.product['@id'], false)"
-                      :disabled="!review.rating"
+                      :disabled="review.rating === false"
                     >
                       c'est SOFT 👎
                     </button>
@@ -241,7 +243,7 @@ onMounted(() => {
                         },
                       ]"
                       @click="handleReviewProduct(review.id, review.product['@id'], true)"
-                      :disabled="review.rating"
+                      :disabled="review.rating || currentUser.isAdmin || currentUser.isDeliverer"
                     >
                       c'est HIGH 💯
                     </button>

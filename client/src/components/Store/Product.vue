@@ -9,7 +9,6 @@ const props = defineProps({
   },
 });
 const currentUser = inject("auth_user");
-console.log(currentUser);
 
 const quantity = ref(1);
 

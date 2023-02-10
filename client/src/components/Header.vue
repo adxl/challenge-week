@@ -95,7 +95,7 @@ const handleLogout = () => {
               </router-link>
             </li>
             <!-- IS CONNECTED -->
-            <li v-if="currentUser?.value?.isClient">
+            <li v-if="currentUser?.value && !currentUser?.value?.isDeliverer">
               <router-link
                 :to="{ name: 'store' }"
                 class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 text-gray-400 md:hover:text-white hover:bg-gray-700 hover:text-white"

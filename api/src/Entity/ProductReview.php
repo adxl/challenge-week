@@ -54,10 +54,9 @@ class ProductReview
     return $this->rating;
   }
 
-  public function setRating(bool $rating): self
+  public function setRating(?bool $rating): self
   {
     $this->rating = $rating;
-
     return $this;
   }
 

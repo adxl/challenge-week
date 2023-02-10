@@ -3,6 +3,7 @@ import { reactive, inject } from "vue";
 import { login } from "@/api/auth";
 import { useRouter } from "vue-router";
 import { initDB } from "../idbHelper";
+import { USER_STATUS } from "@/router/constants";
 
 const route = useRouter();
 
@@ -22,7 +23,10 @@ function handleLogin() {
       if (user.isAdmin) {
         route.push({ name: "admin-dashboard" });
       } else if (user.isDeliverer) {
-        route.push({ name: "orders" });
+        if (user.status === USER_STATUS.BANNED) {
+          sessionStorage.removeItem("cw-app-token");
+          window.location.href = "/login";
+        } else route.push({ name: "orders" });
       } else {
         console.log(user);
         route.push({ name: "store" });
