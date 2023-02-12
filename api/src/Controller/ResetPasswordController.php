@@ -42,7 +42,6 @@ class ResetPasswordController extends AbstractController
   )]
   public function __invoke(string $token, UserPasswordHasherInterface $passwordHasher): JsonResponse
   {
-    // TODO : Secure if not password in body
     $password = json_decode($this->requestStack->getCurrentRequest()->getContent())->password;
 
     /** @var User $user */
@@ -85,6 +84,13 @@ class ResetPasswordController extends AbstractController
     $token = TokenGeneration::generateToken();
     $user->setToken($token);
     $em->flush();
+
+    if ($_ENV["APP_STAGE"] === "local") {
+      return $this->json([
+        "code" => 200,
+        "message" => "Email sending skipped in local"
+      ]);
+    }
 
     $url = $_ENV["APP_URL"] . '/reset-password/' . $token;
 

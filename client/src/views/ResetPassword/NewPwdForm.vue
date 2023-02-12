@@ -1,12 +1,12 @@
 <script setup>
 import { ref } from "vue";
 import { resetPassword } from "@/api/account";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 const pwd = ref("");
 const pwdConfirm = ref("");
 
-const route = useRoute();
-const token = route.params.token;
+const route = useRouter();
+const token = route.currentRoute.value.params.token;
 
 const onSubmit = async () => {
   if (pwd.value !== pwdConfirm.value) {

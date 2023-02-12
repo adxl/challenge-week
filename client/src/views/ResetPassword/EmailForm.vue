@@ -2,12 +2,14 @@
 import { ref } from "vue";
 import { resetPasswordMail } from "@/api/account";
 const email = ref("");
+const emailSent = ref(false);
 
 const onSubmit = () => {
   resetPasswordMail(email.value)
-    .then(() => {
-      console.log("Email envoyé");
+    .then(({ data }) => {
+      console.log(data.message);
       email.value = "";
+      emailSent.value = true;
     })
     .catch((error) => {
       console.log(error);
@@ -20,7 +22,7 @@ const onSubmit = () => {
     class="flex flex-col items-center gap-6 border rounded-lg shadow-md bg-gray-800 border-gray-700 p-5"
   >
     <h3 class="text-3xl text-white">Réinitialiser mon mot de passe</h3>
-    <form @submit.prevent="onSubmit" class="w-full">
+    <form v-if="!emailSent" @submit.prevent="onSubmit" class="w-full">
       <div class="mb-6">
         <label for="email" class="block mb-2 text-sm font-medium text-white"
           >Renseignez votre e-mail :</label
@@ -43,6 +45,9 @@ const onSubmit = () => {
         </button>
       </div>
     </form>
+    <div v-else class="flex justify-center w-full mb-5">
+      <p class="text-white">Un mail a été envoyé</p>
+    </div>
   </div>
 </template>
 
