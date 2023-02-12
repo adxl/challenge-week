@@ -10,13 +10,12 @@ const token = route.params.token;
 
 const onSubmit = async () => {
   if (pwd.value !== pwdConfirm.value) {
-    console.log("Les mots de passe ne correspondent pas");
-    return;
+    return console.error("Les mots de passe ne correspondent pas");
   }
 
   resetPassword(token, pwd.value)
-    .then((response) => {
-      console.log(response);
+    .then(() => {
+      route.push({ name: "login" });
     })
     .catch((error) => {
       console.log(error);
@@ -32,7 +31,7 @@ const onSubmit = async () => {
     <form @submit.prevent="onSubmit" class="w-full">
       <div class="mb-6">
         <label for="pwd" class="block mb-2 text-sm font-medium text-white"
-          >Votre mot de passe :</label
+          >Nouveau mot de passe</label
         >
         <input
           type="password"
@@ -45,7 +44,7 @@ const onSubmit = async () => {
       </div>
       <div class="mb-6">
         <label for="pwdConfirm" class="block mb-2 text-sm font-medium text-white"
-          >Votre mot de passe :</label
+          >Confirmer le nouveau mot de passe</label
         >
         <input
           type="password"

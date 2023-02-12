@@ -3,18 +3,15 @@ import { ref } from "vue";
 import { resetPasswordMail } from "@/api/account";
 const email = ref("");
 
-const onSubmit = async () => {
-  try {
-    const response = await resetPasswordMail(email.value);
-
-    if (response.status === 200) {
+const onSubmit = () => {
+  resetPasswordMail(email.value)
+    .then(() => {
       console.log("Email envoyé");
-    } else {
-      console.log("Erreur");
-    }
-  } catch (error) {
-    console.log(error);
-  }
+      email.value = "";
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 </script>
 
