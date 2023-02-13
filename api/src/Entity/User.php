@@ -53,8 +53,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     requirements: [],
     controller: DeliverersProfilController::class,
   ),
-  new Get(),
-  new GetCollection(),
+  new Get(security: 'object == user or is_granted("ROLE_ADMIN")'),
   new Post(
     security: 'is_granted("PUBLIC_ACCESS")',
     name: 'register',
@@ -80,8 +79,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     uriTemplate: '/users/{id}/role/admin',
     controller: GiveRoleAdminController::class,
   ),
-  new Patch( uriTemplate: '/users/{id}/status', security: 'is_granted("ROLE_ADMIN")', denormalizationContext: ["groups" => ["admin_update"]]),
-  new Patch(processor: UserPasswordHasher::class, denormalizationContext: ["groups" => ["self_update"]]),
+  new Patch(uriTemplate: '/users/{id}/status', security: 'is_granted("ROLE_ADMIN")', denormalizationContext: ["groups" => ["admin_update"]]),
+  new Patch(processor: UserPasswordHasher::class, security: 'object == user',  denormalizationContext: ["groups" => ["self_update"]]),
   new Patch(
     security: 'is_granted("PUBLIC_ACCESS")',
     uriTemplate: '/users/reset-password/{token}',
@@ -150,9 +149,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[ORM\Column(length: 255, nullable: true)]
   private ?string $token = null;
 
-	#[ORM\OneToOne(inversedBy: 'deliverer', cascade: ['persist', 'remove'],)]
-	#[Groups(["self"])]
-	private ?Kyc $kyc = null;
+  #[ORM\OneToOne(inversedBy: 'deliverer', cascade: ['persist', 'remove'],)]
+  #[Groups(["self"])]
+  private ?Kyc $kyc = null;
 
   #[ORM\OneToMany(mappedBy: 'deliverer', targetEntity: Order::class)]
   #[Groups(["self"])]

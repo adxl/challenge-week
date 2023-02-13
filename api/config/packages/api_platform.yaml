@@ -6,7 +6,7 @@ api_platform:
     # Good cache defaults for REST APIs
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']
-    
+
     swagger:
         api_keys:
             JWT:

@@ -3,6 +3,11 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,7 +17,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use App\Entity\Traits\TimestampableTrait;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
-#[ApiResource(normalizationContext: ['groups' => ['product:read']])]
+#[ApiResource(
+  operations: [
+    new GetCollection(),
+    new Get(),
+    new Post(security: 'is_granted("ROLE_ADMIN")'),
+    new Patch(security: 'is_granted("ROLE_ADMIN")'),
+    new Delete(security: 'is_granted("ROLE_ADMIN")'),
+  ],
+  normalizationContext: ['groups' => ['product:read']]
+)]
 class Product
 {
 
@@ -36,9 +50,9 @@ class Product
   #[Groups(['product:read'])]
   private ?string $description = null;
 
-	#[ORM\Column]
-	#[Groups(['product:read', 'order:detail', 'order:write'])]
-	private ?float $price = null;
+  #[ORM\Column]
+  #[Groups(['product:read', 'order:detail', 'order:write'])]
+  private ?float $price = null;
 
   #[ORM\ManyToOne(inversedBy: 'products')]
   #[Groups(['product:read', 'order:detail'])]
@@ -50,9 +64,9 @@ class Product
   #[Groups(['product:read'])]
   private ?ProductCategory $category = null;
 
-	#[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductReview::class, orphanRemoval: true)]
-	#[Groups(['product:read'])]
-	private Collection $reviews;
+  #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductReview::class, orphanRemoval: true)]
+  #[Groups(['product:read'])]
+  private Collection $reviews;
 
   public function __construct()
   {
@@ -166,3 +180,4 @@ class Product
     return $this;
   }
 }
+

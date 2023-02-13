@@ -7,9 +7,22 @@ use App\Repository\ProductCategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use App\Entity\Traits\TimestampableTrait;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 
 #[ORM\Entity(repositoryClass: ProductCategoryRepository::class)]
-#[ApiResource]
+#[ApiResource(
+  operations: [
+    new GetCollection(),
+    new Get(),
+    new Post(security: 'is_granted("ROLE_ADMIN")'),
+    new Patch(security: 'is_granted("ROLE_ADMIN")'),
+    new Delete(security: 'is_granted("ROLE_ADMIN")'),
+  ],
+)]
 class ProductCategory
 {
 	use TimestampableTrait;
