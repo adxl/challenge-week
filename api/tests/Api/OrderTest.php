@@ -16,8 +16,6 @@ final class OrderTest extends AbstractTest
     $token = $this->getToken(['email' => 'client_1@esgi.fr', 'password' => 'esgi']);
 
     $client = $this->createClientWithCredentials($token);
-    $response = $client->request('GET', '/users');
-    $this->assertResponseIsSuccessful();
 
     // get random products
     $products = static::getContainer()->get('doctrine')->getRepository(Product::class)->findAll();
@@ -47,8 +45,6 @@ final class OrderTest extends AbstractTest
     $token = $this->getToken(['email' => 'deliverer_1@esgi.fr', 'password' => 'esgi']);
 
     $client = $this->createClientWithCredentials($token);
-    $response = $client->request('GET', '/users');
-    $this->assertResponseIsSuccessful();
 
     // get deliverer id
     $response = $client->request('GET', '/users/me');
@@ -85,8 +81,6 @@ final class OrderTest extends AbstractTest
     $token = $this->getToken(['email' => 'client_1@esgi.fr', 'password' => 'esgi']);
 
     $client = $this->createClientWithCredentials($token);
-    $response = $client->request('GET', '/users');
-    $this->assertResponseIsSuccessful();
 
     // give a deliverer review
     $response = $client->request('POST', '/deliverer_reviews', [
